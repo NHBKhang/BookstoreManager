@@ -1,1 +1,1 @@
-# BookManager
+# BookStoreManager
