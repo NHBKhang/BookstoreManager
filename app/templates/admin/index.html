@@ -1,10 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{#{% if current_user.is_authenticated %}#}
 
-</body>
-</html>
+    {% extends 'admin/master.html' %}
+
+    {% block body %}
+
+        <h1 class="text-center text-success">CHÀO MỪNG BẠN ĐẾN TRANG QUẢN TRỊ!</h1>
+        <h2 class="text-info">Chào {{ current_user.name }}!</h2>
+
+    {% endblock %}
+
+{#{% else %}#}
+{#    {% include 'admin/login.html' %}#}
+{#{% endif %}#}

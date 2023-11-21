@@ -24,7 +24,7 @@ class Author(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=True)
-    products = relationship('Product', backref='category', lazy=True)
+    products = relationship('Product', backref='author', lazy=True)
 
     def __str__(self):
         return self.name
@@ -41,6 +41,7 @@ class Product(db.Model):
                    default='https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dnth&psig=AOvVaw2ikijy0zik25q-f-qDM3gL&ust=1700653615974000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCJja38aC1YIDFQAAAAAdAAAAABAE')
     active = Column(Boolean, default=True)
     description = Column(String(100), nullable=False)
+    author_id = Column(Integer, ForeignKey(Author.id), nullable=False)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
 
     def __str__(self):
@@ -72,7 +73,7 @@ class Account(db.Model, UserMixin):
     last_login = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
 
-class Admin(Account):
+class Admin(Account, UserMixin):
     __tablename__ = 'admin'
     __table_args__ = {'extend_existing': True}
 
@@ -97,3 +98,8 @@ class User(Account):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+
+        import hashlib
+        admin = Admin(username='admin', password=hashlib.md5("123456".encode('utf-8')).hexdigest(), name='admin', email='admin@gmail.com')
+        db.session.add(admin)
+        db.session.commit()
