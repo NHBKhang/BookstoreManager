@@ -5,10 +5,7 @@ from flask_admin import BaseView, expose
 
 admin = Admin(app=app, name='BookStore Manager', template_mode='bootstrap4')
 
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/main
 class MyProductView(ModelView):
     pass
 
@@ -23,9 +20,4 @@ class StatsView(BaseView):
         return self.render('admin/stats.html')
 
 
-<<<<<<< HEAD
 admin.add_view(StatsView(name='Thông kê báo cáo'))
-=======
-
-admin.add_view(StatsView(name='Thông kê báo cáo'))
->>>>>>> origin/main
