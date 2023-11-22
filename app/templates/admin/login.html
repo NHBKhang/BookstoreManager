@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Đăng nhập</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../static/css/admin_login.css">
+    <script rel="stylesheet" src="../../static/js/script.js"></script>
+</head>
+<body>
+<section class="text-center">
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <div class="fadeIn first">
+                <h1 class="text-success">Đăng nhập quản trị</h1>
+            </div>
+            <form action="/admin/login" method="post">
+                <div>
+                    <label class="text-info m-0 form-label" for="uname">Tên tài khoản:</label>
+                    <input type="text" id="username" class="fadeIn second" name="username" placeholder="Nhập tài khoản...">
+                    <div id="error-username">Vui lòng nhập tài khoản của bạn</div>
+                </div>
+                <div>
+                    <label class="text-info m-0 form-label" for="password">Mật khẩu:</label>
+                    <input type="password" id="password" class="fadeIn third" name="password"
+                           placeholder="Nhập mật khẩu...">
+                    <div id="error-password">Vui lòng nhập mật khẩu của bạn</div>
+                </div>
+                <button onclick="invalid()" type="submit" class="btn btn-primary">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+</section>
+</body>
+</html>

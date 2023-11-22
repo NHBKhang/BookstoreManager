@@ -1,0 +1,56 @@
+/*bs5 class*/
+.dropdown-item:hover{
+    background-color: gray;
+}
+/*tag*/
+a{
+    text-decoration: none;
+    color: aliceblue;
+}
+.social-icon li a i{
+    margin-right: .5rem;
+}
+/*header*/
+.header{
+    background: linear-gradient(to bottom right, yellow 25%, greenyellow 50%, yellowgreen);
+    justify-content: center;
+    align-items: center;
+}
+.header nav a{
+    margin: 0;
+}
+.logo{
+    height: 3.5rem;
+    padding: 0;
+    margin: 0 .5rem .5rem;
+}
+.logo-name{
+    color: blue;
+    margin: 0;
+    padding: 0;
+    font-size:  3rem;
+    font-family: font-champion;
+}
+/*footer*/
+footer .container a:hover > .fa-brands.fa-facebook
+{
+    color:#385898;
+    background: radial-gradient(circle at center,  #faf9f9 10%,#faf9f9 64%,#faf9f9 47%,rgba(27,27,27,1.00) 47%,rgba(27,27,27,1.00) 48%);
+}
+footer .container a:hover > .fa-brands.fa-twitter
+{
+    color:#1DA1F2;
+}
+footer .container a:hover > .fa-brands.fa-instagram
+{
+    background:linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+}
+footer .container a:hover > .fa-brands.fa-youtube
+{
+    color:red;
+    background: radial-gradient(ellipse at center,  #faf9f9 0%,#faf9f9 47%,#faf9f9 47%,rgba(27,27,27,1.00) 47%,rgba(27,27,27,1.00) 48%);
+}
+@font-face {
+    font-family: font-champion;
+    src: url(../font/font_champion_scrip.ttf);
+}
