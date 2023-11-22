@@ -1,34 +1,41 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <title>Đăng nhập</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-            crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/76334962e6.js" crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../../static/css/admin_login.css">
+    <script rel="stylesheet" src="../../static/js/script.js"></script>
 </head>
 <body>
-<div class="container">
-    <br>
-    <h1 class="text-center text-success">ĐĂNG NHẬP QUẢN TRỊ</h1>
-    <form method="post" action="/admin/login">
-        <div class="mb-3 mt-3">
-            <label for="username" class="form-label">Tên đăng nhập:</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập">
+<section class="text-center">
+    <div class="wrapper fadeInDown">
+        <div id="formContent">
+            <div class="fadeIn first">
+                <h1 class="text-success">Đăng nhập quản trị</h1>
+            </div>
+            <form action="/admin/login" method="post">
+                <div>
+                    <label class="text-info m-0 form-label" for="uname">Tên tài khoản:</label>
+                    <input type="text" id="username" class="fadeIn second" name="username" placeholder="Nhập tài khoản...">
+                    <div id="error-username">Vui lòng nhập tài khoản của bạn</div>
+                </div>
+                <div>
+                    <label class="text-info m-0 form-label" for="password">Mật khẩu:</label>
+                    <input type="password" id="password" class="fadeIn third" name="password"
+                           placeholder="Nhập mật khẩu...">
+                    <div id="error-password">Vui lòng nhập mật khẩu của bạn</div>
+                </div>
+                <button onclick="invalid()" type="submit" class="btn btn-primary">Đăng nhập</button>
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="pwd" class="form-label">Mật khẩu:</label>
-            <input type="password" class="form-control" id="pwd" name="password" placeholder="Mật khẩu">
-        </div>
-        <button type="submit" class="btn btn-primary">Đăng nhập</button>
-    </form>
-</div>
-
+    </div>
+</section>
 </body>
 </html>

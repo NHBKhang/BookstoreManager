@@ -69,11 +69,13 @@ class Account(db.Model, UserMixin):
     username = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
     status = Column(Enum(AccountStatus), default=AccountStatus.ACTIVE)
+    avatar = Column(String(255), nullable=False,
+                    default='https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png')
     register_date = Column(DateTime, default=datetime.now())
     last_login = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
 
-class Admin(Account, UserMixin):
+class Admin(Account):
     __tablename__ = 'admin'
     __table_args__ = {'extend_existing': True}
 
@@ -82,24 +84,26 @@ class Admin(Account, UserMixin):
     role = Column(Enum(AdminRole), default=AdminRole.OWNER)
 
 
-class User(Account):
-    __tablename__ = 'user'
-    __table_args__ = {'extend_existing': True}
-
-    first_name = Column(String(50), nullable=False)
-    last_name = Column(String(50), nullable=False)
-    birthday = Column(DateTime, nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
-    phone = Column(String(12), unique=True, nullable=False)
-    gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
-    address = Column(String(100), nullable=False)
+# class User(Account):
+#     __tablename__ = 'user'
+#     __table_args__ = {'extend_existing': True}
+#
+#     first_name = Column(String(50), nullable=False)
+#     last_name = Column(String(50), nullable=False)
+#     birthday = Column(DateTime, nullable=False)
+#     email = Column(String(50), unique=True, nullable=False)
+#     phone = Column(String(12), unique=True, nullable=False)
+#     gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
+#     address = Column(String(100), nullable=False)
 
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
-        import hashlib
-        admin = Admin(username='admin', password=hashlib.md5("123456".encode('utf-8')).hexdigest(), name='admin', email='admin@gmail.com')
-        db.session.add(admin)
-        db.session.commit()
+        # import hashlib
+        #
+        # admin = Admin(username='admin', password=hashlib.md5("123456".encode('utf-8')).hexdigest(), name='admin',
+        #               email='admin@gmail.com')
+        # db.session.add(admin)
+        # db.session.commit()

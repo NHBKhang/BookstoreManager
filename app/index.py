@@ -7,7 +7,7 @@ from flask_login import login_user
 
 @app.route('/')
 def index():
-    return render_template('admin/index.html')
+    return render_template('index.html')
 
 
 @app.route("/admin/login", methods=['GET', 'POST'])
@@ -15,18 +15,20 @@ def login_admin():
     if request.method == 'POST':
         username = request.form.get("username")
         password = request.form.get("password")
-        from app.models import Admin
-        user = Admin.query.filter(username == username, password == password).first()
-        if user:
-            login_user(user=user)
+        if username != '' and password != '':
+            user = dao.auth_admin(username=username, password=password)
+            if user:
+                login_user(user=user)
 
     return redirect("/admin")
 
 
 @login.user_loader
-def get_user(user_id):
-    return dao.get_user_by_id(user_id)
+def get_admin(admin_id):
+    return dao.get_admin_by_id(admin_id)
 
 
 if __name__ == '__main__':
+    from app import admin
+
     app.run(debug=True)

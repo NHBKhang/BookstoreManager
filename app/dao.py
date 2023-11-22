@@ -1,4 +1,4 @@
-from app.models import Category, Product, User
+from app.models import Category, Product, Admin
 from app import app
 import hashlib
 
@@ -25,12 +25,14 @@ def count_product():  # Count number of product in database
     return Product.query.count()
 
 
-def get_user_by_id(user_id):
-    return User.query.get(user_id)
+def get_admin_by_id(admin_id):
+    return Admin.query.get(admin_id)
 
 
-def auth_user(username, password):
+def auth_admin(username, password):
+    import hashlib
+
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest()) #Decrypt password from clients
 
-    return User.query.filter(User.username.__eq__(username.strip()),
-                             User.password.__eq__(password)).first()
+    return Admin.query.filter(Admin.username.__eq__(username.strip()),
+                             Admin.password.__eq__(password)).first()

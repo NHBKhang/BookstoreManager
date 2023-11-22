@@ -1,4 +1,4 @@
-{#{% if current_user.is_authenticated %}#}
+{% if current_user.is_authenticated %}
 
     {% extends 'admin/master.html' %}
 
@@ -9,6 +9,6 @@
 
     {% endblock %}
 
-{#{% else %}#}
-{#    {% include 'admin/login.html' %}#}
-{#{% endif %}#}
+{% else %}
+    {% include 'admin/login.html' %}
+{% endif %}

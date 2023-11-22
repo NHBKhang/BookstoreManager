@@ -39,6 +39,7 @@ class MyStatsView(BaseView):
 
 
 @app.route('/admin/logout')
+@expose("/")
 def logout_admin():
     logout_user()
     return redirect('/admin')

@@ -52,5 +52,5 @@ footer .container a:hover > .fa-brands.fa-youtube
 }
 @font-face {
     font-family: font-champion;
-    src: url(font/font_champion_scrip.ttf);
+    src: url(../font/font_champion_scrip.ttf);
 }
