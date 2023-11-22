@@ -24,15 +24,15 @@
                 <div>
                     <label class="text-info m-0 form-label" for="uname">Tên tài khoản:</label>
                     <input type="text" id="username" class="fadeIn second" name="username" placeholder="Nhập tài khoản...">
-                    <div id="error-username">Vui lòng nhập tài khoản của bạn</div>
+                    <div style="display: {{ err_usr }}" id="error-username">Vui lòng nhập tài khoản của bạn</div>
                 </div>
                 <div>
                     <label class="text-info m-0 form-label" for="password">Mật khẩu:</label>
                     <input type="password" id="password" class="fadeIn third" name="password"
                            placeholder="Nhập mật khẩu...">
-                    <div id="error-password">Vui lòng nhập mật khẩu của bạn</div>
+                    <div style="display: {{ err_pwd }}" id="error-password">Vui lòng nhập mật khẩu của bạn</div>
                 </div>
-                <button onclick="invalid()" type="submit" class="btn btn-primary">Đăng nhập</button>
+                <button type="submit" class="btn btn-primary">Đăng nhập</button>
             </form>
         </div>
     </div>

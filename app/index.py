@@ -29,6 +29,13 @@ def login_admin():
             user = dao.auth_admin(username=username, password=password)
             if user:
                 login_user(user=user)
+        else:
+            err_usr_mess = err_pwd_mess = ""
+            if username == '':
+                err_usr_mess = 'block'
+            if password == '':
+                err_pwd_mess = 'block'
+            return render_template('admin/login.html', err_usr=err_usr_mess, err_pwd=err_pwd_mess)
 
     return redirect("/admin")
 

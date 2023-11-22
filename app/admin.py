@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Category, Book
+from app.models import Category, Book, User
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
@@ -26,10 +26,19 @@ class MyBookView(ModelView):
     column_filters = ['price', 'name']
     column_editable_list = ['name', 'price']
     edit_modal = True
+    create_modal = True
 
 
 class MyCategoryView(ModelView):
     column_list = ['name', 'products']
+    edit_modal = True
+    create_modal = True
+
+
+class MyUserView(ModelView):
+    column_list = ['username', 'first_name', 'last_name']
+    edit_modal = True
+    create_modal = True
 
 
 class MyStatsView(BaseView):
@@ -45,6 +54,7 @@ def logout_admin():
     return redirect('/admin')
 
 
-admin.add_view(MyCategoryView(Category, db.session))
-admin.add_view(MyBookView(Book, db.session))
-admin.add_view(MyStatsView(name='Thống kê báo cáo'))
+admin.add_view(MyUserView(User, db.session, menu_icon_type="fa", menu_icon_value="fa-users"))
+admin.add_view(MyCategoryView(Category, db.session, menu_icon_type="fa", menu_icon_value="fa-list"))
+admin.add_view(MyBookView(Book, db.session, menu_icon_type="fa", menu_icon_value="fa-book"))
+admin.add_view(MyStatsView(name='Thống kê báo cáo', menu_icon_type="fa", menu_icon_value="fa-calculator"))

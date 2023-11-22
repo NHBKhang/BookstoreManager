@@ -1,21 +1,17 @@
 /* BASIC */
-
 html {
     background-color: #56baed;
 }
-
 body {
     font-family: "Poppins", sans-serif;
     height: 100vh;
 }
-
 a {
     color: #92badd;
     display: inline-block;
     text-decoration: none;
     font-weight: 400;
 }
-
 h2 {
     text-align: center;
     font-size: 16px;
@@ -25,7 +21,6 @@ h2 {
     margin: 40px 8px 10px 8px;
     color: #cccccc;
 }
-
 .wrapper {
     display: flex;
     align-items: center;
@@ -35,7 +30,6 @@ h2 {
     min-height: 100%;
     padding: 20px;
 }
-
 #formContent {
     -webkit-border-radius: 10px 10px 10px 10px;
     border-radius: 10px 10px 10px 10px;
@@ -49,7 +43,6 @@ h2 {
     box-shadow: 0 30px 60px 0 rgba(0, 0, 0, 0.3);
     text-align: center;
 }
-
 #formFooter {
     background-color: #f6f6f6;
     border-top: 1px solid #dce8f1;
