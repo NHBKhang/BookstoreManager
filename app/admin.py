@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Category, Product
+from app.models import Category, Book
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
@@ -19,7 +19,7 @@ class AuthenticatedUser(BaseView):
         return current_user.is_authenticated
 
 
-class MyProductView(ModelView):
+class MyBookView(ModelView):
     column_list = ['id', 'name', 'price']
     can_export = True
     column_searchable_list = ['name']
@@ -46,5 +46,5 @@ def logout_admin():
 
 
 admin.add_view(MyCategoryView(Category, db.session))
-admin.add_view(MyProductView(Product, db.session))
+admin.add_view(MyBookView(Book, db.session))
 admin.add_view(MyStatsView(name='Thống kê báo cáo'))

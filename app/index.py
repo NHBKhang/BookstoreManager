@@ -7,7 +7,17 @@ from flask_login import login_user
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    kw = request.args.get('kw')
+    cate_id = request.args.get('cate_id')
+    page = request.args.get('page')
+
+    cates = dao.get_categories()
+    books = dao.get_books(kw, cate_id, page)
+
+    num = dao.count_books()
+    page_size = app.config['PAGE_SIZE']
+
+    return render_template('index.html', categories=cates, books=books, pages=math.ceil(num / page_size))
 
 
 @app.route("/admin/login", methods=['GET', 'POST'])

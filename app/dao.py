@@ -1,32 +1,36 @@
-from app.models import Category, Product, Admin
+from app.models import Category, Book, Admin, User
 from app import app
 import hashlib
 
 
-def get_category():
+def get_categories():
     return Category.query.all()
 
 
-def get_product(kw=None, cate_id=None, page=None):
-    products = Product.query
+def get_books(kw=None, cate_id=None, page=None):
+    books = Book.query
     if kw:
-        products = products.filter(Product.name.contains(kw))
+        books = books.filter(Book.name.contains(kw))
     if cate_id:
-        products = products.filter(Product.category_id.__eq__(cate_id))
+        books = books.filter(Book.category_id.__eq__(cate_id))
     if page:
         page = int(page)
         page_size = app.config['PAGE_SIZE']
         start = (page - 1) * page_size
-        return products.slice(start, start + page_size)
-    return products.all()
+        return books.slice(start, start + page_size)
+    return books.all()
 
 
-def count_product():  # Count number of product in database
-    return Product.query.count()
+def count_books():  # Count number of product in database
+    return Book.query.count()
 
 
 def get_admin_by_id(admin_id):
     return Admin.query.get(admin_id)
+
+
+def get_user_by_id(user_id):
+    return User.query.get(user_id)
 
 
 def auth_admin(username, password):

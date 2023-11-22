@@ -19,9 +19,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thể loại</a>
                     <ul class="dropdown-menu bg-dark">
-                        <li><a class="dropdown-item text-white" href="#">Link</a></li>
-                        <li><a class="dropdown-item text-white" href="#">Another link</a></li>
-                        <li><a class="dropdown-item text-white" href="#">A third link</a></li>
+                        {% for c in categories %}
+                            <li><a class="dropdown-item text-white" href="/?cate_id={{ c.id }}">{{ c.name }}</a></li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul>

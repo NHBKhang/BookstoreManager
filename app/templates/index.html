@@ -4,15 +4,25 @@
 
     <section class="container">
         <div class="row">
-            <div class="card col-xs-12 col-md-3 mt-1">
-                <img class="card-img-top h-100" src="img_avatar1.png" alt="Card image">
-                <div class="card-body">
-                    <h4 class="card-title">John Doe</h4>
-                    <p class="card-text">Some example text.</p>
-                    <a href="#" class="btn btn-primary">See Profile</a>
+            {% for b in books %}
+                <div class="card col-xs-12 col-md-3 mt-1">
+                    <img class="card-img-top h-100" src="{{ b.image }}" alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ b.name }}</h4>
+                        <p class="card-text">{{ b.description }}</p>
+                    </div>
+                    <div style="justify-content: space-between" class="card-footer d-flex">
+                        <a href="#" class="btn btn-danger">Đặt hàng</a>
+                        <a href="#" class="btn btn-primary">Chi tiết</a>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
+        <ul style="justify-content: center" class="pagination mt-1 d-flex">
+            {% for i in range(pages) %}
+                <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+            {% endfor %}
+        </ul>
     </section>
 
 {% endblock %}
