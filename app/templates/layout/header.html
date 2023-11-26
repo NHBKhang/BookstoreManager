@@ -33,8 +33,40 @@
                 <form class="d-flex" action="/" method="get">
                     <input class="form-control me-2" type="text" placeholder="Nhập văn bản..." name="kw">
                     <button class="btn btn-primary icon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button class="btn btn-primary icon ms-2"><i class="fa-solid fa-user"></i></button>
+                    <button type="button" class="btn btn-primary d-block icon ms-2" data-bs-toggle="modal" data-bs-target="#modalForm">
+    <i class="fa-solid fa-user"></i>
+</button>
                 </form>
+<div class="modal fade" id="modalForm" tabindex="-1" aria-labelledby="Userlogin" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Đăng nhập</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/layout/header" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Tên đăng nhập: </label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Nhập tên đăng nhập..." />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mật khẩu</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu..." />
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe" />
+                        <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
+                    </div>
+                    <div class="modal-footer d-block">
+                        <p class="float-start">Chưa có tài khoản? <a class="link-primary" href="/signup">Đăng ký</a></p>
+                        <button type="submit" class="btn btn-primary float-end">Đăng nhập</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
