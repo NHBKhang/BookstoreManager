@@ -1,4 +1,5 @@
-from app import app, db, models
+from app import app, db
+from app.forms import BookViewForm
 from app.models import Category, Book, User, Inventory
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
@@ -21,12 +22,13 @@ class AuthenticatedUser(BaseView):
 
 class MyBookView(ModelView):
     column_list = ['name', 'price']
-    can_export = True
     column_searchable_list = ['name']
     column_filters = ['price', 'name']
     column_editable_list = ['name', 'price']
     edit_modal = True
     create_modal = True
+    can_export = True
+    form = BookViewForm
 
 
 class MyCategoryView(ModelView):

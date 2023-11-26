@@ -1,4 +1,4 @@
-from app.models import Category, Book, Admin, User, Account, Book_Category, Book_Author, Author
+from app.models import Category, Book, Admin, User, Account, Book_Category, Book_Author, Author, Inventory
 from app import app
 import hashlib
 
@@ -21,6 +21,14 @@ def get_books(kw=None, cate_id=None, page=None):
         start = (page - 1) * page_size
         return books.slice(start, start + page_size)
     return books.all()
+
+
+def get_authors():
+    return Author.query.all()
+
+
+def get_inventories():
+    return Inventory.query.all()
 
 
 def count_books():  # Count number of product in database

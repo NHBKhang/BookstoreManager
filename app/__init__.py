@@ -11,6 +11,7 @@ app.secret_key = '235657586DGFHJMNF4354574$#%$^%&5EF#%$^&$#$@FDGFNBCB#%$^%&^2436
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/bookstoredb?charset=utf8mb4" % quote(s1)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config['PAGE_SIZE'] = 12
+app.config['COLUMN_LENGTH'] = 3
 
 db = SQLAlchemy(app=app)
 admin_login = LoginManager(app=app)

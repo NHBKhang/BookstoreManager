@@ -83,6 +83,9 @@ class Book_Category(db.Model):
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
     category_id = Column(Integer, ForeignKey(Category.id), nullable=False)
 
+    def __str__(self):
+        return Book.query.get(self.book_id).name + ' + ' + Category.query.get(self.category_id).name
+
 
 class Book_Author(db.Model):
     __tablename__ = 'book_author'
