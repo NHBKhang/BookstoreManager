@@ -1,62 +1,138 @@
 /*bs5 class*/
-.dropdown-item:hover{
-    background-color: gray;
+.dropdown-item:hover {
+    background-color: grey;
 }
+
+.card-title {
+    width: 100%;
+    height: 3.5rem;
+    overflow: hidden;
+}
+
+.card {
+    width: 175px;
+}
+
+
+.card-footer {
+    width: 100%;
+    margin: 0;
+    padding: 3px;
+}
+
+.btn {
+    font-size: 1rem;
+    padding: 5px;
+}
+
+@media screen and (max-width: 775px) {
+    .card {
+        width: 150px;
+    }
+
+    .card-title {
+        height: 2.5rem;
+        font-size: 1.1rem !important;
+    }
+
+    .card-footer {
+        padding: 1.5px;
+    }
+
+    .card-text {
+        font-size: .8rem !important;
+    }
+
+    .btn {
+        font-size: .8rem !important;
+        padding: 5px;
+    }
+}
+
 /*tag*/
-html{
+html {
     scroll-behavior: smooth;
 }
-a{
+
+a {
     text-decoration: none;
     color: aliceblue;
 }
-.social-icon li a i{
+
+.social-icon li a i {
     margin-right: .5rem;
 }
+
 /*header*/
-.header{
+.header {
     background: linear-gradient(to bottom right, yellow 25%, greenyellow 50%, yellowgreen);
     justify-content: center;
     align-items: center;
 }
-.header nav a{
+
+.header nav a {
     margin: 0;
 }
-.logo{
+
+.logo {
     height: 3.5rem;
     padding: 0;
     margin: 0 .5rem .75rem;
 }
-.logo-name{
+
+.logo-name {
     color: blue;
     margin: 0;
     padding: 0;
-    font-size:  3.5rem;
+    font-size: 3.5rem;
     font-family: logo-font;
 }
+.btn.btn-primary.icon{
+    width: 40px;
+    height: 35px;
+}
+
 /*body*/
-
+/*details.html*/
+.details{
+    border: 2px solid #0d0d0d;
+    padding: .5rem;
+    border-radius: 5px;
+}
+.details-item{
+    padding: 0 5px 0 5px;
+    margin: 0;
+}
+.details-text{
+    font-weight: normal;
+    color: #0d0d0d !important;
+}
+a.details-text:hover{
+    color: blue !important;
+}
+span.m-0.p-0{
+    margin-left: -3px !important;
+}
 /*footer*/
-footer .container a:hover > .fa-brands.fa-facebook
-{
-    color:#385898;
-    background: radial-gradient(circle at center,  #faf9f9 10%,#faf9f9 64%,#faf9f9 47%,rgba(27,27,27,1.00) 47%,rgba(27,27,27,1.00) 48%);
-}
-footer .container a:hover > .fa-brands.fa-twitter
-{
-    color:#1DA1F2;
-}
-footer .container a:hover > .fa-brands.fa-instagram
-{
-    background:linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
-}
-footer .container a:hover > .fa-brands.fa-youtube
-{
-    color:red;
-    background: radial-gradient(ellipse at center,  #faf9f9 0%,#faf9f9 47%,#faf9f9 47%,rgba(27,27,27,1.00) 47%,rgba(27,27,27,1.00) 48%);
+footer .container a:hover > .fa-brands.fa-facebook {
+    color: #385898;
+    background: radial-gradient(circle at center, #faf9f9 10%, #faf9f9 64%, #faf9f9 47%, rgba(27, 27, 27, 1.00) 47%, rgba(27, 27, 27, 1.00) 48%);
 }
 
-#return>button{
+footer .container a:hover > .fa-brands.fa-twitter {
+    color: #1DA1F2;
+}
+
+footer .container a:hover > .fa-brands.fa-instagram {
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+}
+
+footer .container a:hover > .fa-brands.fa-youtube {
+    color: red;
+    background: radial-gradient(ellipse at center, #faf9f9 0%, #faf9f9 47%, #faf9f9 47%, rgba(27, 27, 27, 1.00) 47%, rgba(27, 27, 27, 1.00) 48%);
+}
+
+#return > button {
     font-size: 2.5rem;
     color: rgb(75, 75, 243);
     position: fixed;
@@ -76,10 +152,12 @@ footer .container a:hover > .fa-brands.fa-youtube
     cursor: pointer;
     margin: .75rem;
 }
-#return>button:hover {
+
+#return > button:hover {
     background-color: rgb(205, 220, 220);
     color: dodgerblue;
 }
+
 @font-face {
     font-family: logo-font;
     src: url(../font/monster.ttf);

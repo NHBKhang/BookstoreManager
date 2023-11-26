@@ -11,3 +11,12 @@ function scrollToTop()
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
+function init() {
+
+    // multi-column CSS
+    let theComboCSS = new input.ComboBox('#theComboCSS', {
+        dropDownCssClass: 'cb-flex',
+        displayMemberPath: 'country',
+        itemsSource: getData()
+    });
+}

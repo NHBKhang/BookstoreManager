@@ -2,27 +2,36 @@
 
 {% block content %}
 
+    <br>
     <section class="container">
-        <div class="row">
-            {% for b in books %}
-                <div class="card col-xs-12 col-md-3 mt-1">
-                    <img class="card-img-top h-100" src="{{ b.image }}" alt="Card image">
-                    <div class="card-body">
-                        <h4 class="card-title">{{ b.name }}</h4>
-                        <p class="card-text">{{ b.description }}</p>
+        {% if books %}
+            <div style="justify-content: center" class="row d-flex">
+                {% for b in books %}
+                    <div class="card mb-2 ms-1 me-1">
+                        <img title="{{ b.name }}" class="card-img-top h-100" src="{{ b.image }}" alt="Card image">
+                        <div class="card-body">
+                            <h4 title="{{ b.name }}" class="card-title w-100">{{ b.name }}</h4>
+                            <p title="{{ b.price }} VNĐ" class="card-text">{{ b.price }} VNĐ</p>
+                        </div>
+                        <div style="justify-content: space-between" class="card-footer d-flex w-100">
+                            <a href="" onclick="addToCart('{{ b.id }}', '{{ b.name }}', {{ b.price }})"
+                               class="btn btn-danger">Đặt hàng</a>
+                            <a href="/books/{{ b.id }}" class="btn btn-primary">Chi tiết</a>
+                        </div>
                     </div>
-                    <div style="justify-content: space-between" class="card-footer d-flex">
-                        <a href="#" class="btn btn-danger">Đặt hàng</a>
-                        <a href="#" class="btn btn-primary">Chi tiết</a>
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
-        <ul style="justify-content: center" class="pagination mt-1 d-flex">
-            {% for i in range(pages) %}
-                <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}">{{ i + 1 }}</a></li>
-            {% endfor %}
-        </ul>
+                {% endfor %}
+            </div>
+            <ul style="justify-content: center" class="pagination mt-1 d-flex">
+                {% for i in range(pages) %}
+                    <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="alert alert-info mt-2">KHÔNG có sản phẩm nào!!!</p>
+        {% endif %}
     </section>
+    <br>
+
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 
 {% endblock %}

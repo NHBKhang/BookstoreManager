@@ -6,7 +6,7 @@
         <a class="navbar-brand logo-name" href="/">Book Store</a>
     </nav>
 </div>
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav style="position: relative" class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
@@ -18,22 +18,23 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thể loại</a>
-                    <ul class="dropdown-menu bg-dark">
+                    <ul style="column-count: 3" class="dropdown-menu bg-dark">
                         {% for c in categories %}
-                            <li><a class="dropdown-item text-white" href="/?cate_id={{ c.id }}">{{ c.name }}</a></li>
+                            <li><a class="dropdown-item text-white" href="/?cate_id={{ c.id }}">{{ c.name }}</a>
                         {% endfor %}
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-danger" href="/cart">&#128722; Giỏ hàng <span
+                            class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a>
                 </li>
             </ul>
             <div class="d-inline-flex">
                 <form class="d-flex" action="/" method="get">
                     <input class="form-control me-2" type="text" placeholder="Nhập văn bản..." name="kw">
-                    <button class="btn btn-primary" type="submit"><i class="fa-solid fa-magnifying-glass"></i>
-                    </button>
+                    <button class="btn btn-primary icon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="btn btn-primary icon ms-2"><i class="fa-solid fa-user"></i></button>
                 </form>
-                <button class="btn btn-primary ms-2"><i class="fa-solid fa-user"></i></button>
-            </div>
-            <div>
             </div>
         </div>
     </div>

@@ -1,5 +1,5 @@
-from app import app, db
-from app.models import Category, Book, User
+from app import app, db, models
+from app.models import Category, Book, User, Inventory
 from flask_admin import Admin, BaseView, expose
 from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
@@ -20,7 +20,7 @@ class AuthenticatedUser(BaseView):
 
 
 class MyBookView(ModelView):
-    column_list = ['id', 'name', 'price']
+    column_list = ['name', 'price']
     can_export = True
     column_searchable_list = ['name']
     column_filters = ['price', 'name']
@@ -31,6 +31,7 @@ class MyBookView(ModelView):
 
 class MyCategoryView(ModelView):
     column_list = ['name', 'products']
+    column_searchable_list = ['name']
     edit_modal = True
     create_modal = True
 
@@ -39,6 +40,15 @@ class MyUserView(ModelView):
     column_list = ['username', 'first_name', 'last_name']
     edit_modal = True
     create_modal = True
+
+
+class MyInventoryView(ModelView):
+    column_list = ['name']
+    column_editable_list = ['name']
+    column_searchable_list = ['name']
+    edit_modal = True
+    create_modal = True
+
 
 
 class MyStatsView(BaseView):
@@ -57,4 +67,5 @@ def logout_admin():
 admin.add_view(MyUserView(User, db.session, menu_icon_type="fa", menu_icon_value="fa-users"))
 admin.add_view(MyCategoryView(Category, db.session, menu_icon_type="fa", menu_icon_value="fa-list"))
 admin.add_view(MyBookView(Book, db.session, menu_icon_type="fa", menu_icon_value="fa-book"))
+admin.add_view(MyInventoryView(Inventory, db.session, menu_icon_type="fa", menu_icon_value="fa-box"))
 admin.add_view(MyStatsView(name='Thống kê báo cáo', menu_icon_type="fa", menu_icon_value="fa-calculator"))
