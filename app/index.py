@@ -42,28 +42,28 @@ def login_admin():
     return redirect("/admin")
 
 
-@app.route("/layout/header", methods=['GET', 'POST'])
-def login_admin():
-    if request.method == 'POST':
-        username = request.form.get("username")
-        password = request.form.get("password")
-
-        if username != '' and password != '':
-            user = dao.auth_admin(username=username, password=password)
-            if user:
-                login_user(user=user)
-        else:
-            if username == '':
-                err_usr_dis = 'block'
-            else:
-                err_usr_dis = 'none'
-            if password == '':
-                err_pwd_dis = 'block'
-            else:
-                err_pwd_dis = 'none'
-            return render_template('admin/login.html', err_usr_dis=err_usr_dis, err_pwd_dis=err_pwd_dis)
-
-    return redirect("/admin")
+# @app.route("/layout/header", methods=['GET', 'POST'])
+# def login_admin():
+#     if request.method == 'POST':
+#         username = request.form.get("username")
+#         password = request.form.get("password")
+#
+#         if username != '' and password != '':
+#             user = dao.auth_admin(username=username, password=password)
+#             if user:
+#                 login_user(user=user)
+#         else:
+#             if username == '':
+#                 err_usr_dis = 'block'
+#             else:
+#                 err_usr_dis = 'none'
+#             if password == '':
+#                 err_pwd_dis = 'block'
+#             else:
+#                 err_pwd_dis = 'none'
+#             return render_template('layout/index.html', err_usr_dis=err_usr_dis, err_pwd_dis=err_pwd_dis)
+#
+#     return redirect("/")
 
 
 @app.route("/books/<int:book_id>")
@@ -102,6 +102,10 @@ def add_to_cart():
 @app.route('/cart')
 def cart():
     return render_template('cart.html')
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
 
 
 @app.context_processor
