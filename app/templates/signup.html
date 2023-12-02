@@ -2,88 +2,66 @@
 
 {% block content %}
 
-        <div class="mask d-flex align-items-center">
-            <div class="container">
-                <div class="row d-flex justify-content-center align-items-center">
-                    <div class="">
-                        <div class="card" style="border-radius: 15px;">
-                            <div class="card-body p-5">
-                                <h2 class="text-uppercase text-center mb-5">Tạo tài khoản mới</h2>
-
-                                <form action="#" method="post">
-
-                                    <div class="form-outline mb-4 row">
-                                        <div class="col-xs-1 col-md-6">
-                                            <label class="form-label" for="database">Họ đệm: </label>
-                                            <input type="text" id="database" class="form-control form-control-lg"/>
-                                        </div>
-                                        <div class="col-xs-12 col-md-6">
-                                            <label class="form-label" for="database">Tên: </label>
-                                            <input type="text" id="database" class="form-control form-control-lg"/>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="database">Tên đăng nhập: </label>
-                                        <input type="email" id="username" class="form-control form-control-lg"/>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="form3Example4cg">Mật khẩu: </label>
-                                        <input type="password" id="password" class="form-control form-control-lg"/>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="database">Nhập lại mật khẩu: </label>
-                                        <input type="password" id="password" class="form-control form-control-lg"/>
-                                    </div>
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="database">Giới tính: </label>
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="gender">
-                                        <label class="form-check-label">
-                                            Default radio
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="flexRadioDefault2" checked>
-                                        <label class="form-check-label" for="flexRadioDefault2">
-                                            Default checked radio
-                                        </label>
-                                    </div>
-
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="database">Nhập vào email: </label>
-                                        <input type="password" id="password" class="form-control form-control-lg"/>
-                                    </div>
-
-                                    <div class="form-check d-flex justify-content-center mb-5">
-                                        <input class="form-check-input me-2" type="checkbox" value="" id="database"/>
-                                        <label class="form-check-label" for="database">
-                                            Tôi đồng ý với <a href="#!" class="text-body"><u> Điều khoảng sử
-                                            dụng</u></a> và <a href="#!" class="text-body"><u> Chính sách bảo
-                                            mật</u></a>
-                                        </label>
-                                    </div>
-
-                                    <div class="d-flex justify-content-center">
-                                        <button type="button"
-                                                class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">
-                                            Đăng ký
-                                        </button>
-                                    </div>
-
-                                    <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản? <a href="#!"
-                                                                                                    class="fw-bold text-body"><u>Đăng
-                                        nhập ngay</u></a></p>
-
-                                </form>
-
-                            </div>
+    <div style="border-radius: 20px" class="container border border-primary mt-5">
+        <div class="row">
+            <div style="border-radius: 15px" class="col border-2">
+                <div>
+                    <div class="text-center m-2 p-1">
+                        <h1>Đăng ký tài khoản mới</h1>
+                    </div>
+                    <div class="form-outline mb-4 row">
+                        <div class="col-xs-1 col-md-6">
+                            <label class="form-label" for="database">Họ đệm: </label>
+                            <input type="text" id="database" class="form-control form-control-lg"/>
+                        </div>
+                        <div class="col-xs-12 col-md-6">
+                            <label class="form-label" for="database">Tên: </label>
+                            <input type="text" id="database" class="form-control form-control-lg"/>
                         </div>
                     </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="database">Tên đăng nhập: </label>
+                        <input type="email" id="username" class="form-control form-control-lg"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form3Example4cg">Mật khẩu: </label>
+                        <input type="password" id="password" class="form-control form-control-lg"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="database">Nhập lại mật khẩu: </label>
+                        <input type="password" id="password" class="form-control form-control-lg"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="database">Nhập vào email: </label>
+                        <input type="password" id="password" class="form-control form-control-lg"/>
+                    </div>
+
+                    <div class="form-check d-flex justify-content-center mb-5">
+                        <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg"/>
+                        <label class="form-check-label" for="form2Example3g">
+                            Tôi đồng ý với <a href="#!" class="text-body"><u> Điều khoảng sử dụng</u></a> và <a
+                                href="#!" class="text-body"><u> Chính sách bảo mật</u></a>
+                        </label>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button type="button"
+                                class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Đăng ký
+                        </button>
+                    </div>
+
+                    <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản? <a href="/"
+                                                                                    class="fw-bold text-body"><u>Đăng
+                        nhập ngay</u></a></p>
+
+                    </form>
+
                 </div>
             </div>
         </div>
+    </div>
 {% endblock %}
