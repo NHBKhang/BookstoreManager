@@ -20,7 +20,7 @@
                         <input type="number" value="{{ c.quantity }}" class="form-control"/>
                     </td>
                     <td>
-                        <button class="btn btn-danger">&times;</button>
+                        <button onclick="removeCartItem('{{ c.id }}')" class="btn btn-danger">&times;</button>
                     </td>
                 </tr>
             {% endfor %}

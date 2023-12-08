@@ -11,6 +11,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../../static/css/admin/login.css">
+    <link rel="stylesheet" href="../../static/css/anim.css">
     <script rel="stylesheet" src="../../static/js/script.js"></script>
 </head>
 <body>
@@ -23,14 +24,16 @@
             <form action="/admin/login" method="post">
                 <div>
                     <label class="text-info m-0 form-label" for="uname">Tên tài khoản:</label>
-                    <input type="text" id="username" class="fadeIn second" name="username" placeholder="Nhập tài khoản...">
-                    <div style="display: {{ err_usr_dis }}" id="error-username">Vui lòng nhập tài khoản của bạn</div>
+                    <input type="text" id="username" class="fadeIn second" name="username"
+                           placeholder="Nhập tài khoản..." required>
                 </div>
                 <div>
                     <label class="text-info m-0 form-label" for="password">Mật khẩu:</label>
                     <input type="password" id="password" class="fadeIn third" name="password"
-                           placeholder="Nhập mật khẩu...">
-                    <div style="display: {{ err_pwd_dis }}" id="error-password">Vui lòng nhập mật khẩu của bạn</div>
+                           placeholder="Nhập mật khẩu..." required>
+                    {% if err_acc %}
+                        <div id="error">Tài khoản hoặc mật khẩu của bạn không chính xác. Vui lòng nhập lại.</div>
+                    {% endif %}
                 </div>
                 <button type="submit" class="btn btn-primary">Đăng nhập</button>
             </form>

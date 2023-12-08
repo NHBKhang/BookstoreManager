@@ -6,17 +6,19 @@ window.onscroll = function () {
         r.style.display = "none";
     }
 }
-function scrollToTop()
-{
+
+function scrollToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
 }
-function init() {
 
-    // multi-column CSS
-    let theComboCSS = new input.ComboBox('#theComboCSS', {
-        dropDownCssClass: 'cb-flex',
-        displayMemberPath: 'country',
-        itemsSource: getData()
-    });
+function showPassword(e, nameId='password') {
+    var input = document.getElementById(nameId)
+    if (input.type === 'password') {
+        input.type = "text"
+        e.target.className = "fas fa-eye"
+    } else {
+        input.type = "password"
+        e.target.className = "fas fa-eye-slash"
+    }
 }

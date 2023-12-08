@@ -17,3 +17,7 @@ function addToCart(id, name, price) {
             item.innerText = data.total_quantity;
     })
 }
+
+function removeCartItem(id) {
+
+}

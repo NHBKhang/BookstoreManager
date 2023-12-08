@@ -20,6 +20,15 @@ class AdminRole(enum.Enum):
     OWNER = 1
 
 
+class CustomerType(enum.Enum):
+    GUEST = 1,
+    LOYAL = 2
+
+
+class StaffJobTitle(enum.Enum):
+    SALE = 1
+
+
 class Category(db.Model):
     __tablename__ = 'category'
     __table_args__ = {'extend_existing': True}
@@ -115,7 +124,7 @@ class Account(db.Model, UserMixin):
     password = Column(String(50), nullable=False)
     status = Column(Enum(AccountStatus), default=AccountStatus.ACTIVE)
     avatar = Column(String(255), nullable=False,
-                    default='https://e7.pngegg.com/pngimages/799/987/png-clipart-computer-icons-avatar-icon-design-avatar-heroes-computer-wallpaper-thumbnail.png')
+                    default='avatar_male.png')
     register_date = Column(DateTime, default=datetime.now())
     last_login = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
@@ -142,12 +151,34 @@ class User(Account):
     address = Column(String(100), nullable=False)
 
 
+class Customer(User):
+    __tablename__ = 'customer'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    customer_type = Column(Enum(CustomerType), nullable=False, default=CustomerType.GUEST)
+
+
+class Staff(User):
+    __tablename__ = 'staff'
+    __table_args__ = {'extend_existing': True}
+
+    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    job_title = Column(Enum(StaffJobTitle), nullable=False, default=StaffJobTitle.SALE)
+
+
 def add_accounts():
     import hashlib
     admin = Admin(username='admin', password=hashlib.md5("123456".encode('utf-8')).hexdigest(), name='admin',
                   email='admin@gmail.com')
     db.session.add_all([admin])
+    customer = Customer(username='khang', password=hashlib.md5('khang2003'.encode('utf-8')).hexdigest(),
+                        email='2151053027khang@ou.edu.vn', phone='0123456789', first_name='Khang', last_name='Nguyễn',
+                        birthday=datetime.strptime('29/01/2003', '%d/%m/%Y'), address='11 HCS, Bến Lức, Long An')
+    db.session.add_all([customer])
     db.session.commit()
+
+
 def add_categories():
     c1 = Category(name='Viễn tưởng')
     c2 = Category(name='Kinh dị')
@@ -165,10 +196,14 @@ def add_categories():
     c14 = Category(name="Công nghệ")
     db.session.add_all([c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14])
     db.session.commit()
+
+
 def add_inventory():
     inventory = Inventory(name='Kho 1')
     db.session.add(inventory)
     db.session.commit()
+
+
 def add_authors():
     a1 = Author(name='Anne Rice')
     a2 = Author(name='Alix E. Harrow')
@@ -177,23 +212,30 @@ def add_authors():
     a5 = Author(name='Brenna Thummler')
     a6 = Author(name='Anna Pitoniak')
     a7 = Author(name='Walter Isaacson')
-    # db.session.add(a7)
     db.session.add_all([a1, a2, a3, a4, a5, a6, a7])
     db.session.commit()
+
+
 def add_book_author(book_id, author_ids):
     for id in author_ids:
         ba = Book_Author(book_id=book_id, author_id=id)
         db.session.add(ba)
         db.session.commit()
+
+
 def add_book_inventory(book_id, inventory_id=1, quantity=100):
     bi = Book_Inventory(book_id=book_id, inventory_id=inventory_id, quantity=quantity)
     db.session.add(bi)
     db.session.commit()
+
+
 def add_book_category(book_id, category_ids):
     for id in category_ids:
         bc = Book_Category(book_id=book_id, category_id=id)
         db.session.add(bc)
         db.session.commit()
+
+
 def add_book(name, price, img, description, date):
     b1 = Book(name=name, price=price,
               image=img,
@@ -201,22 +243,27 @@ def add_book(name, price, img, description, date):
               published_date=datetime.strptime(date, '%d/%m/%Y'))
     db.session.add_all([b1])
     db.session.commit()
+
+
 def add_books():
-    add_book('The Wolf Gift', 250000, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1328214020i/12880428.jpg',
+    add_book('The Wolf Gift', 250000,
+             'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1328214020i/12880428.jpg',
              'Nơi có bờ biển gồ ghề phía bắc California. Một trò lừa đảo cao trên Thái Bình Dương. Một dinh thự hoành tráng đầy vẻ đẹp và lịch sử đầy trêu ngươi nằm đối diện với khu rừng gỗ đỏ cao chót vót.',
              '14/12/2012')
-    add_book_author(1, [1]) #add author trc
+    add_book_author(1, [1])  # add author trc
     add_book_inventory(1)
     add_book_category(1, [1, 2, 12])
 
-    add_book('Starling House', 300000, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1682447293i/65213595.jpg',
+    add_book('Starling House', 300000,
+             'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1682447293i/65213595.jpg',
              'Một câu chuyện mới đầy nghiệt ngã và kiểu gothic của tác giả Alix E. Harrow về một thị trấn nhỏ bị ám ảnh bởi những bí mật không thể chôn vùi và ngôi nhà nham hiểm nằm ở ngã tư của tất cả.',
              '10/10/2023')
     add_book_author(2, [2])
     add_book_inventory(2)
     add_book_category(2, [1, 4, 7, 12])
 
-    add_book('Hearts of Darkness', 320000, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1679147652i/98653090.jpg',
+    add_book('Hearts of Darkness', 320000,
+             'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1679147652i/98653090.jpg',
              'Dành cho những người hâm mộ Mindhunter, Crime Minds và My Favorite Murder, một cuốn hồi ký hấp dẫn về cuộc đời của một người phụ nữ tiên phong săn lùng những kẻ giết người hàng loạt với tư cách là một trong những nữ lập hồ sơ đầu tiên của Đơn vị Khoa học Hành vi FBI.',
              '10/10/2023')
     add_book_author(3, [3])
@@ -254,6 +301,7 @@ def add_books():
     add_book_author(7, [7])
     add_book_inventory(7)
     add_book_category(7, [3, 14])
+
 
 if __name__ == '__main__':
     with app.app_context():

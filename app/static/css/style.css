@@ -1,3 +1,7 @@
+html {
+    box-sizing: border-box;
+}
+
 /*bs5 class*/
 .dropdown-item:hover {
     background-color: grey;
@@ -7,12 +11,23 @@
     width: 100%;
     height: 3.5rem;
     overflow: hidden;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.card-title:hover {
+    color: blue;
 }
 
 .card {
-    width: 175px;
+    width: 19%;
 }
 
+@media screen and (max-width: 1000px){
+    .card {
+        width: 24%;
+    }
+}
 
 .card-footer {
     width: 100%;
@@ -25,18 +40,14 @@
     padding: 5px;
 }
 
-@media screen and (max-width: 775px) {
-    .card {
-        width: 150px;
-    }
-
+@media screen and (max-width: 765px) {
     .card-title {
         height: 2.5rem;
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
     }
 
     .card-footer {
-        padding: 1.5px;
+        padding: 1px;
     }
 
     .card-text {
@@ -49,6 +60,16 @@
     }
 }
 
+@media screen and (max-width: 600px){
+    .card-title {
+        font-size: .75rem !important;
+        height: 30px;
+    }
+    .card-text {
+        font-size: .7rem !important;
+    }
+}
+
 /*tag*/
 html {
     scroll-behavior: smooth;
@@ -58,7 +79,9 @@ a {
     text-decoration: none;
     color: aliceblue;
 }
-
+a.normal {
+    color: black !important;
+}
 .social-icon li a i {
     margin-right: .5rem;
 }
@@ -87,32 +110,75 @@ a {
     font-size: 3.5rem;
     font-family: logo-font;
 }
-.btn.btn-primary.icon{
+
+.btn.btn-primary.icon {
     width: 40px;
     height: 35px;
+}
+.avatar-img {
+    height: 35px;
+    margin: 0 1px;
+    padding: 0;
 }
 
 /*body*/
 /*details.html*/
-.details{
+.details {
     border: 2px solid #0d0d0d;
     padding: .5rem;
     border-radius: 5px;
 }
-.details-item{
+
+.details-item {
     padding: 0 5px 0 5px;
     margin: 0;
 }
-.details-text{
+
+.details-text {
     font-weight: normal;
     color: #0d0d0d !important;
 }
-a.details-text:hover{
+
+a.details-text:hover {
     color: blue !important;
 }
-span.m-0.p-0{
+
+.details-info {
+    border: solid whitesmoke 1px;
+    border-radius: 1px;
+    background: whitesmoke;
+}
+
+.details-title {
+    font-size: 2.5em;
+    padding: 0;
+}
+
+@media screen and (max-width: 766px) {
+    .details-info {
+        height: 250px !important;
+    }
+}
+
+.details-description {
+    padding: .5rem;
+    margin: 1em;
+}
+
+.details-price {
+    border: solid floralwhite 1px;
+    border-radius: .5em;
+    padding: .1em .25em;
+    margin: 5em .5em .5em 1em;
+    background: red;
+    color: white !important;
+    display: inline !important;
+}
+
+span.m-0.p-0 {
     margin-left: -3px !important;
 }
+
 /*footer*/
 footer .container a:hover > .fa-brands.fa-facebook {
     color: #385898;

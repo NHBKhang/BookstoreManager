@@ -7,7 +7,7 @@
     </nav>
 </div>
 <nav style="position: relative" class="navbar navbar-expand-sm bg-dark navbar-dark">
-    <div class="container-fluid">
+    <div class="container-fluid pe-0">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -17,7 +17,7 @@
                     <a class="nav-link" href="/">Trang chủ</a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Thể loại</a>
+                    <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">Thể loại</a>
                     <ul style="column-count: 3" class="dropdown-menu bg-dark">
                         {% for c in categories %}
                             <li><a class="dropdown-item text-white" href="/?cate_id={{ c.id }}">{{ c.name }}</a>
@@ -29,12 +29,31 @@
                             class="badge bg-danger cart-counter">{{ cart.total_quantity }}</span></a>
                 </li>
             </ul>
-            <div class="d-inline-flex">
-                <form class="d-flex" action="/" method="get">
-                    <input class="form-control me-2" type="text" placeholder="Nhập văn bản..." name="kw">
-                    <button class="btn btn-primary icon" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                    <button class="btn btn-primary icon ms-2"><i class="fa-solid fa-user"></i></button>
-                </form>
+            <div class="d-block">
+                <div style="align-items: center" class="d-flex">
+                    <form style="align-items: center" class="d-flex" action="/" method="get">
+                        <input class="form-control me-2" type="text" placeholder="Nhập văn bản..." name="kw">
+                        <button class="btn btn-primary icon" type="submit"><i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </form>
+                    {% if current_user.is_authenticated %}
+                        <div class="dropdown bg-dark">
+                            <button type="button" class="btn btn-dark dropdown-toggle ms-1" data-bs-toggle="dropdown">
+                                <img title="Hồ sơ" class="avatar-img"
+                                     src="../../static/img/{{ current_user.avatar }}"
+                                     alt="avatar">
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="/logout">Đăng xuất</a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <a style="width: 35px" title="Đăng nhập" href="/login" class="btn btn-primary icon ms-2 me-2"><i
+                                class="fa-solid fa-user"></i></a>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

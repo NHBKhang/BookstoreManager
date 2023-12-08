@@ -57,13 +57,17 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
-def auth_admin(username, password):
+def auth_account(username, password, type='user'):
     import hashlib
 
-    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())  # Decrypt password from clients
+    password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
-    return Admin.query.filter(Admin.username.__eq__(username.strip()),
-                              Admin.password.__eq__(password)).first()
+    if type == 'user':
+        return User.query.filter(User.username.__eq__(username.strip()),
+                                 User.password.__eq__(password)).first()
+    else:
+        return Admin.query.filter(Admin.username.__eq__(username.strip()),
+                                  Admin.password.__eq__(password)).first()
 
 
 if __name__ == '__main__':
