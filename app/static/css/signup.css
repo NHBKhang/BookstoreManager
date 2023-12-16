@@ -62,8 +62,18 @@ a.text-body:hover {
 .button-group {
     justify-content: space-between;
     position: fixed;
-    width: 85%;
+    width: 100%;
     top: 5%;
+}
+
+#back {
+    position: fixed;
+    left: 0;
+}
+
+#home {
+    position: fixed;
+    right: 0;
 }
 
 .button-group button {
@@ -83,4 +93,17 @@ a.text-body:hover {
 
 .button-group button i:hover {
     color: white !important;
+}
+
+.invalid-feedback {
+    font-size: 1.2rem;
+    padding: 0 !important;
+    margin: 0 5px !important;
+}
+
+#error {
+    font-size: 1rem;
+    color: darkred;
+    margin: 0;
+    padding: 0;
 }

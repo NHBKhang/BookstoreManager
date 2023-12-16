@@ -19,14 +19,8 @@ html {
     color: blue;
 }
 
-.card {
-    width: 19%;
-}
-
-@media screen and (max-width: 1000px){
-    .card {
-        width: 24%;
-    }
+.card-img-top {
+    object-fit: cover;
 }
 
 .card-footer {
@@ -40,36 +34,6 @@ html {
     padding: 5px;
 }
 
-@media screen and (max-width: 765px) {
-    .card-title {
-        height: 2.5rem;
-        font-size: 1rem !important;
-    }
-
-    .card-footer {
-        padding: 1px;
-    }
-
-    .card-text {
-        font-size: .8rem !important;
-    }
-
-    .btn {
-        font-size: .8rem !important;
-        padding: 5px;
-    }
-}
-
-@media screen and (max-width: 600px){
-    .card-title {
-        font-size: .75rem !important;
-        height: 30px;
-    }
-    .card-text {
-        font-size: .7rem !important;
-    }
-}
-
 /*tag*/
 html {
     scroll-behavior: smooth;
@@ -79,9 +43,11 @@ a {
     text-decoration: none;
     color: aliceblue;
 }
+
 a.normal {
     color: black !important;
 }
+
 .social-icon li a i {
     margin-right: .5rem;
 }
@@ -115,6 +81,7 @@ a.normal {
     width: 40px;
     height: 35px;
 }
+
 .avatar-img {
     height: 35px;
     margin: 0 1px;
@@ -122,6 +89,14 @@ a.normal {
 }
 
 /*body*/
+.btn.all {
+    padding: 25px 0 0;
+}
+
+.btn.all:hover {
+    color: #1DA1F2;
+}
+
 /*details.html*/
 .details {
     border: 2px solid #0d0d0d;
@@ -152,12 +127,6 @@ a.details-text:hover {
 .details-title {
     font-size: 2.5em;
     padding: 0;
-}
-
-@media screen and (max-width: 766px) {
-    .details-info {
-        height: 250px !important;
-    }
 }
 
 .details-description {
@@ -199,7 +168,7 @@ footer .container a:hover > .fa-brands.fa-youtube {
 }
 
 #return > button {
-    font-size: 2.5rem;
+    font-size: 2.5rem !important;
     color: rgb(75, 75, 243);
     position: fixed;
     bottom: 10px;
@@ -207,7 +176,7 @@ footer .container a:hover > .fa-brands.fa-youtube {
     width: 30px;
     height: 30px;
     display: inline;
-    padding: 0 35px 50px 10px;
+    padding: 0 35px 50px 10px !important;
     background-color: rgb(200, 200, 200, 0.75);
     opacity: 0.8;
     text-align: justify;
@@ -227,4 +196,67 @@ footer .container a:hover > .fa-brands.fa-youtube {
 @font-face {
     font-family: logo-font;
     src: url(../font/monster.ttf);
+}
+
+.carousel-control-next, .carousel-control-prev {
+    color: red !important;
+}
+
+.carousel-img {
+    height: 400px;
+}
+
+@media screen and (max-width: 600px) {
+    .card-title {
+        font-size: .75rem !important;
+        height: 30px;
+    }
+
+    .card-text {
+        font-size: .7rem !important;
+    }
+
+    .carousel-img {
+        height: 300px;
+    }
+}
+
+@media screen and (max-width: 766px) {
+    .card-title {
+        height: 2.5rem;
+        font-size: 1rem !important;
+    }
+
+    .card-footer {
+        padding: 1px;
+    }
+
+    .card-text {
+        font-size: .8rem !important;
+    }
+
+    .btn {
+        font-size: .8rem !important;
+        padding: 5px;
+    }
+
+    .details-info {
+        height: 250px !important;
+    }
+
+    .carousel-img {
+        height: 350px !important;
+    }
+}
+
+@media screen and (min-width: 1000px) {
+    .carousel-img {
+        height: 500px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .carousel-img {
+        height: 550px;
+    }
 }

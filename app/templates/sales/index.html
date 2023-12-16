@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang chủ</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+</head>
+<body>
+    <h1>WEBSITE BÁN HÀNG TRỰC TUYẾN</h1>
+    <h3>
+        {% if session.user  %}
+        <h4>{{ session.user.username }}</h4> <a href="{{ url_for('logout') }}">Logout</a>
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('register') }}">Register</a>
+        {% endif %}
+    </h3>
+{#    <ul>#}
+{#        <li>#}
+{#            <a href="{{ url_for('product_list') }}">Tất cả</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{{ url_for('product_list_by_cate', category_id=1) }}">Điện thoại di động</a>#}
+{#        </li>#}
+{#        <li>#}
+{#            <a href="{{ url_for('product_list_by_cate', category_id=2) }}">Máy tính bảng</a>#}
+{#        </li>#}
+{#    </ul>#}
+</body>
+</html>

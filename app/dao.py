@@ -1,13 +1,14 @@
-from app.models import Category, Book, Admin, User, Account, Book_Category, Book_Author, Author, Inventory
-from app import app
-import hashlib
+from app.models import *
+from app import db, app
+from sqlalchemy import desc
+import hashlib, json, os
 
 
 def get_categories():
     return Category.query.all()
 
 
-def get_books(kw=None, cate_id=None, page=None):
+def get_books(kw=None, cate_id=None, page=None, desc=True, amount=None):
     books = Book.query
     if kw:
         books = books.filter(Book.name.contains(kw))
@@ -19,8 +20,18 @@ def get_books(kw=None, cate_id=None, page=None):
         page = int(page)
         page_size = app.config['PAGE_SIZE']
         start = (page - 1) * page_size
-        return books.slice(start, start + page_size)
+        books = books.slice(start, start + page_size)
+    if desc:
+        books = books.order_by(Book.id.desc())
+    if amount:
+        books = books.limit(amount)
+
     return books.all()
+
+
+def get_recommend_book():
+    with open(os.path.join(app.root_path, "static/data/carousel.json"), encoding="utf-8") as rb:
+        return json.load(rb)
 
 
 def get_authors():
@@ -37,6 +48,10 @@ def count_books():  # Count number of product in database
 
 def get_book_by_id(book_id):
     return Book.query.get(book_id)
+
+
+def get_book_by_name(book_name):
+    return Book.query.get(book_name).first()
 
 
 def get_authors_by_book_id(book_id):
@@ -70,6 +85,58 @@ def auth_account(username, password, type='user'):
                                   Admin.password.__eq__(password)).first()
 
 
-if __name__ == '__main__':
-    with app.app_context():
-        pass
+def add_admin(username, password, name, email, status=AccountStatus.ACTIVE, avatar='avatar_male.png'):
+    admin = Admin(username=username, password=hashlib.md5(password.strip().encode('utf-8')).hexdigest(), status=status,
+                  avatar=avatar, name=name, email=email)
+    db.session.add(admin)
+    db.session.commit()
+
+
+def add_user(username, password, first_name, last_name, birthday, email, phone, address, gender=GenderType.MALE,
+             status=AccountStatus.ACTIVE, avatar='avatar_male.png'):
+    import hashlib
+    user = User(username=username, password=hashlib.md5(password.strip().encode('utf-8')).hexdigest(), status=status,
+                avatar=avatar, first_name=first_name, last_name=last_name,
+                birthday=datetime.strptime(birthday, '%Y-%m-%d'), phone=phone, email=email,
+                gender=gender, address=address)
+    db.session.add(user)
+    db.session.commit()
+
+
+def add_customer(user_id, customer_type=CustomerType.GUEST):
+    customer = Customer(user_id=user_id, customer_type=customer_type)
+    db.session.add(customer)
+    db.session.commit()
+
+
+def add_staff(user_id, job_title=StaffJobTitle.SALE):
+    customer = Customer(user_id=user_id, job_title=job_title)
+    db.session.add(customer)
+    db.session.commit()
+
+
+def add_book(name, price, img, description, date):
+    b1 = Book(name=name, price=price,
+              image=img,
+              description=description,
+              published_date=datetime.strptime(date, '%d/%m/%Y'))
+    db.session.add_all([b1])
+    db.session.commit()
+
+
+def add_book_inventory(book_id, inventory_id=1, quantity=100):
+    bi = Book_Inventory(book_id=book_id, inventory_id=inventory_id, quantity=quantity)
+    db.session.add(bi)
+    db.session.commit()
+
+
+def add_book_category(book_id, category_id):
+    ba = Book_Author(book_id=book_id, author_id=category_id)
+    db.session.add(ba)
+    db.session.commit()
+
+
+def add_book_author(book_id, author_id):
+    ba = Book_Author(book_id=book_id, author_id=author_id)
+    db.session.add(ba)
+    db.session.commit()

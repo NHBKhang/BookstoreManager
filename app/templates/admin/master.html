@@ -18,7 +18,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
               crossorigin="anonymous">
-        <link rel="stylesheet" href="../../static/css/admin/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/admin/style.css') }}">
         {% if config.get('FLASK_ADMIN_SWATCH', 'default') == 'default' %}
             <link href="{{ admin_static.url(filename='bootstrap/bootstrap4/css/bootstrap.min.css', v='4.2.1') }}"
                   rel="stylesheet">
@@ -52,12 +52,31 @@
 <body>
 {% block page_body %}
     <div class="sidebar-wrapper">
-        <nav id="sidebar">
-            <div class="sidebar-header">
+        <nav id="sidebar" class="active">
+            <div class="sidebar-header p-2 d-flex justify-content-center"
+                 style="background: royalblue">
                 {% block brand %}
-                    <a class="navbar-brand text-white" href="{{ admin_view.admin.url }}">{{ admin_view.admin.name }}</a>
+                    <a class="navbar-brand text-white p-0 mt-1" href="{{ admin_view.admin.url }}">
+                        <img src="{{ url_for('static', filename='img/logo_book.png') }}" style="width: 3rem">
+                        {{ admin_view.admin.name }}
+                    </a>
                 {% endblock %}
             </div>
+            <div title="{{ current_user.name.capitalize() }}" class="m-2 d-flex align-items-center"
+                 style="cursor: default">
+                <div style="border: solid 1px white; border-radius: 10rem">
+                    <img src="../../static/img/{{ current_user.avatar }}" style="height: 60px; padding: 2px">
+                </div>
+                <div class="col">
+                    <h6 class="text-white mt-1">{{ current_user.name.capitalize() }}</h6>
+                    <div class="ms-1 d-flex align-items-center">
+                        <div style="border: solid 1px lawngreen; border-radius: 1em; background-color: lawngreen;
+                        width: 10px; height: 10px; margin: 0 6px" class="p-0"></div>
+                        <div style="font-size: .75rem">Online</div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-block" style="background-color: white; padding: 1px 0 0; margin: 0 12px"></div>
             {% block main_menu %}
                 <ul class="nav navbar-nav mr-auto">
                     {{ layout.menu() }}

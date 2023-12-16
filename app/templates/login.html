@@ -13,20 +13,20 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/76334962e6.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" media="screen" href="../static/css/login.css">
-    <link rel="stylesheet" href="../../static/css/anim.css">
-    <script type="text/javascript" src="../static/js/script.js"></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='css/login.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/anim.css') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='js/script.js') }}"></script>
 </head>
 <body>
 <div class="min-vh-100 d-flex align-items-center">
     <div class="container">
-        <div class="d-flex button-group">
+        <div class="d-flex button-group fadeInDown">
             <button title="Về trang trước" id="back" type="button" onclick="javascript:history.back()"><i
                     class="fa-solid fa-arrow-left"></i></button>
             <button title="Về trang chủ" id="home" type="button"><a href="/"><i class="fa-solid fa-house"></i></a>
             </button>
         </div>
-        <div class="row">
+        <div class="row second fadeInDown">
             <div class="col-sm-7 mx-auto">
                 <div class="shadow-lg">
                     <div class="d-flex align-items-center">
@@ -40,20 +40,26 @@
                             <form action="/login" method="post">
                                 <div title="Nhập tên tài khoản" class="custom-form-group fadeIn second was-validated">
                                     <label class="text-uppercase" for="username">Tên tài khoản</label>
-                                    <input type="text" id="username" class="pb-1" name="username" required/><span class="pb-1"><i
+                                    <input type="text" id="username" class="pb-1" name="username" required/><span
+                                        class="pb-1"><i
                                         class="fas fa-user"></i></span>
                                     <div class="valid-feedback error">Hợp lệ.</div>
                                     <div class="invalid-feedback error">Vui lòng điền vào trường trên.</div>
                                 </div>
                                 <div title="Nhập mật khẩu" class="custom-form-group mt-3 fadeIn second was-validated">
                                     <label class="text-uppercase" for="password">Mật khẩu</label>
-                                    <input type="password" id="password" class="pb-1" name="password" required/><span class="pb-1"><i
+                                    <input type="password" id="password" class="pb-1" name="password" required/><span
+                                        class="pb-1"><i
                                         class="fas fa-eye-slash" onclick="showPassword(event)"></i></span>
                                     <div class="valid-feedback error">Hợp lệ.</div>
                                     <div class="invalid-feedback error">Vui lòng điền vào trường trên.</div>
                                 </div>
+                                {% if err_acc %}
+                                    <div id="error">Tài khoản hoặc mật khẩu của bạn không chính xác. Vui lòng nhập lại.
+                                    </div>
+                                {% endif %}
                                 <div class="custom-text mt-4 mb-2 ms-1 fadeIn third">Bạn chưa có tài khoản? <a
-                                        href="/signup">Đăng ký</a>
+                                        href="/register">Đăng ký</a>
                                 </div>
                                 <div class="mt-5 fadeIn fourth">
                                     <button type="submit" class="w-100 p-2 d-block custom-btn">Đăng nhập</button>

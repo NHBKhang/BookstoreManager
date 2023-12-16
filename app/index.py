@@ -1,6 +1,5 @@
-import dao, utils
 from flask import session
-from app import app, dao, login
+from app import dao, login, utils, app
 
 
 @app.context_processor
@@ -21,6 +20,6 @@ def get_account(account_id):
 
 
 if __name__ == '__main__':
-    from app import admin, urls
+    from app import urls, admin
 
     app.run(debug=True)

@@ -103,6 +103,9 @@
 .button-group button i:hover {
     color: white !important;
 }
-.error{
-    font-size: .75rem;
+
+#error {
+    font-size: .9rem;
+    color: darkred;
+    margin-top: 10px;
 }
