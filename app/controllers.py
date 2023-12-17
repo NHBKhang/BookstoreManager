@@ -3,6 +3,7 @@ from flask import render_template, request, redirect, url_for, session, jsonify
 from flask_login import logout_user, current_user, login_user
 from flask_admin import expose
 from app import dao, utils, app
+from datetime import datetime
 
 
 def index():
@@ -75,13 +76,13 @@ def admin_login():
         else:
             return render_template('/admin/login.html', err_acc=True)
 
-    return redirect('/admin')
+    return redirect(url_for('admin'))
 
 
 @expose("/")
 def admin_logout():
     logout_user()
-    return redirect('/admin')
+    return redirect(url_for('admin'))
 
 
 def user_login():
@@ -104,8 +105,8 @@ def user_register():
         username = request.form.get("username")
         password = request.form.get("password")
         conf_password = request.form.get("confirm-password")
-        first_name = request.form.get("first_name")
-        last_name = request.form.get("last_name")
+        first_name = request.form.get("first-name")
+        last_name = request.form.get("last-name")
         gender = request.form.get("gender")
         birthday = request.form.get("birthday")
         phone = request.form.get("phone")
@@ -113,14 +114,23 @@ def user_register():
         email = request.form.get("email")
 
         from app.models import User
-        if User.query.filter(User.username.__eq__(username.strip())):
+        if User.query.filter_by(username=username).first():
             err_msg = "Tên tài khoản đã tồn tại"
         elif password.strip() != conf_password.strip():
             err_msg = "Mật khẩu không khớp"
         else:
             err_msg = ""
-            dao.add_user(username=username, password=password, first_name=first_name, last_name=last_name,
-                         gender=gender, birthday=birthday, address=address, phone=phone, email=email)
+
+            from app.models import GenderType
+            if gender == GenderType.FEMALE.__val__():
+                avatar = 'avatar_female.png'
+            else:
+                avatar = 'avatar_male.png'
+
+            dao.add_customer(username=username, password=password, first_name=first_name, last_name=last_name,
+                             gender=gender, birthday=birthday, address=address, phone=phone, email=email, avatar=avatar)
+
+            return redirect(url_for('login'))
 
     return render_template('register.html', err_msg=err_msg)
 

@@ -32,43 +32,6 @@
                         <div class="card-body p-5">
                             <h2 class="text-uppercase text-center mb-5">ĐĂNG KÝ TÀI KHOẢN MỚI</h2>
                             <form class="was-validated" action="/register" method="post">
-                                <div style="justify-content: space-between" class="d-flex w-100">
-                                    <div style="width: 67%" class="form-outline mb-4">
-                                        <label class="form-label" for="lastname">Họ</label>
-                                        <input type="text" id="lastname" class="form-control form-control-lg"
-                                               name="first_name" required/>
-                                        <div class="invalid-feedback">*</div>
-                                    </div>
-                                    <div style="width: 30%" class="form-outline mb-4">
-                                        <label class="form-label" for="firstname">Tên</label>
-                                        <input type="text" id="firstname" class="form-control form-control-lg"
-                                               name="last_name" required/>
-                                        <div class="invalid-feedback">*</div>
-                                    </div>
-                                </div>
-                                <div class="form-outline mb-4">
-                                    <label class="form-label" for="birthday">Ngày sinh</label>
-                                    <input type="date" id="birthday" class="form-control form-control-lg"
-                                           name="birthday" required/>
-                                    <div class="invalid-feedback">*</div>
-                                </div>
-                                <div class="form-outline d-flex mb-4">
-                                    <label class="me-2 form-label">Giới tính</label>
-                                    <div class="ms-1 me-1">
-                                        <input type="radio"
-                                               id="male"
-                                               name="gender"
-                                               value="Male" checked>
-                                        <label for="male">Nam</label>
-                                    </div>
-                                    <div class="ms-1 me-1">
-                                        <input type="radio"
-                                               id="female"
-                                               name="gender"
-                                               value="Female">
-                                        <label for="female">Nữ</label>
-                                    </div>
-                                </div>
                                 <div>
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="username">Tên tài khoản</label>
@@ -80,55 +43,92 @@
                                         <label class="form-label" for="password">Mật khẩu</label>
                                         <input type="password" id="password" class="form-control form-control-lg"
                                                name="password" required/>
-                                        <div class="invalid-feedback">*</div>
                                         <span><i style="cursor: pointer" class="fas fa-eye-slash"
                                                  onclick="showPassword(event)"></i></span>
+                                        <div class="invalid-feedback">*</div>
                                     </div>
                                     <div class="form-outline mb-4">
                                         <label class="form-label" for="confirm-password">Nhập lại mật khẩu</label>
                                         <input type="password" id="confirm-password"
                                                class="form-control form-control-lg" name="confirm-password" required/>
-                                        <div class="invalid-feedback">*</div>
                                         <span><i style="cursor: pointer" class="fas fa-eye-slash"
-                                                 onclick="showPassword(event, 're-password')"></i></span>
-                                    </div>
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="username">Số điện thoại</label>
-                                        <input type="text" id="username" class="form-control form-control-lg"
-                                               name="phone" required/>
+                                                 onclick="showPassword(event, 'confirm-password')"></i></span>
                                         <div class="invalid-feedback">*</div>
                                     </div>
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="email">Email</label>
-                                        <input type="email" id="email" class="form-control form-control-lg"
-                                               name="email" required/>
-                                        <div class="invalid-feedback">*</div>
-                                    </div>
-                                    <div class="form-outline mb-4">
-                                        <label class="form-label" for="address">Địa chỉ</label>
-                                        <input type="text" id="address" class="form-control form-control-lg"
-                                               name="address" required/>
-                                        <div class="invalid-feedback">*</div>
-                                    </div>
-                                    <div class="form-check d-flex justify-content-center mb-3">
-                                        <input class="form-check-input me-2" type="checkbox" value="agree"
-                                               id="agreement-check" required/>
-                                        <label class="form-check-label" for="agreement-check">
-                                            Tôi đồng ý với tất cả <a href="" class="text-body"><u>Điều khoản dịch
-                                            vụ</u></a>
-                                        </label>
-                                    </div>
-                                    <div class="d-flex justify-content-center mb-3" id="error">{{ err_msg }}</div>
-                                    <div class="d-flex justify-content-center">
-                                        <button type="submit"
-                                                class="btn btn-info btn-block btn-lg gradient-custom-4 text-body">
-                                            Đăng ký
-                                        </button>
-                                    </div>
-                                    <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản?
-                                        <a href="/login" class="fw-bold text-body">Bấm vào đây</a>
-                                    </p>
                                 </div>
+                                <div style="justify-content: space-between" class="d-flex w-100 mb-4">
+                                    <div style="width: 67%" class="form-outline">
+                                        <label class="form-label" for="lastname">Họ</label>
+                                        <input type="text" id="lastname" class="form-control form-control-lg"
+                                               name="first-name" required/>
+                                        <div class="invalid-feedback">*</div>
+                                    </div>
+                                    <div style="width: 30%" class="form-outline">
+                                        <label class="form-label" for="firstname">Tên</label>
+                                        <input type="text" id="firstname" class="form-control form-control-lg"
+                                               name="last-name" required/>
+                                        <div class="invalid-feedback">*</div>
+                                    </div>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="birthday">Ngày sinh</label>
+                                    <input type="date" id="birthday" class="form-control form-control-lg"
+                                           name="birthday" max="{{ today }}" required/>
+                                    <div class="invalid-feedback">*</div>
+                                </div>
+                                <div class="form-outline d-flex mb-4">
+                                    <label class="me-2 form-label">Giới tính</label>
+                                    <div class="ms-1 me-1">
+                                        <input type="radio"
+                                               id="male"
+                                               name="gender"
+                                               value="1" checked>
+                                        <label for="male">Nam</label>
+                                    </div>
+                                    <div class="ms-1 me-1">
+                                        <input type="radio"
+                                               id="female"
+                                               name="gender"
+                                               value="2">
+                                        <label for="female">Nữ</label>
+                                    </div>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="username">Số điện thoại</label>
+                                    <input type="tel" id="username" class="form-control form-control-lg"
+                                           name="phone" pattern="(?:7|0\d|\+94\d)\d{8}" required/>
+                                    <div class="invalid-feedback">*</div>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" class="form-control form-control-lg"
+                                           name="email" required/>
+                                    <div class="invalid-feedback">*</div>
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" for="address">Địa chỉ</label>
+                                    <input type="text" id="address" class="form-control form-control-lg"
+                                           name="address" required/>
+                                    <div class="invalid-feedback">*</div>
+                                </div>
+                                <div class="form-check d-flex justify-content-center mb-3">
+                                    <input class="form-check-input me-2" type="checkbox" value="agree"
+                                           id="agreement-check" required/>
+                                    <label class="form-check-label" for="agreement-check">
+                                        Tôi đồng ý với tất cả <a href="" class="text-body"><u>Điều khoản dịch
+                                        vụ</u></a>
+                                    </label>
+                                </div>
+                                <div class="d-flex justify-content-center mb-3" id="error">{{ err_msg }}</div>
+                                <div class="d-flex justify-content-center">
+                                    <button type="submit"
+                                            class="btn btn-info btn-block btn-lg gradient-custom-4 text-body">
+                                        Đăng ký
+                                    </button>
+                                </div>
+                                <p class="text-center text-muted mt-5 mb-0">Đã có tài khoản?
+                                    <a href="/login" class="fw-bold text-body">Bấm vào đây</a>
+                                </p>
                             </form>
                         </div>
                     </div>

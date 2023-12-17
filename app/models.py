@@ -11,6 +11,9 @@ class GenderType(enum.Enum):
     MALE = 1,
     FEMALE = 2
 
+    def __val__(self):
+        return str(self.value)
+
 
 class AccountStatus(enum.Enum):
     ACTIVE = 1,
@@ -149,8 +152,8 @@ class User(Account):
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     birthday = Column(DateTime, nullable=False)
-    email = Column(String(50), unique=True, nullable=False)
-    phone = Column(String(12), unique=True, nullable=False)
+    email = Column(String(50), nullable=False)
+    phone = Column(String(12), nullable=False)
     gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
     address = Column(String(100), nullable=False)
 
@@ -175,12 +178,12 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
 
-        add_accounts()
-
-        add_categories()
-
-        add_inventory()
-
-        add_authors()
-
-        add_books()
+        # add_accounts()
+        #
+        # add_categories()
+        #
+        # add_inventory()
+        #
+        # add_authors()
+        #
+        # add_books()

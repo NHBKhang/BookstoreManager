@@ -101,10 +101,15 @@ def add_user(username, password, first_name, last_name, birthday, email, phone, 
                 gender=gender, address=address)
     db.session.add(user)
     db.session.commit()
+    return user
 
 
-def add_customer(user_id, customer_type=CustomerType.GUEST):
-    customer = Customer(user_id=user_id, customer_type=customer_type)
+def add_customer(username, password, first_name, last_name, birthday, email, phone, address, gender=GenderType.MALE,
+                 status=AccountStatus.ACTIVE, avatar='avatar_male.png', customer_type=CustomerType.GUEST):
+    customer = Customer(username=username, password=hashlib.md5(password.strip().encode('utf-8')).hexdigest(),
+                        status=status, avatar=avatar, first_name=first_name, last_name=last_name, phone=phone,
+                        birthday=datetime.strptime(birthday, '%Y-%m-%d'), email=email, gender=gender,
+                        address=address, customer_type=customer_type)
     db.session.add(customer)
     db.session.commit()
 
