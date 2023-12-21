@@ -25,7 +25,8 @@
             <div class="details-info col-md-7 ms-5">
                 <h1 title="{{ book.name }}" class="details-title m-2">{{ book.name }}</h1>
                 <p title="{{ book.description }}" class="details-description m-2 mb-5">{{ book.description }}</p>
-                <h3 title="{{ book.price }}" class="details-price text-danger">{{ book.price }} VNĐ</h3>
+                <h3 title="{{ "{:,.0f}".format(book.price) }}"
+                    class="details-price text-danger">{{ "{:,.0f}".format(book.price) }} VNĐ</h3>
             </div>
         </div>
     </div>

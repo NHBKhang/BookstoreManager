@@ -1,40 +1,60 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-    {% if 'cart' in session %}
-        <h1 class="text-center text-info mt-1">GIỎ HÀNG</h1>
-        <table class="table">
-            <tr>
-                <th>Mã sản phẩm</th>
-                <th>Tên sản phẩm</th>
-                <th>Đơn giá</th>
-                <th>Số lượng</th>
-                <th></th>
-            </tr>
-            {% for c in session['cart'].values() %}
+    <div class="m-1">
+        <h1 class="text-center text-success m-4">GIỎ HÀNG</h1>
+
+        {% if 'cart' in session and session['cart'] %}
+            <table class="table">
                 <tr>
-                    <td>{{ c.id }}</td>
-                    <td>{{ c.name }}</td>
-                    <td>{{ c.price }} VNĐ</td>
-                    <td>
-                        <input type="number" value="{{ c.quantity }}" class="form-control"/>
-                    </td>
-                    <td>
-                        <button onclick="removeCartItem('{{ c.id }}')" class="btn btn-danger">&times;</button>
-                    </td>
+                    <th>Mã sản phẩm</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th></th>
                 </tr>
-            {% endfor %}
-        </table>
+                {% for c in session['cart'].values() %}
+                    <tr id="cart{{ c.id }}">
+                        <td>{{ c.id }}</td>
+                        <td>{{ c.name }}</td>
+                        <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
+                        <td>
+                            <input type="number" value="{{ c.quantity }}" onblur="updateCart({{ c.id }}, this)"
+                                   class="form-control" min="1" max=""/>
+                        </td>
+                        <td>
+                            <input type="button" value="X" onclick="deleteCart({{ c.id }})" class="btn btn-danger"
+                                   style="height: 36px; width: 36px; font-weight: bold"/>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
 
-        <div class="alert alert-info">
-            <h3>Tổng tiền: {{ cart.total_amount }} VNĐ</h3>
-            <h3>Tổng sản phẩm: {{ cart.total_quantity }}</h3>
-        </div>
+            <div class="alert alert-info">
+                <h3>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h3>
+                <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount) }}</span> VNĐ</h3>
+            </div>
 
-        <div>
-            <input type="button" value="Thanh toán" class="btn btn-success"/>
-        </div>
-    {% endif %}
+            <div class="ms-2">
+                {% if current_user.is_authenticated %}
+                    <input type="button" value="Thanh toán" onclick="pay()" class="btn btn-success"/>
+                {% else %}
+                    <p>Vui lòng <a class="lg" href="/login?next=/cart">đăng nhập</a> để thanh toán!</p>
+                {% endif %}
+            </div>
+        {% else %}
+            <p class="container" style="font-size: 1.2rem">Giỏ không có hàng!</p>
+        {% endif %}
+    </div>
 
+    <style>
+        a.lg {
+            color: blue
+        }
 
+        a.lg:hover {
+            color: #5fbae9
+        }
+    </style>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 {% endblock %}

@@ -39,9 +39,8 @@
                     {% if current_user.is_authenticated %}
                         <div class="dropdown bg-dark">
                             <button type="button" class="btn btn-dark dropdown-toggle ms-1" data-bs-toggle="dropdown">
-                                <img title="Hồ sơ" class="avatar-img"
-                                     src="../../static/img/{{ current_user.avatar }}"
-                                     alt="avatar">
+                                <img title="Hồ sơ" class="avatar-img" alt="avatar"
+                                     src="{{ url_for('static', filename='img/' + current_user.avatar) }}">
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>

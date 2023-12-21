@@ -33,6 +33,13 @@ class StaffJobTitle(enum.Enum):
     SALE = 1
 
 
+class OrderStatus(enum.Enum):
+    PENDING = 1,
+    DELIVERING = 2,
+    DELIVERED = 3,
+    CANCELLED = 4
+
+
 class Category(db.Model):
     __tablename__ = 'category'
     __table_args__ = {'extend_existing': True}
@@ -63,6 +70,7 @@ class Inventory(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50), nullable=True)
+    books = relationship('Book_Inventory', backref='inventory', lazy=True)
 
     def __str__(self):
         return self.name
@@ -79,10 +87,12 @@ class Book(db.Model):
                    default='https://www.google.com/url?sa=i&url=https%3A%2F%2Fstock.adobe.com%2Fsearch%3Fk%3Dnth&psig=AOvVaw2ikijy0zik25q-f-qDM3gL&ust=1700653615974000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCJja38aC1YIDFQAAAAAdAAAAABAE')
     active = Column(Boolean, default=True)
     description = Column(String(512), nullable=False)
-    authors = relationship("Book_Author", backref='book', lazy=True)
     published_date = Column(DateTime, nullable=False)
     categories = relationship("Book_Category", backref='book')
+    authors = relationship("Book_Author", backref='book', lazy=True)
     inventories = relationship("Book_Inventory", backref='book', lazy=True)
+    orders = relationship("OrderDetails", backref='book', lazy=True)
+    receipts = relationship("ReceiptDetails", backref='book', lazy=True)
 
     def __str__(self):
         return self.name
@@ -156,34 +166,81 @@ class User(Account):
     phone = Column(String(12), nullable=False)
     gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
     address = Column(String(100), nullable=False)
+    comments = relationship('Comment', backref='user', lazy=True)
 
 
 class Customer(User):
     __tablename__ = 'customer'
     __table_args__ = {'extend_existing': True}
 
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     customer_type = Column(Enum(CustomerType), nullable=False, default=CustomerType.GUEST)
+    orders = relationship('Order', backref='customer', lazy=True)
+    receipts = relationship('Receipt', backref='customer', lazy=True)
 
 
 class Staff(User):
     __tablename__ = 'staff'
     __table_args__ = {'extend_existing': True}
 
-    user_id = Column(Integer, ForeignKey('user.id'), primary_key=True)
+    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
     job_title = Column(Enum(StaffJobTitle), nullable=False, default=StaffJobTitle.SALE)
+    receipts = relationship('Receipt', backref='staff', lazy=True)
+
+
+class Order(db.Model):
+    __tablename__ = 'order'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    created_date = Column(DateTime, nullable=False, default=datetime.now())
+    updated_date = Column(DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
+    status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
+    customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
+
+
+class OrderDetails(db.Model):
+    __tablename__ = 'order_details'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    quantity = Column(Integer, nullable=False, default=1)
+    order_id = Column(Integer, ForeignKey(Order.id), nullable=False)
+    book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
+
+
+class Receipt(db.Model):
+    __tablename__ = 'receipt'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    created_date = Column(DateTime, default=datetime.now())
+    customer_id = Column(Integer, ForeignKey(Customer.user_id), nullable=False)
+    staff_id = Column(Integer, ForeignKey(Staff.user_id), nullable=False)
+    details = relationship('ReceiptDetails', backref='receipt', lazy=True)
+
+
+class ReceiptDetails(db.Model):
+    __tablename__ = 'receipt_details'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    quantity = Column(Integer, nullable=False, default=1)
+    receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
+    book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
+
+
+class Comment(db.Model):
+    __tablename__ = 'comment'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    content = Column(String(255), nullable=False)
+    created_date = Column(DateTime, default=datetime.now())
+    user_id = Column(Integer, ForeignKey(User.id), nullable=False)
+    book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
 
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-
-        # add_accounts()
-        #
-        # add_categories()
-        #
-        # add_inventory()
-        #
-        # add_authors()
-        #
-        # add_books()

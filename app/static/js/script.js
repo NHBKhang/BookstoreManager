@@ -12,7 +12,7 @@ function scrollToTop() {
     document.documentElement.scrollTop = 0;
 }
 
-function showPassword(e, nameId='password') {
+function showPassword(e, nameId = 'password') {
     var input = document.getElementById(nameId)
     if (input.type === 'password') {
         input.type = "text"

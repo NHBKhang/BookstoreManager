@@ -2,72 +2,81 @@
 
 {% block content %}
 
-    <br>
+    {% if index %}
+        <br>
+        <section class="container">
+            <!-- Carousel -->
+            <div id="demo" class="carousel slide container-fluid" data-bs-ride="carousel">
 
-    <section class="container">
-        <!-- Carousel -->
-        <div id="demo" class="carousel slide container-fluid" data-bs-ride="carousel">
+                <!-- Indicators/dots -->
+                <div class="carousel-indicators">
+                    {% for i in range(0, (carousel_items | length)) %}
+                        <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ i }}"
+                                {% if loop.first %}
+                                class="active"
+                                {% endif %}></button>
+                    {% endfor %}
+                </div>
 
-            <!-- Indicators/dots -->
-            <div class="carousel-indicators">
-                {% for i in range(0, (recommend_books | length)) %}
-                    <button type="button" data-bs-target="#demo" data-bs-slide-to="{{ i }}"
-                            {% if loop.first %}
-                            class="active"
-                            {% endif %}></button>
-                {% endfor %}
+                <!-- The slideshow/carousel -->
+                <div class="carousel-inner">
+                    {% for c in carousel_items %}
+                        <div title="{{ c.name }}" class="carousel-item {% if loop.first %}active{% endif %}">
+                            <a href="{{ c.url }}">
+                                <img src="{{ c.image }}" alt="{{ c.name }}" class="d-block w-100 carousel-img">
+                                <div class="carousel-caption">
+                                    <h3>{{ c.title }}</h3>
+                                    <p>{{ c.description }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Left and right controls/icons -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
-
-            <!-- The slideshow/carousel -->
-            <div class="carousel-inner">
-                {% for r in recommend_books %}
-                    <div title="{{ r.name }}" class="carousel-item {% if loop.first %}active{% endif %}">
-                        <a href="{{ r.url }}">
-                            <img src="{{ r.image }}" alt="{{ r.name }}" class="d-block w-100 carousel-img">
-                            <div class="carousel-caption">
-                                <h3>{{ r.title }}</h3>
-                                <p>{{ r.description }}</p>
+            <br>
+            <div class="d-flex justify-content-between" style="background: whitesmoke">
+                <h1 class="tw-text-3xl">Mới tải lên</h1>
+                <a class="btn all" href="/?page=1">Xem tất cả
+                    <i style="font-size: .75em" class="fa-solid fa-play fa-fw ms-1"></i></a>
+            </div>
+            <div class="d-flex row justify-content-center align-items-center flex-wrap p-0"
+                 style="background: whitesmoke">
+                {% for i in range(0, amount) %}
+                    <div class="card mb-2 col-sm-6 col-md-3">
+                        <a class="normal" href="/books/{{ books[i].id }}">
+                            <div>
+                                <img title="{{ books[i].name }}" class="card-img-top h-100" src="{{ books[i].image }}"
+                                     alt="Card image">
+                            </div>
+                            <div class="card-body">
+                                <h4 title="{{ books[i].name }}" class="card-title w-100">{{ books[i].name }}</h4>
+                                <p title="{{ "{:,.0f}".format(books[i].price) }} VNĐ"
+                                   class="card-text">{{ "{:,.0f}".format(books[i].price) }} VNĐ</p>
                             </div>
                         </a>
                     </div>
                 {% endfor %}
             </div>
+        </section>
 
-            <!-- Left and right controls/icons -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
-                <span class="carousel-control-next-icon"></span>
-            </button>
-        </div>
         <br>
-        <div class="d-flex justify-content-between" style="background: whitesmoke">
-            <h1 class="tw-text-3xl">Mới tải lên</h1>
-            <a class="btn all" href="/list">Xem tất cả
-                <i style="font-size: .75em" class="fa-solid fa-play fa-fw ms-1"></i></a>
-        </div>
-        <div class="d-flex row justify-content-center align-items-center flex-wrap p-0" style="background: whitesmoke">
-            {% for b in books %}
-                <div class="card mb-2 col-sm-6 col-md-3">
-                    <a href="/books/{{ b.id }}">
-                        <div>
-                            <img title="{{ b.name }}" class="card-img-top h-100" src="{{ b.image }}"
-                                 alt="Card image">
-                        </div>
-                    </a>
-                    <a class="normal" href="/books/{{ b.id }}">
-                        <div class="card-body">
-                            <h4 title="{{ b.name }}" class="card-title w-100">{{ b.name }}</h4>
-                            <p title="{{ b.price }} VNĐ" class="card-text">{{ b.price }} VNĐ</p>
-                        </div>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    </section>
+        <style>
+            .card:hover {
+                background-color: rgb(0, 0, 0, .05);
+                z-index: 100;
+            }
+        </style>
+        <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+    {% else %}
+        {% include 'pages.html' %}
+    {% endif %}
 
-    <br>
-
-    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 {% endblock %}

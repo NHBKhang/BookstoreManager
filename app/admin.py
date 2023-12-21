@@ -29,6 +29,7 @@ class MyBookView(ModelView):
     edit_modal = True
     create_modal = True
     can_export = True
+    can_view_details = True
     form = BookForm
 
 
@@ -52,6 +53,7 @@ class MyUserView(ModelView):
     column_searchable_list = ['username']
     edit_modal = True
     can_create = False
+    can_view_details = True
 
 
 class MyInventoryView(ModelView):

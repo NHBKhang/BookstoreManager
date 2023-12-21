@@ -8,7 +8,7 @@
                 <div style="justify-content: center; flex-wrap: wrap" class="d-flex w-100">
                     <h1 class="text-center text-success w-100">CHÀO MỪNG BẠN ĐẾN TRANG QUẢN TRỊ!</h1>
                     <h2 class="text-center text-info w-100">Chào {{ current_user.name }}!</h2>
-                    <img style="height: 10rem" src="../../static/img/{{ current_user.avatar }}" class="rounded-circle" alt="Avatar"/>
+                    <img style="height: 10rem" src="{{ url_for('static', filename='img/' + current_user.avatar) }}" class="rounded-circle" alt="Avatar"/>
                 </div>
 
 

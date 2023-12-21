@@ -53,19 +53,20 @@
 {% block page_body %}
     <div class="sidebar-wrapper">
         <nav id="sidebar" class="active">
-            <div class="sidebar-header p-2 d-flex justify-content-center"
-                 style="background: royalblue">
+            <div class="sidebar-header d-flex justify-content-center">
                 {% block brand %}
-                    <a class="navbar-brand text-white p-0 mt-1" href="{{ admin_view.admin.url }}">
-                        <img src="{{ url_for('static', filename='img/logo_book.png') }}" style="width: 3rem">
-                        {{ admin_view.admin.name }}
+                    <a class="navbar-brand text-white p-0 mt-1" href="{{ admin_view.admin.url }}"
+                       style="font-size: 1.25rem">
+                        <img src="{{ url_for('static', filename='img/logo_book.png') }}" class="p-1 pt-1 ms-1 me-1"
+                             style="width: 2.5rem; border: solid 1px whitesmoke; border-radius: 10rem;
+                             background: whitesmoke;">{{ admin_view.admin.name }}
                     </a>
                 {% endblock %}
             </div>
             <div title="{{ current_user.name.capitalize() }}" class="m-2 d-flex align-items-center"
                  style="cursor: default">
                 <div style="border: solid 1px white; border-radius: 10rem">
-                    <img src="../../static/img/{{ current_user.avatar }}" style="height: 60px; padding: 2px">
+                    <img src="{{ url_for('static', filename='img/' + current_user.avatar) }}" style="height: 60px; padding: 2px">
                 </div>
                 <div class="col">
                     <h6 class="text-white mt-1">{{ current_user.name.capitalize() }}</h6>

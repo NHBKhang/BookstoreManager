@@ -1,7 +1,6 @@
 from app import controllers, app
 
 app.add_url_rule('/', 'index', controllers.index)
-app.add_url_rule('/list', 'list', controllers.list)
 app.add_url_rule('/cart', 'cart', controllers.cart)
 app.add_url_rule('/login', 'login', controllers.login)
 app.add_url_rule('/logout', 'logout', controllers.logout)
@@ -13,3 +12,5 @@ app.add_url_rule('/register', 'user-register', controllers.user_register, method
 app.add_url_rule('/admin/login', 'admin-login', controllers.admin_login, methods=['POST', 'GET'])
 app.add_url_rule('/admin/logout', 'admin-logout', controllers.admin_logout)
 app.add_url_rule('/api/cart', 'api-cart', controllers.add_to_cart, methods=['POST'])
+app.add_url_rule('/api/cart/<int:book_id>', 'update-cart', controllers.update_cart, methods=['PUT'])
+app.add_url_rule('/api/cart/<int:book_id>', 'delete-cart', controllers.delete_cart, methods=['DELETE'])

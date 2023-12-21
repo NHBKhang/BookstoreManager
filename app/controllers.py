@@ -1,6 +1,6 @@
 import math
 from flask import render_template, request, redirect, url_for, session, jsonify
-from flask_login import logout_user, current_user, login_user
+from flask_login import logout_user, current_user, login_user, login_required
 from flask_admin import expose
 from app import dao, utils, app
 from datetime import datetime
@@ -9,30 +9,22 @@ from datetime import datetime
 def index():
     kw = request.args.get('kw')
     cate_id = request.args.get('cate_id')
-    amount = 8
-
-    books = dao.get_books(kw, cate_id, amount=amount)
-    recommend_books = dao.get_recommend_book()
-
-    if kw != None or cate_id != None:
-        num = len(books)
-        page_size = app.config['PAGE_SIZE']
-        return render_template('list.html', books=books, pages=math.ceil(num / page_size))
-
-    return render_template('index.html', books=books, amount=amount, recommend_books=recommend_books)
-
-
-def list():
-    kw = request.args.get('kw')
-    cate_id = request.args.get('cate_id')
     page = request.args.get('page')
-
-    books = dao.get_books(kw, cate_id, page)
-
-    num = dao.count_books()
     page_size = app.config['PAGE_SIZE']
 
-    return render_template('list.html', books=books, pages=math.ceil(num / page_size))
+    books = dao.get_books(kw, cate_id, page)
+    carousel_items = dao.get_carousel_items()
+
+    num = dao.count_books()
+
+    if kw or cate_id:
+        num = len(books)
+        return render_template('index.html', books=books, pages=math.ceil(num / page_size))
+    if page:
+        return render_template('index.html', books=books, pages=math.ceil(num / page_size))
+
+    return render_template('index.html', books=books, amount=8, carousel_items=carousel_items,
+                           index=True)
 
 
 def cart():
@@ -45,7 +37,7 @@ def login():
 
 def logout():
     logout_user()
-    return redirect(url_for("index"))
+    return redirect(url_for('index'))
 
 
 def register():
@@ -76,13 +68,13 @@ def admin_login():
         else:
             return render_template('/admin/login.html', err_acc=True)
 
-    return redirect(url_for('admin'))
+    return redirect('/admin')
 
 
 @expose("/")
 def admin_logout():
     logout_user()
-    return redirect(url_for('admin'))
+    return redirect('/admin')
 
 
 def user_login():
@@ -136,7 +128,8 @@ def user_register():
 
 
 def add_to_cart():
-    cart = session.get('cart')
+    key = app.config['CART_KEY']
+    cart = session.get(key)
     if cart is None:
         cart = {}
 
@@ -156,3 +149,44 @@ def add_to_cart():
     session['cart'] = cart
 
     return jsonify(utils.count_cart(cart))
+
+
+def update_cart(book_id):
+    key = app.config['CART_KEY']
+    cart = session.get(key)
+
+    if cart and book_id in cart:
+        cart[book_id]['quantity'] = int(request.json['quantity'])
+
+    session[key] = cart
+
+    return jsonify(utils.count_cart(cart))
+
+
+def delete_cart(book_id):
+    key = app.config['CART_KEY']
+    cart = session.get(key)
+
+    if cart and book_id in cart:
+        del cart[book_id]
+
+    session[key] = cart
+
+    return jsonify(utils.count_cart(cart))
+
+
+@login_required
+def pay():
+    key = app.config['CART_KEY']
+    cart = session.get(key)
+
+    if cart:
+        try:
+            dao.save_receipt(cart=cart)
+        except Exception as ex:
+            print(str(ex))
+            return jsonify({"status": 500})
+        else:
+            del session[key]
+
+    return jsonify({"status": 200})

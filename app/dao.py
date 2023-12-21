@@ -8,28 +8,25 @@ def get_categories():
     return Category.query.all()
 
 
-def get_books(kw=None, cate_id=None, page=None, desc=True, amount=None):
+def get_books(kw=None, cate_id=None, page=None, desc=True):
     books = Book.query
     if kw:
         books = books.filter(Book.name.contains(kw))
     if cate_id:
         from app.models import Book_Category
-
         books = books.filter(Book.categories.any(Book_Category.category_id == cate_id))
+    if desc:
+        books = books.order_by(Book.id.desc())
     if page:
         page = int(page)
         page_size = app.config['PAGE_SIZE']
         start = (page - 1) * page_size
         books = books.slice(start, start + page_size)
-    if desc:
-        books = books.order_by(Book.id.desc())
-    if amount:
-        books = books.limit(amount)
 
     return books.all()
 
 
-def get_recommend_book():
+def get_carousel_items():
     with open(os.path.join(app.root_path, "static/data/carousel.json"), encoding="utf-8") as rb:
         return json.load(rb)
 
@@ -136,7 +133,7 @@ def add_book_inventory(book_id, inventory_id=1, quantity=100):
 
 
 def add_book_category(book_id, category_id):
-    ba = Book_Author(book_id=book_id, author_id=category_id)
+    ba = Book_Category(book_id=book_id, category_id=category_id)
     db.session.add(ba)
     db.session.commit()
 

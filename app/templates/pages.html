@@ -1,0 +1,49 @@
+<style>
+    h4.name:hover {
+        text-decoration: underline;
+    }
+</style>
+<br>
+<section class="container">
+    {% if books %}
+        <div style="justify-content: center; align-items: center" class="d-flex row">
+            {% for b in books %}
+                <div style="position: relative" class="card mb-2 ms-1 me-1 col-sm-5 col-md-3 col-lg-2">
+                    <a class="h-100 normal box-container" href="/books/{{ b.id }}">
+                        <div class="h-100 p-0">
+                            <img title="{{ b.name }}" class="card-img-top" src="{{ b.image }}"
+                                 alt="Card image">
+                        </div>
+                        <div class="card-body">
+                            <h4 title="{{ b.name }}" class="card-title w-100">{{ b.name }}</h4>
+                            <p title="{{ "{:,.0f}".format(b.price) }} VNĐ" class="card-text">
+                                {{ "{:,.0f}".format(b.price) }} VNĐ</p>
+                        </div>
+                        <div class="overlay p-0 m-0">
+                            <div class="hidden-box">
+                                <h4 style="text-align: center" title="{{ b.name }}"
+                                    class="w-100 p-0 pb-1 m-0 name">{{ b.name }}</h4>
+                                <p style="font-size: .8rem" title="Miêu tả"
+                                   class="w-100 p-0 m-0">{{ b.description }}</p>
+                            </div>
+                        </div>
+                    </a>
+                    <div style="justify-content: flex-start" class="card-footer d-flex w-100 h-100">
+                        <a href="" onclick="addToCart('{{ b.id }}', '{{ b.name }}', {{ b.price }})"
+                           class="btn btn-danger">Đặt hàng</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <ul style="justify-content: center" class="pagination mt-1 d-flex">
+            {% for i in range(pages) %}
+                <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="alert alert-info mt-2">KHÔNG có sản phẩm nào!!!</p>
+    {% endif %}
+</section>
+<br>
+
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
