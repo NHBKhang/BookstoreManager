@@ -4,14 +4,16 @@
     <h1 class="text-center text-success m-5">CHI TIẾT SẢN PHẨM</h1>
 
     <div class="container">
-        <div class="row">
+        <div class="row d-flex justify-content-between">
             <div class="details col-md-4">
                 <img title="{{ book.name }}" class="card-img-top" src="{{ book.image }}" alt="{{ book.name }}<">
                 {% for a in authors %}
-                    <h6 title="{{ a.name }}" class="details-item mt-3">Tác giả: <span class="details-text">{{ a.name }}</span></h6>
+                    <h6 title="{{ a.name }}" class="details-item mt-3">Tác giả: <span
+                            class="details-text">{{ a.name }}</span></h6>
                 {% endfor %}
-                <h6 title="{{ book.published_date.strftime('%d/%m/%Y') }}" class="details-item mt-2">Ngày phát hành: <span
-                        class="details-text">{{ book.published_date.strftime('%d/%m/%Y') }}</span></h6>
+                <h6 title="{{ book.published_date.strftime('%d/%m/%Y') }}" class="details-item mt-2">Ngày phát hành:
+                    <span
+                            class="details-text">{{ book.published_date.strftime('%d/%m/%Y') }}</span></h6>
                 <h6 class="details-item mt-2">Thể loại:
                     {% for i in range(0, cate_len) %}
                         <a title="{{ b_categories[i].name }}" href="/?cate_id={{ b_categories[i].id }}"
@@ -22,7 +24,7 @@
                     {% endfor %}
                 </h6>
             </div>
-            <div class="details-info col-md-7 ms-5">
+            <div class="details-info col-md-7">
                 <h1 title="{{ book.name }}" class="details-title m-2">{{ book.name }}</h1>
                 <p title="{{ book.description }}" class="details-description m-2 mb-5">{{ book.description }}</p>
                 <h3 title="{{ "{:,.0f}".format(book.price) }}"
@@ -30,32 +32,42 @@
             </div>
         </div>
     </div>
-    <hr/>
-    {#{% if current_user.is_authenticated %}#}
-    {#<div class="m-1">#}
-    {#    <form method="post" action="/products/{{ product.id }}/comments">#}
-    {#        <textarea class="form-control" rows="3" id="comment" placeholder="Nội dung bình luận..." name="content"></textarea>#}
-    {#        <button class="btn btn-success mt-1">Bình luận</button>#}
-    {#    </form>#}
-    {#</div>#}
-    {#{% else %}#}
-    {#<p>Vui lòng <a href="/login?next=/products/{{ product.id }}">đăng nhập</a> để thanh toán!</p>#}
-    {#{% endif %}#}
-    {#<hr />#}
-    {#<div>#}
-    {#    {% for c in comments %}#}
-    {#    <div class="row bg-light m-1 p-2">#}
-    {#        <div class="col-md-1">#}
-    {#            <img src="{{ c.user.avatar }}" class="img-fluid rounded-circle" />#}
-    {#        </div>#}
-    {#        <div class="col-md-11">#}
-    {#            <p>{{ c.content }}</p>#}
-    {#            <small>Được bình luận bởi <a href="#">{{ c.user.username }}</a> vào <span class="created-date">{{ c.created_date }}</span></small>#}
-    {#        </div>#}
-    {#    </div>#}
-    {#    {% endfor %}#}
-    {#</div>#}
+    <div class="m-2">
+        <hr/>
+        {% if current_user.is_authenticated %}
+            <div class="m-1">
+                <form method="post" action="/products/{{ book.id }}/comments">
+                <textarea class="form-control" rows="3" id="comment" placeholder="Nội dung bình luận..."
+                          name="content"></textarea>
+                    <button class="btn btn-success mt-1">Bình luận</button>
+                </form>
+            </div>
+        {% else %}
+            <p class=" ms-5">Vui lòng
+                <a class="text-info lg" href="/login?next=/products/{{ book.id }}">đăng nhập</a> để thanh toán!</p>
+        {% endif %}
+        <hr/>
+        <div>
+            {% for c in comments %}
+                <div class="row bg-light m-1 p-2">
+                    <div class="col-md-1">
+                        <img src="{{ c.user.avatar }}" class="img-fluid rounded-circle"/>
+                    </div>
+                    <div class="col-md-11">
+                        <p>{{ c.content }}</p>
+                        <small>Được bình luận bởi <a href="#">{{ c.user.username }}</a> vào <span
+                                class="created-date">{{ c.created_date }}</span></small>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 
+    <style>
+        a.lg:hover {
+            text-decoration: underline;
+        }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
     <script>

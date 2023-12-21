@@ -48,9 +48,9 @@ def details(book_id):
     book = dao.get_book_by_id(book_id)
     authors = dao.get_authors_by_book_id(book_id)
     categories = dao.get_categories_by_book_id(book_id)
-    # comments = dao.load_comments(book_id)
+    comments = dao.get_comments(book_id)
     return render_template('details.html', book=book, authors=authors, b_categories=categories,
-                           cate_len=len(categories))
+                           cate_len=len(categories), comments=comments)
 
 
 def sales():
@@ -111,18 +111,19 @@ def user_register():
         elif password.strip() != conf_password.strip():
             err_msg = "Mật khẩu không khớp"
         else:
-            err_msg = ""
-
             from app.models import GenderType
             if gender == GenderType.FEMALE.__val__():
                 avatar = 'avatar_female.png'
             else:
                 avatar = 'avatar_male.png'
 
-            dao.add_customer(username=username, password=password, first_name=first_name, last_name=last_name,
+            try:
+                dao.add_customer(username=username, password=password, first_name=first_name, last_name=last_name,
                              gender=gender, birthday=birthday, address=address, phone=phone, email=email, avatar=avatar)
 
-            return redirect(url_for('login'))
+                return redirect(url_for('login'))
+            except:
+                err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
 
     return render_template('register.html', err_msg=err_msg)
 

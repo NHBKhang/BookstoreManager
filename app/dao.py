@@ -39,6 +39,10 @@ def get_inventories():
     return Inventory.query.all()
 
 
+def get_comments(book_id):
+    return Comment.query.filter(Comment.book_id == book_id).all()
+
+
 def count_books():  # Count number of product in database
     return Book.query.count()
 
@@ -142,3 +146,21 @@ def add_book_author(book_id, author_id):
     ba = Book_Author(book_id=book_id, author_id=author_id)
     db.session.add(ba)
     db.session.commit()
+
+
+def stats_revenue(kw=None, from_date=None, to_date=None):
+    # query = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.price * ReceiptDetails.quantity)) \
+    #     .join(ReceiptDetails, ReceiptDetails.product_id.__eq__(Product.id)) \
+    #     .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
+    #
+    # if kw:
+    #     query = query.filter(Product.name.contains(kw))
+    #
+    # if from_date:
+    #     query = query.filter(Receipt.created_date.__ge__(from_date))
+    #
+    # if to_date:
+    #     query = query.filter(Receipt.created_date.__le__(to_date))
+    #
+    # return query.group_by(Product.id).order_by(-Product.id).all()
+    pass

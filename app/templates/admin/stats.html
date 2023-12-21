@@ -1,6 +1,59 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-<h1 class="text-center text-info">Báo cáo thống kê</h1>
+    <h1 class="text-center text-info p-1 m-1 mb-2">Báo cáo thống kê</h1>
 
+    <div class="row" style="border: 1px solid lightgray">
+        <div class="col-md-5 col-sm-12">
+            <table class="table">
+                <tr>
+                    <th>Id</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Doanh thu</th>
+                </tr>
+                {% for s in stats %}
+                    <tr>
+                        <td>{{ s[0] }}</td>
+                        <td>{{ s[1] }}</td>
+                        <td>{{ "{:,.0f}".format(s[2]) }} VNĐ</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md-7 col-sm-12">
+            <form>
+                <div class="form-group">
+                    <label>Tìm  từ khóa</label>
+                    <input type="text" placeholder="Nhập từ khóa..." class="form-control" name="kw"/>
+                </div>
+                <div class="form-group">
+                    <label>Từ ngày</label>
+                    <input type="date" class="form-control" name="from_date" max="{{ today }}"/>
+                </div>
+                <div class="form-group">
+                    <label>Đến ngày</label>
+                    <input type="date" class="form-control" name="to_date" max="{{ today }}"/>
+                </div>
+                <div>
+                    <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
+                </div>
+            </form>
+            <canvas id="cateChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+    <script>
+        let labels = []
+        let data = []
+        {% for s in stats %}
+            labels.push('{{ s[1] }}')
+            data.push({{ s[2] }})
+        {% endfor %}
+
+        window.onload = function () {
+            drawRevenueChart(labels, data)
+        }
+    </script>
 {% endblock %}

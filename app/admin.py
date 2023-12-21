@@ -4,7 +4,7 @@ from app.models import Category, Book, User, Inventory, Author
 from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
-from flask import redirect
+from flask import redirect, request
 
 
 admin = Admin(app=app, name='Quản Lí Nhà Sách', template_mode='bootstrap4',
@@ -68,7 +68,11 @@ class MyInventoryView(ModelView):
 class MyStatsView(BaseView):
     @expose("/")
     def index(self):
-        return self.render('admin/stats.html')
+        # stats = dao.stats_revenue(kw=request.args.get('kw'),
+        #                           from_date=request.args.get('from_date'),
+        #                           to_date=request.args.get('to_date'))
+        stats = []
+        return self.render('admin/stats.html', stats=stats)
 
 
 admin.add_view(MyUserView(User, db.session, name='Người dùng', menu_icon_type="fa", menu_icon_value="fa-users"))

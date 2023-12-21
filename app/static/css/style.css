@@ -247,6 +247,10 @@ footer .container a:hover > .fa-brands.fa-youtube {
     .carousel-img {
         height: 350px !important;
     }
+
+    .details-info {
+        height: 500px !important;
+    }
 }
 
 @media screen and (min-width: 1000px) {
