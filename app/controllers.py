@@ -50,7 +50,7 @@ def details(book_id):
     categories = dao.get_categories_by_book_id(book_id)
     comments = dao.get_comments(book_id)
     return render_template('details.html', book=book, authors=authors, b_categories=categories,
-                           cate_len=len(categories), comments=comments)
+                           comments=comments)
 
 
 def sales():
@@ -119,7 +119,8 @@ def user_register():
 
             try:
                 dao.add_customer(username=username, password=password, first_name=first_name, last_name=last_name,
-                             gender=gender, birthday=birthday, address=address, phone=phone, email=email, avatar=avatar)
+                                 gender=gender, birthday=birthday, address=address, phone=phone, email=email,
+                                 avatar=avatar)
 
                 return redirect(url_for('login'))
             except:
@@ -147,7 +148,7 @@ def add_to_cart():
             "quantity": 1
         }
 
-    session['cart'] = cart
+    session[key] = cart
 
     return jsonify(utils.count_cart(cart))
 
@@ -191,3 +192,43 @@ def pay():
             del session[key]
 
     return jsonify({"status": 200})
+
+
+def comments(book_id):
+    data = []
+    for c in dao.get_comments(book_id=book_id):
+        data.append({
+            'id': c.id,
+            'content': c.content,
+            'created_date': str(c.created_date),
+            'user': {
+                'name': c.user.username,
+                'avatar': c.user.avatar
+            }
+        })
+
+    return jsonify(data)
+
+
+def add_comment(book_id):
+    content = request.json['content']
+    if content == '':
+        return jsonify({'status': 501})
+
+    try:
+        c = dao.save_comment(book_id=book_id, content=content)
+    except:
+        return jsonify({'status': 500})
+
+    return jsonify({
+        'status': 204,
+        'comment': {
+            'id': c.id,
+            'content': c.content,
+            'created_date': str(c.created_date),
+            'user': {
+                'name': c.user.username,
+                'avatar': c.user.avatar
+            }
+        }
+    })

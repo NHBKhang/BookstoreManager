@@ -1,7 +1,10 @@
+import hashlib
+import os
+import json
 from app.models import *
 from app import db, app
 from sqlalchemy import desc
-import hashlib, json, os
+from flask_login import current_user
 
 
 def get_categories():
@@ -26,11 +29,6 @@ def get_books(kw=None, cate_id=None, page=None, desc=True):
     return books.all()
 
 
-def get_carousel_items():
-    with open(os.path.join(app.root_path, "static/data/carousel.json"), encoding="utf-8") as rb:
-        return json.load(rb)
-
-
 def get_authors():
     return Author.query.all()
 
@@ -40,7 +38,7 @@ def get_inventories():
 
 
 def get_comments(book_id):
-    return Comment.query.filter(Comment.book_id == book_id).all()
+    return Comment.query.filter(Comment.book_id.__eq__(book_id)).order_by(-Comment.id).all()
 
 
 def count_books():  # Count number of product in database
@@ -73,6 +71,16 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
+def get_carousel_items():
+    with open(os.path.join(app.root_path, "static/data/carousel.json"), encoding="utf-8") as c:
+        return json.load(c)
+
+
+def get_rule():
+    with open(os.path.join(app.root_path, "static/data/rules.json"), encoding="utf-8") as r:
+        return json.load(r)[0]
+
+
 def auth_account(username, password, type='user'):
     import hashlib
 
@@ -84,6 +92,25 @@ def auth_account(username, password, type='user'):
     else:
         return Admin.query.filter(Admin.username.__eq__(username.strip()),
                                   Admin.password.__eq__(password)).first()
+
+
+def save_receipt(cart):
+    if cart:
+        r = Receipt(user_id=current_user.id)
+        db.session.add(r)
+
+        for c in cart.values():
+            d = ReceiptDetails(quantity=c['quantity'], price=c['price'], receipt_id=r.id, book_id=c['id'])
+            db.session.add(d)
+
+        db.session.commit()
+
+
+def save_comment(content, book_id):
+    c = Comment(content=content, book_id=book_id, user_id=int(current_user.id))
+    db.session.add(c)
+    db.session.commit()
+    return c
 
 
 def add_admin(username, password, name, email, status=AccountStatus.ACTIVE, avatar='avatar_male.png'):
@@ -130,7 +157,7 @@ def add_book(name, price, img, description, date):
     db.session.commit()
 
 
-def add_book_inventory(book_id, inventory_id=1, quantity=100):
+def add_book_inventory(book_id, inventory_id=1, quantity=150):
     bi = Book_Inventory(book_id=book_id, inventory_id=inventory_id, quantity=quantity)
     db.session.add(bi)
     db.session.commit()

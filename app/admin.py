@@ -6,7 +6,6 @@ from flask_admin.contrib.sqla import ModelView
 from flask_login import logout_user, current_user
 from flask import redirect, request
 
-
 admin = Admin(app=app, name='Quản Lí Nhà Sách', template_mode='bootstrap4',
               index_view=AdminIndexView(name='Trang chủ', menu_icon_type="fa", menu_icon_value="fa-home"))
 
@@ -75,9 +74,21 @@ class MyStatsView(BaseView):
         return self.render('admin/stats.html', stats=stats)
 
 
+class MyOtherView(BaseView):
+    @expose('/')
+    def add_books(self):
+        rule = dao.get_rule()
+        authors = dao.get_authors()
+        books = dao.get_books()
+        return self.render('admin/add-books.html', books=books, authors=authors, rule=rule)
+
+
 admin.add_view(MyUserView(User, db.session, name='Người dùng', menu_icon_type="fa", menu_icon_value="fa-users"))
 admin.add_view(MyBookView(Book, db.session, name='Sách', menu_icon_type="fa", menu_icon_value="fa-book"))
 admin.add_view(MyCategoryView(Category, db.session, name='Thể loại', menu_icon_type="fa", menu_icon_value="fa-list"))
 admin.add_view(MyAuthorView(Author, db.session, name='Tác giả', menu_icon_type="fa", menu_icon_value="fa-user"))
 admin.add_view(MyInventoryView(Inventory, db.session, name='Kho', menu_icon_type="fa", menu_icon_value="fa-box"))
 admin.add_view(MyStatsView(name='Thống kê báo cáo', menu_icon_type="fa", menu_icon_value="fa-calculator"))
+admin.add_category(name='Tiện ích khác', icon_type="fa", icon_value="fa-bars")
+admin.add_view(MyOtherView(name='Nhập sách', endpoint='add_books', category='Tiện ích khác', menu_icon_type="fa",
+                           menu_icon_value="fa-book-medical"))

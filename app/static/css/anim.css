@@ -127,7 +127,13 @@
 }
 
 .box-container:hover > .overlay {
-    height: 88%;
+    height: 90%;
+}
+
+@media screen and (max-width: 576px) {
+    .box-container:hover > .overlay {
+        height: 95%;
+    }
 }
 
 .hidden-box {

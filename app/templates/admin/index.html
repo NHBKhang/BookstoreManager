@@ -4,13 +4,35 @@
 
     {% block body %}
 
-
-                <div style="justify-content: center; flex-wrap: wrap" class="d-flex w-100">
-                    <h1 class="text-center text-success w-100">CHÀO MỪNG BẠN ĐẾN TRANG QUẢN TRỊ!</h1>
-                    <h2 class="text-center text-info w-100">Chào {{ current_user.name }}!</h2>
-                    <img style="height: 10rem" src="{{ url_for('static', filename='img/' + current_user.avatar) }}" class="rounded-circle" alt="Avatar"/>
-                </div>
-
+        <h1 class="text-center text-success w-100">CHÀO MỪNG BẠN ĐẾN TRANG QUẢN TRỊ!</h1>
+        <div class="container">
+            <div style="justify-content: center; flex-wrap: wrap" class="d-flex w-100">
+                <h2 class="text-center text-info w-100">Chào {{ current_user.name }}!</h2>
+                <img style="height: 10rem" src="{{ url_for('static', filename='img/' + current_user.avatar) }}"
+                     class="rounded-circle" alt="Avatar"/>
+            </div>
+            {#            <div class="row">#}
+            {#                <div class="col-md-5 col-sm-12">#}
+            {#                    <table class="table">#}
+            {#                        <tr>#}
+            {#                            <th>Id</th>#}
+            {#                            <th>Tên danh mục</th>#}
+            {#                            <th>Số sản phẩm</th>#}
+            {#                        </tr>#}
+            {#                        {% for s in stats %}#}
+            {#                            <tr>#}
+            {#                                <td>{{ s[0] }}</td>#}
+            {#                                <td>{{ s[1] }}</td>#}
+            {#                                <td>{{ s[2] }}</td>#}
+            {#                            </tr>#}
+            {#                        {% endfor %}#}
+            {#                    </table>#}
+            {#                </div>#}
+            {#                <div class="col-md-7 col-sm-12">#}
+            {#                    <canvas id="cateChart"></canvas>#}
+            {#                </div>#}
+            {#            </div>#}
+        </div>
 
     {% endblock %}
 

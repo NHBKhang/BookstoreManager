@@ -43,7 +43,7 @@
                 {% endif %}
             </div>
         {% else %}
-            <p class="container" style="font-size: 1.2rem">Giỏ không có hàng!</p>
+            <div class="alert alert-warning container">KHÔNG có sản phẩm nào trong giỏ!</div>
         {% endif %}
     </div>
 
@@ -56,5 +56,4 @@
             color: #5fbae9
         }
     </style>
-    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
 {% endblock %}

@@ -216,6 +216,7 @@ class Receipt(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     created_date = Column(DateTime, default=datetime.now())
     customer_id = Column(Integer, ForeignKey(Customer.user_id), nullable=False)
+    price = Column(Integer, nullable=False, default=0)
     staff_id = Column(Integer, ForeignKey(Staff.user_id), nullable=False)
     details = relationship('ReceiptDetails', backref='receipt', lazy=True)
 
@@ -235,7 +236,7 @@ class Comment(db.Model):
     __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    content = Column(String(255), nullable=False)
+    content = Column(String(512), nullable=False)
     created_date = Column(DateTime, default=datetime.now())
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)

@@ -1,17 +1,21 @@
-.container-fluid{
+.container-fluid {
     width: 15%;
     margin: 5px;
 }
-.navbar{
+
+.navbar {
     align-items: center;
 }
-#sidebarCollapse{
+
+#sidebarCollapse {
     width: 100px;
     z-index: 1000;
 }
-.nav.navbar-nav li a{
+
+.nav.navbar-nav li a {
     color: whitesmoke;
 }
+
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
@@ -35,6 +39,7 @@
 #sidebar.active {
     margin-left: 0;
 }
+
 
 #sidebar .sidebar-header {
     padding: 20px;
@@ -70,17 +75,23 @@ ul.CTAs a {
     border-radius: 5px;
     margin-bottom: 5px;
 }
+
 a.logout {
     background: #fff;
     color: #7386D5;
+    position: relative;
 }
-a.logout:hover{
+
+a.logout:hover {
     background: #92badd !important;
     color: white !important;
+    z-index: 1200;
 }
-a{
+
+a {
     text-decoration: none !important;
 }
+
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */

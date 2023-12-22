@@ -236,8 +236,8 @@ footer .container a:hover > .fa-brands.fa-youtube {
     }
 
     .btn {
-        font-size: .8rem !important;
         padding: 5px;
+        margin: 2px;
     }
 
     .details-info {
@@ -252,10 +252,19 @@ footer .container a:hover > .fa-brands.fa-youtube {
         height: 500px !important;
     }
 }
+@media screen and (max-width: 1000px) {
+    .btn.btn-danger {
+        font-size: .9rem;
+    }
+}
 
 @media screen and (min-width: 1000px) {
     .carousel-img {
-        height: 500px;
+        height: 400px;
+    }
+
+    .btn.btn-danger {
+        font-size: .9rem;
     }
 }
 

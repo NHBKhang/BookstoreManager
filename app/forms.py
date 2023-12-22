@@ -14,13 +14,13 @@ class BookForm(Form):
     description = TextAreaField('Miêu tả', validators=[DataRequired()])
     image = StringField('Ảnh')
     published_date = DateField('Ngày phát hành', validators=[DataRequired()])
-    with app.app_context():
-        authors = FieldList(SelectField(label='', choices=[x for x in dao.get_authors()]), validators=[DataRequired()],
-                            min_entries=1, max_entries=3, label='Tác giả')
-        categories = FieldList(SelectField(label='', choices=[x for x in dao.get_categories()]),
-                               validators=[DataRequired()], min_entries=1, max_entries=10, label='Thể loại')
-        inventories = FieldList(SelectField(label='', choices=[x for x in dao.get_inventories()]),
-                               validators=[DataRequired()], min_entries=1, max_entries=50, label='Kho')
+    # with app.app_context():
+    #     authors = FieldList(SelectField(label='', choices=[x for x in dao.get_authors()]), validators=[DataRequired()],
+    #                         min_entries=1, max_entries=3, label='Tác giả')
+    #     categories = FieldList(SelectField(label='', choices=[x for x in dao.get_categories()]),
+    #                            validators=[DataRequired()], min_entries=1, max_entries=10, label='Thể loại')
+    #     inventories = FieldList(SelectField(label='', choices=[x for x in dao.get_inventories()]),
+    #                            validators=[DataRequired()], min_entries=1, max_entries=50, label='Kho')
 
 
 class CategoryForm(Form):
