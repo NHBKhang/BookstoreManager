@@ -1,4 +1,5 @@
 rowAddIndex = 3;
+
 function addRow() {
     var id = document.getElementById("id");
     var quanVal = document.getElementById("quantity").value;
@@ -26,7 +27,7 @@ function addRow() {
 }
 
 function deleteRow(r) {
-  var i = r.parentNode.parentNode.rowIndex;
+    var i = r.parentNode.parentNode.rowIndex;
     document.getElementById("addTable").deleteRow(i);
     rowAddIndex--;
 }
