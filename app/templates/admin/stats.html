@@ -22,8 +22,7 @@
         </div>
         <div class="col-md-7 col-sm-12">
             <form>
-                <div class="form-group">
-                    <label>Tìm  từ khóa</label>
+                <div class="form-group mt-1">
                     <input type="text" placeholder="Nhập từ khóa..." class="form-control" name="kw"/>
                 </div>
                 <div class="form-group">
@@ -33,6 +32,10 @@
                 <div class="form-group">
                     <label>Đến ngày</label>
                     <input type="date" class="form-control" name="to_date" max="{{ today }}"/>
+                </div>
+                <div class="form-group">
+                    <label>Theo tháng</label>
+                    <input type="month" class="form-control" name="month"/>
                 </div>
                 <div>
                     <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
