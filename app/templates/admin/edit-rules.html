@@ -3,14 +3,15 @@
 {% block body %}
     <h1 class="text-center text-info p-1 m-1 mb-2">Thay đổi qui định</h1>
 
-    <form method="post">
+    <form method="post" action="/admin/edit_rules">
         <table class="table" id="">
             <tr>
                 <td>
                     <h6>Số lượng nhập tối thiểu</h6>
                 </td>
                 <td>
-                    <input type="number" class="form-control" value="{{ rule.min_quantity }}"  min="10" max="1000"/>
+                    <input id="min-quantity" name="min-quantity" type="number"
+                           class="form-control" value="{{ rule.min_quantity }}"  min="10" max="1000"/>
                 </td>
             </tr>
             <tr>
@@ -18,7 +19,8 @@
                     <h6>Số lượng nhập tối đa</h6>
                 </td>
                 <td>
-                    <input type="number" class="form-control" value="{{ rule.max_quantity }}" min="10" max="1000"/>
+                    <input id="max-quantity" name="max-quantity" type="number"
+                           class="form-control" value="{{ rule.max_quantity }}" min="10" max="1000"/>
                 </td>
             </tr>
             <tr>
@@ -26,7 +28,8 @@
                     <h6>Thời gian tự động tự động hủy đơn hàng</h6>
                 </td>
                 <td>
-                    <input type="number" class="form-control" value="{{ rule.expired_hours }}" min="0" max="1000"/>
+                    <input id="expired-hours" name="expired-hours" type="number"
+                           class="form-control" value="{{ rule.expired_hours }}" min="0" max="1000"/>
                 </td>
             </tr>
         </table>

@@ -78,7 +78,23 @@ def get_carousel_items():
 
 def get_rule():
     with open(os.path.join(app.root_path, "static/data/rules.json"), encoding="utf-8") as r:
-        return json.load(r)[0]
+        return json.load(r)
+
+
+def edit_rule(min_quantity=None, max_quantity=None, expired_hours=None):
+    rule = {
+        "min_quantity": 150,
+        "max_quantity": 301,
+        "expired_hours": 48
+    }
+    if min_quantity:
+        rule["min_quantity"] = min_quantity
+    if max_quantity:
+        rule["max_quantity"] = max_quantity
+    if expired_hours:
+        rule["expired_hours"] = expired_hours
+    with open(os.path.join(app.root_path, "static/data/rules.json"), 'w', encoding="utf-8") as r:
+        r.write(json.dumps(rule, indent=2))
 
 
 def auth_account(username, password, type='user'):

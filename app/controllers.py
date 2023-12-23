@@ -232,3 +232,13 @@ def add_comment(book_id):
             }
         }
     })
+
+
+def edit_rules():
+    min_quantity = request.form.get('min-quantity')
+    max_quantity = request.form.get('max-quantity')
+    expired_hours = request.form.get('expired-hours')
+    print(min_quantity, max_quantity, expired_hours)
+
+    dao.edit_rule(int(min_quantity), int(max_quantity), int(expired_hours))
+    return redirect('/admin/edit_rules/')
