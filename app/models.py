@@ -205,6 +205,7 @@ class OrderDetails(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     quantity = Column(Integer, nullable=False, default=1)
+    price = Column(Integer, nullable=False, default=10000)
     order_id = Column(Integer, ForeignKey(Order.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
 
@@ -216,8 +217,7 @@ class Receipt(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     created_date = Column(DateTime, default=datetime.now())
     customer_id = Column(Integer, ForeignKey(Customer.user_id), nullable=False)
-    price = Column(Integer, nullable=False, default=0)
-    staff_id = Column(Integer, ForeignKey(Staff.user_id), nullable=False)
+    staff_id = Column(Integer, ForeignKey(Staff.user_id))
     details = relationship('ReceiptDetails', backref='receipt', lazy=True)
 
 
@@ -227,6 +227,7 @@ class ReceiptDetails(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     quantity = Column(Integer, nullable=False, default=1)
+    price = Column(Integer, nullable=False, default=10000)
     receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
 

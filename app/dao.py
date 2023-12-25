@@ -16,7 +16,6 @@ def get_books(kw=None, cate_id=None, page=None, desc=True):
     if kw:
         books = books.filter(Book.name.contains(kw))
     if cate_id:
-        from app.models import Book_Category
         books = books.filter(Book.categories.any(Book_Category.category_id == cate_id))
     if desc:
         books = books.order_by(Book.id.desc())
@@ -29,8 +28,20 @@ def get_books(kw=None, cate_id=None, page=None, desc=True):
     return books.all()
 
 
+def get_orders(customer_id):
+    return Order.query.filter_by(customer_id=customer_id).all()
+
+
+def get_order_details(order_id):
+    return OrderDetails.query.filter_by(order_id=order_id).all()
+
+
 def get_authors():
     return Author.query.all()
+
+
+def get_book_inventory(book_id):
+    return Book_Inventory.query.filter_by(book_id=book_id).first()
 
 
 def get_inventories():
@@ -112,7 +123,7 @@ def auth_account(username, password, type='user'):
 
 def save_receipt(cart):
     if cart:
-        r = Receipt(user_id=current_user.id)
+        r = Receipt(customer_id=current_user.id)
         db.session.add(r)
 
         for c in cart.values():
@@ -120,6 +131,16 @@ def save_receipt(cart):
             db.session.add(d)
 
         db.session.commit()
+
+
+# def save_receipt(customer_id, quantity):
+#     r = Receipt(customer_id=customer_id, staff_id=current_user.id)
+#     db.session.add(r)
+#
+#     # d = ReceiptDetails(quantity=quantity price=price, receipt_id=r.id, book_id=book)
+#     db.session.add(d)
+#
+#     db.session.commit()
 
 
 def save_comment(content, book_id):
@@ -188,6 +209,20 @@ def add_book_category(book_id, category_id):
 def add_book_author(book_id, author_id):
     ba = Book_Author(book_id=book_id, author_id=author_id)
     db.session.add(ba)
+    db.session.commit()
+
+
+def add_order(customer_id, created_date=datetime.now(), updated_date=datetime.now(), status=OrderStatus.PENDING):
+    o = Order(customer_id=customer_id, created_date=created_date, updated_date=updated_date, status=status)
+    db.session.add(o)
+    db.session.commit()
+
+
+def add_order_details(order_id, book_id, price=None, quantity=1):
+    if price is None:
+        price = dao.get_book_by_id(book_id).price
+    o = OrderDetails(order_id=order_id, book_id=book_id, price=price, quantity=quantity)
+    db.session.add(o)
     db.session.commit()
 
 

@@ -5,7 +5,7 @@
         <h1 class="text-center text-success m-4">GIỎ HÀNG</h1>
 
         {% if 'cart' in session and session['cart'] %}
-            <table class="table">
+            <table class="table" id="cartTable">
                 <tr>
                     <th>Mã sản phẩm</th>
                     <th>Tên sản phẩm</th>
@@ -20,11 +20,11 @@
                         <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
                         <td>
                             <input type="number" value="{{ c.quantity }}" onblur="updateCart({{ c.id }}, this)"
-                                   class="form-control" min="1" max=""/>
+                                   class="form-control" min="1" max="{{ c.max_quantity }}"/>
                         </td>
                         <td>
-                            <input type="button" value="X" onclick="deleteCart({{ c.id }})" class="btn btn-danger"
-                                   style="height: 36px; width: 36px; font-weight: bold"/>
+                            <input type="button" value="X" onclick="deleteCart({{ c.id }}, this)" class="btn btn-danger"
+                                   style="width: 35px;height: 35px"/>
                         </td>
                     </tr>
                 {% endfor %}
@@ -32,7 +32,7 @@
 
             <div class="alert alert-info">
                 <h3>Tổng sản phẩm: <span class="cart-counter">{{ cart.total_quantity }}</span></h3>
-                <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount) }}</span> VNĐ</h3>
+                <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cart.total_amount) }} VNĐ</span></h3>
             </div>
 
             <div class="ms-2">

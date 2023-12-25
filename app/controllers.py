@@ -53,6 +53,37 @@ def details(book_id):
                            comments=comments)
 
 
+@login_required
+def my_orders():
+    orders = summary = []
+    for o in dao.get_orders(current_user.id):
+        orders.append({
+            'id': o.id,
+            'created_date': o.created_date.strftime('%H:%M:%S %d/%m/%Y'),
+            'status': o.status.name,
+            'details': [{
+                'quantity': d.quantity,
+                'price': d.price,
+                'book': dao.get_book_by_id(d.book_id)
+            } for d in dao.get_order_details(o.id)]
+        })
+    sub_total = total = 0
+    for o in orders:
+        for d in o['details']:
+            total += d['price'] * d['quantity']
+            sub_total += d['book'].price * d['quantity']
+
+    summary.append({
+        'sub_total': sub_total,
+        'total': total,
+        'discount': total - sub_total,
+        'tax': 11000
+    })
+    print(summary)
+
+    return render_template('my-orders.html', orders=orders, summary=summary)
+
+
 def sales():
     return render_template('sales/index.html')
 
@@ -124,7 +155,7 @@ def user_register():
 
                 return redirect(url_for('login'))
             except:
-                err_msg = "Hệ thống đang có lỗi! Vui lòng quay lại sau!"
+                err_msg = "Hệ thống đang lỗi! Vui lòng quay lại sau!"
 
     return render_template('register.html', err_msg=err_msg)
 
@@ -145,7 +176,8 @@ def add_to_cart():
             "id": id,
             "name": data.get("name"),
             "price": data.get("price"),
-            "quantity": 1
+            "quantity": 1,
+            "max_quantity": dao.get_book_inventory(id).quantity
         }
 
     session[key] = cart

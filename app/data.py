@@ -156,15 +156,25 @@ def add_books():
     add_book_categories(10, [1, 7, 16])
 
 
+def add_orders():
+    dao.add_order(customer_id=1)
+    dao.add_order_details(1, 1, 240000, 1)
+    dao.add_order_details(1, 4, 105000, 1)
+    dao.add_order(customer_id=1)
+    dao.add_order_details(2, 5, 125000, 2)
+
+
 if __name__ == '__main__':
     with app.app_context():
-        # add_accounts()
-        #
-        # add_categories()
-        #
-        # add_inventory()
-        #
-        # add_authors()
-        #
-        # add_books()
+        add_accounts()
+
+        add_categories()
+
+        add_inventory()
+
+        add_authors()
+
+        add_books()
+
+        add_orders()
         pass

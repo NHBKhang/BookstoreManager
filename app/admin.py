@@ -77,17 +77,15 @@ class MyStatsView(BaseView):
 class AddBooksView(BaseView):
     @expose('/')
     def add_books(self):
-        rule = dao.get_rule()
         authors = dao.get_authors()
         books = dao.get_books()
-        return self.render('admin/add-books.html', books=books, authors=authors, rule=rule)
+        return self.render('admin/add-books.html', books=books, authors=authors)
 
 
 class EditRulesView(BaseView):
     @expose('/')
     def edit_rules(self):
-        rule = dao.get_rule()
-        return self.render('admin/edit-rules.html', rule=rule)
+        return self.render('admin/edit-rules.html')
 
 
 admin.add_view(MyUserView(User, db.session, name='Người dùng', menu_icon_type="fa", menu_icon_value="fa-users"))
