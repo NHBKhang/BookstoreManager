@@ -9,23 +9,30 @@
         <div class="row">
             <div class="col-xl-8">
                 {% for o in orders %}
-                    {% for d in o.details %}
+                    <a class="black" href="/my_orders/{{ o.id }}">
                         <div class="card border shadow-none">
                             <div class="card-body">
                                 <div class="d-flex align-items-start border-bottom pb-3" style="position: relative">
                                     <div class="text-white bg-info m-2 p-1 border-info"
-                                         style="position: absolute;right: 0; bottom: 0; border-radius: 10px">
+                                         style="position: absolute; right: 0; bottom: 0; border-radius: 10px">
                                         {{ o.status }}
                                     </div>
+                                    <div class="p-0 m-0" style="position: absolute; right: 0; bottom: 50%">
+                                        <span>#MN{{ "{:03d}".format(o.id) }}</span>
+                                    </div>
+                                    <div class="p-0 m-0" style="position: absolute; right: 0; bottom: 35%">
+                                        <span>{{ o.created_date }}</span>
+                                    </div>
                                     <div class="me-4">
-                                        <img src="{{ d.book.image }}" alt="book_image" style="height: 150px"
+                                        <img src="{{ o.details[0].book.image }}" alt="book_image"
+                                             style="height: 150px"
                                              class="avatar-lg rounded">
                                     </div>
                                     <div class="flex-grow-1 align-self-center overflow-hidden">
                                         <div>
                                             <h5 class="text-truncate font-size-18">
-                                                <a href="books/{{ d.book.id }}" class="text-dark">
-                                                    {{ d.book.name }}
+                                                <a href="books/{{ o.details[0].book.id }}" class="text-dark">
+                                                    {{ o.details[0].book.name }}
                                                 </a>
                                             </h5>
                                             <p class="text-muted mb-0">
@@ -54,43 +61,47 @@
                                 </div>
                                 <div>
                                     <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mt-3">
-                                                <p class="text-muted mb-2">Giá</p>
-                                                <h5 class="mb-0 mt-2"><span class="me-2">
-                                                     {% if d.price < d.book.price %}
-                                                         <del class="text-muted font-size-16 fw-normal">{{ d.book.price }} VNĐ</del>
-                                                     {% endif %} {{ "{:,.0f}".format(d.price) }} VNĐ</span>
+                                        <div class="col-md-7">
+                                            <div class="mt-3 mb-2 d-inline-flex">
+                                                <p class="text-muted mb-2 me-2">Giá: </p>
+                                                <h5 class="mb-0"><span class="me-2">
+                                                     {% if o.details[0].price < o.details[0].book.price %}
+                                                         <del class="text-muted font-size-16 fw-normal">{{ o.details[0].book.price }} VNĐ</del>
+                                                     {% endif %} {{ "{:,.0f}".format(o.details[0].price) }} VNĐ</span>
                                                 </h5>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="mt-3">
-                                                <p class="text-muted mb-2">Số lượng</p>
-                                                <div class="d-inline-flex">
-                                                    <h5>{{ d.quantity }}</h5>
+                                        <div class="col-md-5">
+                                            <div class="mt-3 mb-2 d-inline-flex">
+                                                <p class="text-muted mb-2 me-2">Số lượng: </p>
+                                                <h5>{{ o.details[0].quantity }}</h5>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer col-md-12 row">
+                                            <div class="col-md-7">
+                                                <div class="mt-3 d-inline-flex">
+                                                    <p class="text-muted mb-2 me-2">Tổng sản phẩm: </p>
+                                                    <h5>{{ o.product_quantity }}</h5>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="mt-3 d-inline-flex">
+                                                    <p class="text-muted mb-2 me-2">Thành tiền: </p>
+                                                    <h5>{{ "{:,.0f}".format(o.total_price) }} VNĐ</h5>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="mt-3">
-                                                <p class="text-muted mb-2">Tổng tiền</p>
-                                                <h5>{{ "{:,.0f}".format(d.price * d.quantity) }} VNĐ</h5>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer col-md-12">
-                                            <div class="ms-2 me-2">
-                                                <small>Mã đơn hàng: MN{{ "{:03d}".format(o.id) }}</small>
-                                            </div>
-                                            <div class="ms-2 me-2">
-                                                <small>Đơn hàng được đặt vào lúc: {{ o.created_date }}</small>
-                                            </div>
+                                        <div>
+                                            <a class="text-center d-block border m-0 mt-1 btn-primary text-white"
+                                               href="/my_orders/{{ o.id }}">Xem chi tiết đơn hàng</a>
+                                            <a class="text-center d-block border m-0 mt-1 btn-danger text-white"
+                                               href="">Đặt lại đơn hàng</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
+                    </a>
                 {% endfor %}
                 <!-- end card -->
 
@@ -112,7 +123,7 @@
                 <div class="mt-5 mt-lg-0">
                     <div class="card border shadow-none">
                         <div class="card-header bg-transparent border-bottom py-3 px-4">
-                            <h5 class="font-size-16 mb-0">Tóm tắt đơn đặt hàng</h5>
+                            <h5 class="font-size-16 mb-0">Tóm tắt tất cả đơn hàng</h5>
                         </div>
                         <div class="card-body p-4 pt-2">
 
@@ -121,21 +132,21 @@
                                     <tbody>
                                     <tr>
                                         <td>Tổng phụ:</td>
-                                        <td class="text-end">{{ "{:,.0f}".format(summary[0].sub_total) }} VNĐ</td>
+                                        <td class="text-end">{{ "{:,.0f}".format(summary.sub_total) }} VNĐ</td>
                                     </tr>
                                     <tr>
                                         <td>Giảm giá:</td>
-                                        <td class="text-end">{{ "{:,.0f}".format(summary[0].discount) }} VNĐ</td>
+                                        <td class="text-end">{{ "{:,.0f}".format(summary.discount) }} VNĐ</td>
                                     </tr>
                                     <tr>
                                         <td>Thuế ước tính:</td>
-                                        <td class="text-end">{{ "{:,.0f}".format(summary[0].tax) }} VNĐ</td>
+                                        <td class="text-end">{{ "{:,.0f}".format(summary.tax) }} VNĐ</td>
                                     </tr>
                                     <tr class="bg-light">
                                         <th>Tổng:</th>
                                         <td class="text-end">
                                             <span class="fw-bold">
-                                                {{ "{:,.0f}".format(summary[0].total - summary[0].tax) }} VNĐ
+                                                {{ "{:,.0f}".format(summary.total - summary.tax) }} VNĐ
                                             </span>
                                         </td>
                                     </tr>
@@ -155,5 +166,9 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
           crossorigin="anonymous"/>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
+    <style>
+        a.black {
+            color: black !important;
+        }
+    </style>
 {% endblock %}

@@ -37,7 +37,7 @@
 
             <div class="ms-2">
                 {% if current_user.is_authenticated %}
-                    <input type="button" value="Thanh toán" onclick="pay()" class="btn btn-success"/>
+                    <a class="btn btn-success" href="/payment">Thanh toán</a>
                 {% else %}
                     <p>Vui lòng <a class="lg" href="/login?next=/cart">đăng nhập</a> để thanh toán!</p>
                 {% endif %}

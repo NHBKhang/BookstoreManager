@@ -146,15 +146,6 @@ class Account(db.Model, UserMixin):
     last_login = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
 
-class Admin(Account):
-    __tablename__ = 'admin'
-    __table_args__ = {'extend_existing': True}
-
-    name = Column(String(50), nullable=False)
-    email = Column(String(100), nullable=False, unique=True)
-    role = Column(Enum(AdminRole), default=AdminRole.OWNER)
-
-
 class User(Account):
     __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
@@ -167,6 +158,15 @@ class User(Account):
     gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
     address = Column(String(100), nullable=False)
     comments = relationship('Comment', backref='user', lazy=True)
+
+
+class Admin(Account):
+    __tablename__ = 'admin'
+    __table_args__ = {'extend_existing': True}
+
+    name = Column(String(50), nullable=False)
+    email = Column(String(100), nullable=False, unique=True)
+    role = Column(Enum(AdminRole), default=AdminRole.OWNER)
 
 
 class Customer(User):

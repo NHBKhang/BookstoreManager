@@ -82,6 +82,10 @@ def get_user_by_id(user_id):
     return User.query.get(user_id)
 
 
+def get_order_by_id(order_id):
+    return Order.query.get(order_id)
+
+
 def get_carousel_items():
     with open(os.path.join(app.root_path, "static/data/carousel.json"), encoding="utf-8") as c:
         return json.load(c)

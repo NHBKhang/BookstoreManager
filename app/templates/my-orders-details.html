@@ -1,0 +1,183 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+    <div class="container-fluid">
+
+        <div class="container">
+            <!-- Title -->
+            <div class="d-flex justify-content-between align-items-center py-3">
+                <h2 class="h5 mb-0"><a href="" class="text-muted"></a>Đơn hàng #MN{{ "{:03d}".format(order.id) }}</h2>
+            </div>
+
+            <!-- Main content -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- Details -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="mb-3 d-flex justify-content-between">
+                                <div>
+                                    <span class="me-3">{{ order.created_date }}</span>
+                                    <span class="me-3">#MN{{ "{:03d}".format(order.id) }}</span>
+                                    <span class="me-3">Momo -1234</span>
+                                    <span class="badge rounded-pill bg-info">{{ order.status.name }}</span>
+                                </div>
+                                <div class="d-flex">
+                                    <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text">
+                                        <i class="fa-solid fa-download"></i> <span class="text">Hóa đơn</span></button>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link p-0 text-muted" type="button"
+                                                data-bs-toggle="dropdown">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Chỉnh sửa</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i>
+                                                In</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-borderless">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Sách</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-end">Giá tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for d in order.details %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex">
+                                                <div class="flex-shrink-0">
+                                                    <img src="{{ d.book.image }}" alt="book_image" width="50"
+                                                         class="img-fluid">
+                                                </div>
+                                                <div class="flex-lg-grow-1 ms-3">
+                                                    <h6 class="small mb-0">
+                                                        <a href="" class="text-reset">{{ d.book.name }}</a>
+                                                    </h6>
+                                                    <span class="small">Bản giới hạn</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">{{ d.quantity }}</td>
+                                        <td class="text-end">{{ "{:,.0f}".format(d.price) }} VNĐ
+                                            {% if d.price <  d.book.price %}
+                                                <del class="text-danger">{{ "{:,.0f}".format(d.book.price) }} VNĐ</del>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <td colspan="2">Tổng phụ</td>
+                                    <td class="text-end">{{ "{:,.0f}".format(order.sub_total) }} VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Phí vận chuyển</td>
+                                    <td class="text-end">0 VNĐ</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Giảm giá {% if order.id == 1 %}(Mã: NEWYEAR){% endif %}</td>
+                                    <td class="text-danger text-end">
+                                        {{ "{:,.0f}".format(order.sub_total - order.total_price) }} VNĐ
+                                    </td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td colspan="2">Thành tiền</td>
+                                    <td class="text-end">{{ "{:,.0f}".format(order.total_price) }} VNĐ</td>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Payment -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6" style="vertical-align: center">
+                                    <h3 class="h6">Phương thức thanh toán</h3>
+                                    <p>Momo -1234<br>Tổng: {{ order.total_price }}
+                                        <span class="badge bg-success rounded-pill">ĐÃ THANH TOÁN</span></p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <h3 class="h6">Địa chỉ gửi hàng</h3>
+                                    <address>
+                                        <strong>Nhà sách Book Store</strong>
+                                        <br>xã Nhơn Đức, huyện Nhà Bè, TP.HCM<br>
+                                        <abbr title="Phone">P: 19005341</abbr>
+                                    </address>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <!-- Customer Notes -->
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h3 class="h6">Ghi chú khách hàng</h3>
+                            <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
+                        </div>
+                    </div>
+                    <div class="card mb-4">
+                        <!-- Shipping information -->
+                        <div class="card-body">
+                            <h3 class="h6">Thông tin giao hàng</h3>
+                            <strong>Vietnam Post</strong>
+                            <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i
+                                    class="bi bi-box-arrow-up-right"></i> </span>
+                            <hr>
+                            <h3 class="h6">Địa chỉ giao hàng</h3>
+                            <address>
+                                <strong>{{ user.first_name + ' ' + user.last_name }}</strong>
+                                <br>{{ user.address }}<br>
+                                <abbr title="Phone">P: {{ user.phone }}</abbr>
+                            </address>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <style>
+        body {
+            background: #eee;
+        }
+
+        .card {
+            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+        }
+
+        .card {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            word-wrap: break-word;
+            background-color: #fff;
+            background-clip: border-box;
+            border: 0 solid rgba(0, 0, 0, .125);
+            border-radius: 1rem;
+        }
+
+        .text-reset {
+            --bs-text-opacity: 1;
+            color: inherit !important;
+        }
+
+        a {
+            color: #5465ff;
+            text-decoration: none;
+        }
+    </style>
+
+{% endblock %}

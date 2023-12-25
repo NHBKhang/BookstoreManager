@@ -55,33 +55,17 @@ def details(book_id):
 
 @login_required
 def my_orders():
-    orders = summary = []
-    for o in dao.get_orders(current_user.id):
-        orders.append({
-            'id': o.id,
-            'created_date': o.created_date.strftime('%H:%M:%S %d/%m/%Y'),
-            'status': o.status.name,
-            'details': [{
-                'quantity': d.quantity,
-                'price': d.price,
-                'book': dao.get_book_by_id(d.book_id)
-            } for d in dao.get_order_details(o.id)]
-        })
-    sub_total = total = 0
-    for o in orders:
-        for d in o['details']:
-            total += d['price'] * d['quantity']
-            sub_total += d['book'].price * d['quantity']
-
-    summary.append({
-        'sub_total': sub_total,
-        'total': total,
-        'discount': total - sub_total,
-        'tax': 11000
-    })
-    print(summary)
+    orders = utils.get_orders()
+    summary = utils.get_orders_summary(orders)
 
     return render_template('my-orders.html', orders=orders, summary=summary)
+
+
+@login_required
+def my_order_details(order_id):
+    order = utils.get_order_by_id(order_id)
+    user = dao.get_user_by_id(current_user.id)
+    return render_template('my-orders-details.html', order=order, user=user)
 
 
 def sales():
@@ -113,7 +97,7 @@ def user_login():
         username = request.form.get("username")
         password = request.form.get("password")
 
-        user = dao.auth_account(username=username, password=password)
+        user = dao.auth_account(username=username, password=password, type='user')
         if user:
             login_user(user=user)
         else:
@@ -207,6 +191,11 @@ def delete_cart(book_id):
     session[key] = cart
 
     return jsonify(utils.count_cart(cart))
+
+
+@login_required
+def payment():
+    return render_template('payment.html')
 
 
 @login_required
