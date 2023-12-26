@@ -75,10 +75,6 @@ def get_categories_by_book_id(book_id):
     return [Category.query.get(a.category_id) for a in book_category]
 
 
-def get_admin_by_id(admin_id):
-    return Admin.query.get(admin_id)
-
-
 def get_user_by_id(user_id):
     return User.query.get(user_id)
 
@@ -150,26 +146,15 @@ def save_receipt(cart):
 
 
 def save_order(cart, is_paid=False):
-    print(cart)
     if cart:
-        o = Order(customer_id=current_user.id, is_paid=is_paid)
-        db.session.add(o)
-        db.session.commit()
+        o = add_order(customer_id=current_user.id, is_paid=is_paid)
+        if is_paid:
+            r = add_receipt(customer_id=current_user.id, staff_id=2)
 
         for c in cart.values():
-            d = OrderDetails(quantity=c['quantity'], price=c['price'], order_id=o.id, book_id=c['id'])
-            db.session.add(d)
-            db.session.commit()
-
-# def save_receipt(customer_id, quantity):
-#     r = Receipt(customer_id=customer_id, staff_id=current_user.id)
-#     db.session.add(r)
-#
-#     # d = ReceiptDetails(quantity=quantity price=price, receipt_id=r.id, book_id=book)
-#     db.session.add(d)
-#
-#     db.session.commit()
-
+            add_order_details(order_id=o.id, quantity=c['quantity'], price=c['price'], book_id=c['id'])
+            if is_paid:
+                add_receipt_details(receipt_id=r.id, quantity=c['quantity'], price=c['price'], book_id=c['id'])
 
 def save_comment(content, book_id):
     c = Comment(content=content, book_id=book_id, user_id=int(current_user.id))
@@ -240,10 +225,13 @@ def add_book_author(book_id, author_id):
     db.session.commit()
 
 
-def add_order(customer_id, created_date=datetime.now(), updated_date=datetime.now(), status=OrderStatus.PENDING, is_paid=False):
-    o = Order(customer_id=customer_id, created_date=created_date, updated_date=updated_date, status=status, is_paid=is_paid)
+def add_order(customer_id, created_date=datetime.now(), updated_date=datetime.now(), status=OrderStatus.PENDING,
+              is_paid=False):
+    o = Order(customer_id=customer_id, created_date=created_date, updated_date=updated_date, status=status,
+              is_paid=is_paid)
     db.session.add(o)
     db.session.commit()
+    return o
 
 
 def add_order_details(order_id, book_id, price=None, quantity=1):
@@ -251,6 +239,21 @@ def add_order_details(order_id, book_id, price=None, quantity=1):
         price = dao.get_book_by_id(book_id).price
     o = OrderDetails(order_id=order_id, book_id=book_id, price=price, quantity=quantity)
     db.session.add(o)
+    db.session.commit()
+
+
+def add_receipt(customer_id, staff_id, created_date=datetime.now()):
+    r = Receipt(customer_id=customer_id, staff_id=staff_id, created_date=created_date)
+    db.session.add(r)
+    db.session.commit()
+    return r
+
+
+def add_receipt_details(receipt_id, book_id, price=None, quantity=1):
+    if price is None:
+        price = dao.get_book_by_id(book_id).price
+    d = ReceiptDetails(receipt_id=receipt_id, quantity=quantity, price=price, book_id=book_id)
+    db.session.add(d)
     db.session.commit()
 
 

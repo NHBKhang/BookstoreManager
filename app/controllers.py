@@ -64,8 +64,7 @@ def my_orders():
 @login_required
 def my_order_details(order_id):
     order = utils.get_order_by_id(order_id)
-    user = dao.get_user_by_id(current_user.id)
-    return render_template('my-orders-details.html', order=order, user=user)
+    return render_template('my-orders-details.html', order=order)
 
 
 def sales():
@@ -206,11 +205,10 @@ def pay():
 
     if cart:
         try:
-            # if int(method) == 3:
-            #     dao.save_order(cart=cart, is_paid=True)
-            # elif int(method) == 4:
-            #     dao.save_order(cart=cart)
-            pass
+            if int(method) == 3:
+                dao.save_order(cart=cart, is_paid=True)
+            elif int(method) == 4:
+                dao.save_order(cart=cart)
         except Exception as ex:
             print(str(ex))
             return jsonify({"status": 500})

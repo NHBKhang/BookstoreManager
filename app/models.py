@@ -31,6 +31,7 @@ class CustomerType(enum.Enum):
 
 class StaffJobTitle(enum.Enum):
     SALE = 1
+    SHIPPING = 2
 
 
 class OrderStatus(enum.Enum):

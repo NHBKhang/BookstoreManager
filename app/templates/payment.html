@@ -4,9 +4,9 @@
 
     <div class="container">
         <h3 class="m-3">Thanh toán</h3>
-        <div class="row">
-            <!-- Left -->
-            <form action="api/pay" method="post">
+        <form action="api/pay" method="post" class="col-lg-12">
+            <div class="row">
+                <!-- Left -->
                 <div class="col-lg-9">
                     <div class="accordion" id="accordionPayment">
                         <!-- Credit card -->
@@ -185,12 +185,12 @@
                                     hủy đăng ký bất cứ lúc nào. <a class="text-primary" href="">Chính sách bảo mật</a>
                                 </label>
                             </div>
-                            <button type="submit" onclick="pay()" class="btn btn-primary w-100 mt-2">Đặt hàng</button>
+                            <button type="submit" class="btn btn-primary w-100 mt-2">Đặt hàng</button>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
     <style>

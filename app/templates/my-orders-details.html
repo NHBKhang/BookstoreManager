@@ -20,7 +20,7 @@
                                 <div>
                                     <span class="me-3">{{ order.created_date }}</span>
                                     <span class="me-3">#MN{{ "{:03d}".format(order.id) }}</span>
-                                    {% if order.is_paid %}<span class="me-3">Momo -{{ user.phone }}</span>{% endif %}
+                                    {% if order.is_paid %}<span class="me-3">Momo -{{ current_user.phone }}</span>{% endif %}
                                     <span class="badge rounded-pill {{ order.status.value[1] }}">
                                         {{ order.status.name }}</span>
                                 </div>
@@ -106,7 +106,7 @@
                                     <h3 class="h6">Phương thức thanh toán</h3>
                                     <p>
                                         {% if order.is_paid %}
-                                            <span class="me-3">Momo -{{ user.phone }}</span>
+                                            <span class="me-3">Momo -{{ current_user.phone }}</span>
                                         {% else %}
                                             <span class="me-3">Thanh toán tại quầy</span>
                                         {% endif %}
@@ -150,9 +150,9 @@
                                 <hr>
                                 <h3 class="h6">Địa chỉ giao hàng</h3>
                                 <address>
-                                    <strong>{{ user.first_name + ' ' + user.last_name }}</strong>
-                                    <br>{{ user.address }}<br>
-                                    <abbr title="Phone">P: {{ user.phone }}</abbr>
+                                    <strong>{{ current_user.first_name + ' ' + current_user.last_name }}</strong>
+                                    <br>{{ current_user.address }}<br>
+                                    <abbr title="Phone">P: {{ current_user.phone }}</abbr>
                                 </address>
                             </div>
                         </div>

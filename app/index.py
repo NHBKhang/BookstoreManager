@@ -15,10 +15,8 @@ def common_resp():
 
 
 @login.user_loader
-def get_account(account_id):
-    user = dao.get_admin_by_id(account_id)
-    if user is None:
-        user = dao.get_user_by_id(account_id)
+def get_account(user_id):
+    user = dao.get_user_by_id(user_id)
 
     return user
 
