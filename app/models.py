@@ -8,7 +8,7 @@ import enum
 
 
 class GenderType(enum.Enum):
-    MALE = 1,
+    MALE = 1
     FEMALE = 2
 
     def __val__(self):
@@ -16,7 +16,7 @@ class GenderType(enum.Enum):
 
 
 class AccountStatus(enum.Enum):
-    ACTIVE = 1,
+    ACTIVE = 1
     BANNED = 2
 
 
@@ -25,7 +25,7 @@ class AdminRole(enum.Enum):
 
 
 class CustomerType(enum.Enum):
-    GUEST = 1,
+    GUEST = 1
     LOYAL = 2
 
 
@@ -34,10 +34,12 @@ class StaffJobTitle(enum.Enum):
 
 
 class OrderStatus(enum.Enum):
-    PENDING = 1,
-    DELIVERING = 2,
-    DELIVERED = 3,
-    CANCELLED = 4
+    PENDING = [1, 'bg-info']
+    APPROVED = [2, 'bg-primary']
+    REJECTED = [3, 'bg-danger']
+    SHIPPING = [4, 'bg-info']
+    RECEIVED = [5, 'bg-success']
+    CANCELLED = [6, 'bg-danger']
 
 
 class Category(db.Model):
@@ -195,6 +197,7 @@ class Order(db.Model):
     id = Column(Integer, primary_key=True, autoincrement=True)
     created_date = Column(DateTime, nullable=False, default=datetime.now())
     updated_date = Column(DateTime, nullable=False, default=datetime.now(), onupdate=datetime.now())
+    is_paid = Column(Boolean, nullable=False, default=False)
     status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
     customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
 

@@ -20,14 +20,14 @@ def count_cart(cart):
 def get_orders():
     orders = []
     for o in dao.get_orders(current_user.id):
+        dao.update_order_status(o.id, o.status.name)
         details = dao.get_order_details(o.id)
-        total = numpy.sum([d.quantity * d.price for d in details])
         orders.append({
             'id': o.id,
             'created_date': o.created_date.strftime('%H:%M:%S %d/%m/%Y'),
-            'status': o.status.name,
+            'status': o.status,
             'product_quantity': len(details),
-            'total_price': total,
+            'total_price': numpy.sum([d.quantity * d.price for d in details]),
             'details': [{
                 'quantity': d.quantity,
                 'price': d.price,
@@ -45,7 +45,8 @@ def get_order_by_id(order_id):
     orders.append({
         'id': order_id,
         'created_date': o.created_date.strftime('%H:%M:%S %d/%m/%Y'),
-        'status': o.status.name,
+        'status': o.status,
+        'is_paid': o.is_paid,
         'product_quantity': len(dao.get_order_details(o.id)),
         'total_price': numpy.sum([d.quantity * d.price for d in dt]),
         'sub_total': 0,

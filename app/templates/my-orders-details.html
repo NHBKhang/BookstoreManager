@@ -20,8 +20,9 @@
                                 <div>
                                     <span class="me-3">{{ order.created_date }}</span>
                                     <span class="me-3">#MN{{ "{:03d}".format(order.id) }}</span>
-                                    <span class="me-3">Momo -1234</span>
-                                    <span class="badge rounded-pill bg-info">{{ order.status.name }}</span>
+                                    {% if order.is_paid %}<span class="me-3">Momo -{{ user.phone }}</span>{% endif %}
+                                    <span class="badge rounded-pill {{ order.status.value[1] }}">
+                                        {{ order.status.name }}</span>
                                 </div>
                                 <div class="d-flex">
                                     <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text">
@@ -59,9 +60,9 @@
                                                 </div>
                                                 <div class="flex-lg-grow-1 ms-3">
                                                     <h6 class="small mb-0">
-                                                        <a href="" class="text-reset">{{ d.book.name }}</a>
+                                                        <a href="/books/{{ d.book.id }}" class="text-reset">{{ d.book.name }}</a>
                                                     </h6>
-                                                    <span class="small">Bản giới hạn</span>
+                                                    <span class="small">Bản phổ thông</span>
                                                 </div>
                                             </div>
                                         </td>
@@ -103,11 +104,23 @@
                             <div class="row">
                                 <div class="col-lg-6" style="vertical-align: center">
                                     <h3 class="h6">Phương thức thanh toán</h3>
-                                    <p>Momo -1234<br>Tổng: {{ order.total_price }}
-                                        <span class="badge bg-success rounded-pill">ĐÃ THANH TOÁN</span></p>
+                                    <p>
+                                        {% if order.is_paid %}
+                                            <span class="me-3">Momo -{{ user.phone }}</span>
+                                        {% else %}
+                                            <span class="me-3">Thanh toán tại quầy</span>
+                                        {% endif %}
+                                        <br>Tổng: {{ "{:,.0f}".format(order.total_price) }} VNĐ
+                                        {% if order.is_paid %}
+                                            <span class="badge bg-success rounded-pill">ĐÃ THANH TOÁN</span>
+                                        {% else %}
+                                            <span class="badge bg-danger rounded-pill">CHƯA THANH TOÁN</span>
+                                        {% endif %}
+                                    </p>
+
                                 </div>
                                 <div class="col-lg-6">
-                                    <h3 class="h6">Địa chỉ gửi hàng</h3>
+                                    <h3 class="h6">Địa chỉ thanh toán</h3>
                                     <address>
                                         <strong>Nhà sách Book Store</strong>
                                         <br>xã Nhơn Đức, huyện Nhà Bè, TP.HCM<br>
@@ -118,31 +131,33 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4">
-                    <!-- Customer Notes -->
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <h3 class="h6">Ghi chú khách hàng</h3>
-                            <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
+                {% if order.is_paid %}
+                    <div class="col-lg-4">
+                        <!-- Customer Notes -->
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h3 class="h6">Ghi chú khách hàng</h3>
+                                <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <!-- Shipping information -->
+                            <div class="card-body">
+                                <h3 class="h6">Thông tin giao hàng</h3>
+                                <strong>Vietnam Post</strong>
+                                <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i
+                                        class="bi bi-box-arrow-up-right"></i> </span>
+                                <hr>
+                                <h3 class="h6">Địa chỉ giao hàng</h3>
+                                <address>
+                                    <strong>{{ user.first_name + ' ' + user.last_name }}</strong>
+                                    <br>{{ user.address }}<br>
+                                    <abbr title="Phone">P: {{ user.phone }}</abbr>
+                                </address>
+                            </div>
                         </div>
                     </div>
-                    <div class="card mb-4">
-                        <!-- Shipping information -->
-                        <div class="card-body">
-                            <h3 class="h6">Thông tin giao hàng</h3>
-                            <strong>Vietnam Post</strong>
-                            <span><a href="#" class="text-decoration-underline" target="_blank">FF1234567890</a> <i
-                                    class="bi bi-box-arrow-up-right"></i> </span>
-                            <hr>
-                            <h3 class="h6">Địa chỉ giao hàng</h3>
-                            <address>
-                                <strong>{{ user.first_name + ' ' + user.last_name }}</strong>
-                                <br>{{ user.address }}<br>
-                                <abbr title="Phone">P: {{ user.phone }}</abbr>
-                            </address>
-                        </div>
-                    </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>

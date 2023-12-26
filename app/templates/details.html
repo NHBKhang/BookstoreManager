@@ -67,7 +67,8 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
-    <script src="{{ url_for('static', filename='js/details.js') }}" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='js/details.js') }}" type="text/javascript" rel="stylesheet"></script>
+    <script src="{{ url_for('static', filename='js/payment.js') }}" type="text/javascript" rel="stylesheet"></script>
     <script>
         window.onload = function () {
             loadComments({{ book.id }})

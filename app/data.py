@@ -157,10 +157,10 @@ def add_books():
 
 
 def add_orders():
-    dao.add_order(customer_id=1)
+    dao.add_order( customer_id=1, is_paid=True)
     dao.add_order_details(1, 1, 240000, 1)
     dao.add_order_details(1, 4, 105000, 1)
-    dao.add_order(customer_id=1)
+    dao.add_order(created_date=datetime.strptime('2023-12-20 17:03:02', '%Y-%m-%d %H:%M:%S'),customer_id=1)
     dao.add_order_details(2, 5, 125000, 2)
 
 

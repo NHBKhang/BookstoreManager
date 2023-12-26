@@ -13,9 +13,9 @@
                         <div class="card border shadow-none">
                             <div class="card-body">
                                 <div class="d-flex align-items-start border-bottom pb-3" style="position: relative">
-                                    <div class="text-white bg-info m-2 p-1 border-info"
-                                         style="position: absolute; right: 0; bottom: 0; border-radius: 10px">
-                                        {{ o.status }}
+                                    <div class="text-white mb-3 p-2 badge rounded-pill {{ o.status.value[1] }}"
+                                         style="position: absolute; right: 0; bottom: 0; font-size: 1rem">
+                                        {{ o.status.name }}
                                     </div>
                                     <div class="p-0 m-0" style="position: absolute; right: 0; bottom: 50%">
                                         <span>#MN{{ "{:03d}".format(o.id) }}</span>
@@ -94,8 +94,10 @@
                                         <div>
                                             <a class="text-center d-block border m-0 mt-1 btn-primary text-white"
                                                href="/my_orders/{{ o.id }}">Xem chi tiết đơn hàng</a>
-                                            <a class="text-center d-block border m-0 mt-1 btn-danger text-white"
-                                               href="">Đặt lại đơn hàng</a>
+                                            {% if o.status.name == 'REJECTED' or o.status.name == 'RECEIVED' or o.status.name == 'CANCELLED' %}
+                                                <a class="text-center d-block border m-0 mt-1 btn-danger text-white"
+                                                   href="">Đặt lại đơn hàng</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

@@ -18,6 +18,6 @@ app.add_url_rule('/admin/edit_rules', 'edit-rules', controllers.edit_rules, meth
 app.add_url_rule('/api/cart', 'api-cart', controllers.add_to_cart, methods=['POST'])
 app.add_url_rule('/api/cart/<string:book_id>', 'update-cart', controllers.update_cart, methods=['PUT'])
 app.add_url_rule('/api/cart/<string:book_id>', 'delete-cart', controllers.delete_cart, methods=['DELETE'])
-app.add_url_rule('/api/pay', 'pay', controllers.pay)
+app.add_url_rule('/api/pay', 'pay', controllers.pay, methods=['POST'])
 app.add_url_rule('/api/books/<int:book_id>/comments', 'comments', controllers.comments)
 app.add_url_rule('/api/books/<int:book_id>/comments', 'add-comment', controllers.add_comment, methods=['POST'])

@@ -202,17 +202,22 @@ def payment():
 def pay():
     key = app.config['CART_KEY']
     cart = session.get(key)
+    method = request.form.get('payment')
 
     if cart:
         try:
-            dao.save_receipt(cart=cart)
+            # if int(method) == 3:
+            #     dao.save_order(cart=cart, is_paid=True)
+            # elif int(method) == 4:
+            #     dao.save_order(cart=cart)
+            pass
         except Exception as ex:
             print(str(ex))
             return jsonify({"status": 500})
         else:
             del session[key]
 
-    return jsonify({"status": 200})
+    return redirect('/my_orders')
 
 
 def comments(book_id):

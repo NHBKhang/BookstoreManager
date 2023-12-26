@@ -34,7 +34,7 @@ function updateCart(bookId, obj) {
 
         let d2 = document.getElementsByClassName('cart-amount')
         for (let i = 0; i < d2.length; i++)
-            d2[i].innerText = data.total_amount.toLocaleString("en-US")
+            d2[i].innerText = data.total_amount.toLocaleString("en-US") + ' VNĐ'
     }).catch(err => console.info(err)) // promise
 }
 
@@ -54,16 +54,5 @@ function deleteCart(bookId) {
             let c = document.getElementById(`cart${bookId}`)
             c.style.display = "none"
         }).catch(err => console.info(err)) // promise
-    }
-}
-
-function pay() {
-    if (confirm("Bạn chắc chắn thanh toán không?") == true) {
-        fetch("/api/pay").then(res => res.json()).then(data => {
-            if (data.status === 200)
-                location.reload()
-            else
-                alert("Hệ thống đang bị lỗi!")
-        })
     }
 }

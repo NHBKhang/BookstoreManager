@@ -5,6 +5,7 @@ from app.models import *
 from app import db, app
 from sqlalchemy import desc
 from flask_login import current_user
+from datetime import datetime, timedelta
 
 
 def get_categories():
@@ -99,7 +100,7 @@ def get_rule():
 def edit_rule(min_quantity=None, max_quantity=None, expired_hours=None):
     rule = {
         "min_quantity": 150,
-        "max_quantity": 301,
+        "max_quantity": 300,
         "expired_hours": 48
     }
     if min_quantity:
@@ -125,17 +126,40 @@ def auth_account(username, password, type='user'):
                                   Admin.password.__eq__(password)).first()
 
 
+def update_order_status(order_id, status=None):
+    o = get_order_by_id(order_id)
+    if status is not None:
+        if datetime.now() - o.created_date > timedelta(hours=get_rule()['expired_hours']):
+            o.status = OrderStatus.REJECTED
+    else:
+        o.status = status
+    db.session.add(o)
+    db.session.commit()
+
+
 def save_receipt(cart):
     if cart:
         r = Receipt(customer_id=current_user.id)
         db.session.add(r)
+        db.session.commit()
 
         for c in cart.values():
             d = ReceiptDetails(quantity=c['quantity'], price=c['price'], receipt_id=r.id, book_id=c['id'])
             db.session.add(d)
+            db.session.commit()
 
+
+def save_order(cart, is_paid=False):
+    print(cart)
+    if cart:
+        o = Order(customer_id=current_user.id, is_paid=is_paid)
+        db.session.add(o)
         db.session.commit()
 
+        for c in cart.values():
+            d = OrderDetails(quantity=c['quantity'], price=c['price'], order_id=o.id, book_id=c['id'])
+            db.session.add(d)
+            db.session.commit()
 
 # def save_receipt(customer_id, quantity):
 #     r = Receipt(customer_id=customer_id, staff_id=current_user.id)
@@ -216,8 +240,8 @@ def add_book_author(book_id, author_id):
     db.session.commit()
 
 
-def add_order(customer_id, created_date=datetime.now(), updated_date=datetime.now(), status=OrderStatus.PENDING):
-    o = Order(customer_id=customer_id, created_date=created_date, updated_date=updated_date, status=status)
+def add_order(customer_id, created_date=datetime.now(), updated_date=datetime.now(), status=OrderStatus.PENDING, is_paid=False):
+    o = Order(customer_id=customer_id, created_date=created_date, updated_date=updated_date, status=status, is_paid=is_paid)
     db.session.add(o)
     db.session.commit()
 
