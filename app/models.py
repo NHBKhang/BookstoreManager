@@ -14,6 +14,9 @@ class GenderType(enum.Enum):
     def __val__(self):
         return str(self.value)
 
+    def __str__(self):
+        return str(self.name)
+
 
 class AccountStatus(enum.Enum):
     ACTIVE = 1
@@ -135,16 +138,22 @@ class Book_Inventory(db.Model):
     quantity = Column(Integer, nullable=False)
     added_date = Column(DateTime, nullable=False, default=datetime.now())
 
+    def __str__(self):
+        return Inventory.query.get(self.inventory_id).name
+
 
 class Account(db.Model, UserMixin):
-    __abstract__ = True
+    __tablename__ = 'account'
+    __table_args__ = {'extend_existing': True}
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String(50), nullable=False)
+    name = Column(String(50), nullable=False)
     password = Column(String(50), nullable=False)
     status = Column(Enum(AccountStatus), default=AccountStatus.ACTIVE)
     avatar = Column(String(255), nullable=False,
                     default='avatar_male.png')
+    email = Column(String(100), nullable=False, unique=True)
     register_date = Column(DateTime, default=datetime.now())
     last_login = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
 
@@ -153,10 +162,10 @@ class User(Account):
     __tablename__ = 'user'
     __table_args__ = {'extend_existing': True}
 
+    id = Column(Integer, ForeignKey(Account.id), primary_key=True)
     first_name = Column(String(50), nullable=False)
     last_name = Column(String(50), nullable=False)
     birthday = Column(DateTime, nullable=False)
-    email = Column(String(50), nullable=False)
     phone = Column(String(12), nullable=False)
     gender = Column(Enum(GenderType), nullable=False, default=GenderType.MALE)
     address = Column(String(100), nullable=False)
@@ -167,8 +176,7 @@ class Admin(Account):
     __tablename__ = 'admin'
     __table_args__ = {'extend_existing': True}
 
-    name = Column(String(50), nullable=False)
-    email = Column(String(100), nullable=False, unique=True)
+    id = Column(Integer, ForeignKey(Account.id), primary_key=True)
     role = Column(Enum(AdminRole), default=AdminRole.OWNER)
 
 
@@ -176,7 +184,7 @@ class Customer(User):
     __tablename__ = 'customer'
     __table_args__ = {'extend_existing': True}
 
-    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    id = Column(Integer, ForeignKey(User.id), primary_key=True)
     customer_type = Column(Enum(CustomerType), nullable=False, default=CustomerType.GUEST)
     orders = relationship('Order', backref='customer', lazy=True)
     receipts = relationship('Receipt', backref='customer', lazy=True)
@@ -186,7 +194,7 @@ class Staff(User):
     __tablename__ = 'staff'
     __table_args__ = {'extend_existing': True}
 
-    user_id = Column(Integer, ForeignKey(User.id), primary_key=True)
+    id = Column(Integer, ForeignKey(User.id), primary_key=True)
     job_title = Column(Enum(StaffJobTitle), nullable=False, default=StaffJobTitle.SALE)
     receipts = relationship('Receipt', backref='staff', lazy=True)
 
@@ -213,6 +221,9 @@ class OrderDetails(db.Model):
     order_id = Column(Integer, ForeignKey(Order.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
 
+    def __str__(self):
+        return 'Order ' + str(Order.query.get(self.order_id).id)
+
 
 class Receipt(db.Model):
     __tablename__ = 'receipt'
@@ -220,8 +231,8 @@ class Receipt(db.Model):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     created_date = Column(DateTime, default=datetime.now())
-    customer_id = Column(Integer, ForeignKey(Customer.user_id), nullable=False)
-    staff_id = Column(Integer, ForeignKey(Staff.user_id))
+    customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
+    staff_id = Column(Integer, ForeignKey(Staff.id))
     details = relationship('ReceiptDetails', backref='receipt', lazy=True)
 
 
@@ -234,6 +245,9 @@ class ReceiptDetails(db.Model):
     price = Column(Integer, nullable=False, default=10000)
     receipt_id = Column(Integer, ForeignKey(Receipt.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
+
+    def __str__(self):
+        return 'Receipt ' + str(Receipt.query.get(self.receipt_id).id)
 
 
 class Comment(db.Model):

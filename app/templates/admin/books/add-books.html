@@ -1,0 +1,103 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+    <h1 class="text-center text-info p-1 m-1 mb-3">Thêm sách</h1>
+
+    <div class="container border mt-2" style="background: whitesmoke">
+        <form method="post">
+            <table class="table p-2">
+                <tr>
+                    <th class="text-center" colspan="2">Ngày nhập: {{ date }}</th>
+                </tr>
+                <tr>
+                    <td><h6>Tên sách</h6></td>
+                    <td class="was-validated">
+                        <input type="text" name="name" class="form-control" maxlength="50" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Mô tả</h6></td>
+                    <td class="was-validated">
+                        <textarea rows="3" name="description" class="form-control" required maxlength="512"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Giá</h6></td>
+                    <td class="was-validated">
+                        <input type="number" name="price" value="" class="form-control" min="10000" max="10000000"
+                               required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Ảnh</h6></td>
+                    <td class="was-validated">
+                        <input type="text" name="image" value="" class="form-control" maxlength="255" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Ngày phát hành</h6></td>
+                    <td class="was-validated">
+                        <input class="form-control" type="date" name="published-date" min="1970-01-01" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Thể loại</h6></td>
+                    <td class="was-validated">
+                        <select class="form-control" name="categories" id="categories" multiple required>
+                            {% for c in categories %}
+                                <option value="{{ c.id }}">{{ c.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Tác giả</h6></td>
+                    <td class="was-validated">
+                        <select class="form-control" name="authors" id="authors" multiple required>
+                            {% for a in authors %}
+                                <option value="{{ a.id }}">{{ a.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Kho</h6></td>
+                    <td class="was-validated">
+                        <select class="form-control" name="inventory" id="inventory" multiple required>
+                            {% for i in inventories %}
+                                <option value="{{ i.id }}" {% if loop.first %}selected{% endif %}>{{ i.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h6>Số lượng</h6></td>
+                    <td class="was-validated">
+                        <input class="form-control" type="number" id="quantity" name="quantity"
+                               value="{{ rule.min_quantity }}"
+                               min="{{ rule.min_quantity }}" max="{{ rule.max_quantity }}" required/>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a href="/admin/manage_books" class="btn btn-info me-2">Trở lại</a>
+                <input type="submit" class="btn btn-primary me-2" value="Lưu và trở lại" name="back"/>
+                <button type="submit" class="btn btn-primary me-2">Lưu và tiếp tục</button>
+            </div>
+        </form>
+        <br><br>
+    </div>
+
+
+
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/css/multi-select-tag.css">
+    <script src="https://cdn.jsdelivr.net/gh/habibmhamadi/multi-select-tag@2.0.1/dist/js/multi-select-tag.js"></script>
+    <script>
+        new MultiSelectTag('categories')
+        new MultiSelectTag('authors')
+    </script>
+
+{% endblock %}

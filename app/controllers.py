@@ -64,7 +64,9 @@ def my_orders():
 @login_required
 def my_order_details(order_id):
     order = utils.get_order_by_id(order_id)
-    return render_template('my-orders-details.html', order=order)
+    user = dao.get_user_by_id(current_user.id)
+
+    return render_template('my-orders-details.html', order=order, user=user)
 
 
 def sales():
@@ -99,10 +101,12 @@ def user_login():
         user = dao.auth_account(username=username, password=password, type='user')
         if user:
             login_user(user=user)
+
+            return redirect(url_for(request.args.get('next', 'index')))
         else:
             return render_template('login.html', err_acc=True)
 
-    return redirect(url_for('index'))
+    return render_template('login.html')
 
 
 def user_register():

@@ -9,11 +9,11 @@ def add_accounts():
     admin = Admin(username='admin', password=hashlib.md5("123456".encode('utf-8')).hexdigest(), name='admin',
                   email='admin@gmail.com')
     db.session.add_all([admin])
-    customer = Customer(username='khang', password=hashlib.md5('khang2003'.encode('utf-8')).hexdigest(),
+    customer = Customer(username='khang', name='khang', password=hashlib.md5('khang2003'.encode('utf-8')).hexdigest(),
                         email='2151053027khang@ou.edu.vn', phone='0123456789', first_name='Khang', last_name='Nguyễn',
                         birthday=datetime.strptime('29/01/2003', '%d/%m/%Y'), address='11 HCS, Bến Lức, Long An')
     db.session.add_all([customer])
-    staff = Staff(username='huyshipping', password=hashlib.md5('11001100'.encode('utf-8')).hexdigest(),
+    staff = Staff(username='huyshipping', name='huy', password=hashlib.md5('11001100'.encode('utf-8')).hexdigest(),
                   email='huyshipping@gmail.com', phone='0123456999', first_name='Huy', last_name='Phan',
                   birthday=datetime.strptime('21/11/2000', '%d/%m/%Y'), address='TTT, Q12, Tp HCM',
                   job_title=models.StaffJobTitle.SHIPPING)
@@ -162,10 +162,10 @@ def add_books():
 
 
 def add_orders():
-    dao.add_order(customer_id=1, is_paid=True)
+    dao.add_order(customer_id=2, is_paid=True)
     dao.add_order_details(1, 1, 240000, 1)
     dao.add_order_details(1, 4, 105000, 1)
-    dao.add_order(created_date=datetime.strptime('2023-12-20 17:03:02', '%Y-%m-%d %H:%M:%S'), customer_id=1)
+    dao.add_order(created_date=datetime.strptime('2023-12-20 17:03:02', '%Y-%m-%d %H:%M:%S'), customer_id=2)
     dao.add_order_details(2, 5, 125000, 2)
 
 
@@ -182,4 +182,3 @@ if __name__ == '__main__':
         add_books()
 
         add_orders()
-        pass

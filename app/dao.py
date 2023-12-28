@@ -61,8 +61,8 @@ def get_book_by_id(book_id):
     return Book.query.get(book_id)
 
 
-def get_book_by_name(book_name):
-    return Book.query.get(book_name).first()
+def get_inventory_by_id(inventory_id):
+    return Inventory.query.get(inventory_id)
 
 
 def get_authors_by_book_id(book_id):
@@ -77,6 +77,10 @@ def get_categories_by_book_id(book_id):
 
 def get_user_by_id(user_id):
     return User.query.get(user_id)
+
+
+def get_account_by_id(account_id):
+    return Account.query.get(account_id)
 
 
 def get_order_by_id(order_id):
@@ -133,6 +137,16 @@ def update_order_status(order_id, status=None):
     db.session.commit()
 
 
+def update_book(book_id, name, price, description, image, published_date):
+    Book.query.filter_by(id=book_id).update(
+        dict(name=name, price=price, description=description, image=image, published_date=published_date))
+
+    Book_Category.query.filter_by(book_id=book_id).delete()
+    Book_Author.query.filter_by(book_id=book_id).delete()
+    Book_Inventory.query.filter_by(book_id=book_id).delete()
+    db.session.commit()
+
+
 def save_receipt(cart):
     if cart:
         r = Receipt(customer_id=current_user.id)
@@ -156,6 +170,7 @@ def save_order(cart, is_paid=False):
             if is_paid:
                 add_receipt_details(receipt_id=r.id, quantity=c['quantity'], price=c['price'], book_id=c['id'])
 
+
 def save_comment(content, book_id):
     c = Comment(content=content, book_id=book_id, user_id=int(current_user.id))
     db.session.add(c)
@@ -170,41 +185,25 @@ def add_admin(username, password, name, email, status=AccountStatus.ACTIVE, avat
     db.session.commit()
 
 
-def add_user(username, password, first_name, last_name, birthday, email, phone, address, gender=GenderType.MALE,
-             status=AccountStatus.ACTIVE, avatar='avatar_male.png'):
-    import hashlib
-    user = User(username=username, password=hashlib.md5(password.strip().encode('utf-8')).hexdigest(), status=status,
-                avatar=avatar, first_name=first_name, last_name=last_name,
-                birthday=datetime.strptime(birthday, '%Y-%m-%d'), phone=phone, email=email,
-                gender=gender, address=address)
-    db.session.add(user)
-    db.session.commit()
-    return user
-
-
-def add_customer(username, password, first_name, last_name, birthday, email, phone, address, gender=GenderType.MALE,
+def add_customer(username, password, name, first_name, last_name, birthday, email, phone, address,
+                 gender=GenderType.MALE,
                  status=AccountStatus.ACTIVE, avatar='avatar_male.png', customer_type=CustomerType.GUEST):
     customer = Customer(username=username, password=hashlib.md5(password.strip().encode('utf-8')).hexdigest(),
                         status=status, avatar=avatar, first_name=first_name, last_name=last_name, phone=phone,
                         birthday=datetime.strptime(birthday, '%Y-%m-%d'), email=email, gender=gender,
-                        address=address, customer_type=customer_type)
-    db.session.add(customer)
-    db.session.commit()
-
-
-def add_staff(user_id, job_title=StaffJobTitle.SALE):
-    customer = Customer(user_id=user_id, job_title=job_title)
+                        address=address, customer_type=customer_type, name=name if name else username)
     db.session.add(customer)
     db.session.commit()
 
 
 def add_book(name, price, img, description, date):
-    b1 = Book(name=name, price=price,
-              image=img,
-              description=description,
-              published_date=datetime.strptime(date, '%d/%m/%Y'))
-    db.session.add_all([b1])
+    b = Book(name=name, price=price,
+             image=img,
+             description=description,
+             published_date=datetime.strptime(date, '%Y-%m-%d'))
+    db.session.add_all([b])
     db.session.commit()
+    return b
 
 
 def add_book_inventory(book_id, inventory_id=1, quantity=150):
@@ -273,3 +272,12 @@ def stats_revenue(kw=None, from_date=None, to_date=None):
     #
     # return query.group_by(Product.id).order_by(-Product.id).all()
     pass
+
+
+def delete_book_by_id(book_id):
+    Book_Inventory.query.filter_by(book_id=book_id).delete()
+    Book_Author.query.filter_by(book_id=book_id).delete()
+    Book_Category.query.filter_by(book_id=book_id).delete()
+    Book.query.filter_by(id=book_id).delete()
+    print('cc')
+    db.session.commit()

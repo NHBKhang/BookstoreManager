@@ -15,10 +15,8 @@ def common_resp():
 
 
 @login.user_loader
-def get_account(user_id):
-    user = dao.get_user_by_id(user_id)
-
-    return user
+def get_account(account_id):
+    return dao.get_account_by_id(account_id)
 
 
 if __name__ == '__main__':

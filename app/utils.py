@@ -77,3 +77,53 @@ def get_orders_summary(orders):
     })
 
     return summary[0]
+
+
+def get_books(kw=None, cate_id=None):
+    books = []
+    for b in dao.get_books(desc=False, kw=kw, cate_id=cate_id):
+        books.append({
+            'id': b.id,
+            'name': b.name,
+            'image': b.image,
+            'categories': [{
+                'id': c.id,
+                'name': c.__str__()
+            } for c in b.categories],
+            'authors': [{
+                'id': a.id,
+                'name': a.__str__()
+            } for a in b.authors],
+            'quantity': dao.get_book_inventory(b.id).quantity,
+        })
+
+    return books
+
+
+def get_book(book_id):
+    book = []
+    b = dao.get_book_by_id(book_id)
+    i = dao.get_inventory_by_id(dao.get_book_inventory(book_id).inventory_id)
+    book.append({
+        'id': b.id,
+        'name': b.name,
+        'price': b.price,
+        'description': b.description,
+        'published_date': b.published_date,
+        'image': b.image,
+        'categories': [{
+            'id': int(c.id),
+            'name': c.__str__()
+        } for c in dao.get_categories_by_book_id(b.id)],
+        'authors': [{
+            'id': int(a.id),
+            'name': a.__str__()
+        } for a in dao.get_authors_by_book_id(b.id)],
+        'inventory': {
+            'id': int(i.id),
+            'name': i.name
+        },
+        'quantity': dao.get_book_inventory(b.id).quantity,
+    })
+
+    return book[0]

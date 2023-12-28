@@ -31,13 +31,13 @@
                 <div class="shadow-lg">
                     <div class="d-flex align-items-center">
                         <div class="d-none d-md-block d-lg-block fadeIn first">
-                            <img class="objectFit" src="../static/img/login.jpg"/>
+                            <img class="objectFit" src="{{ url_for('static', filename='img/login.jpg') }}"/>
                         </div>
                         <div class="p-4" id="formPanel">
                             <div class="text-center mb-5">
                                 <h1 class="customHeading h3 text-uppercase fadeIn first">Đăng nhập</h1>
                             </div>
-                            <form action="/login" method="post">
+                            <form method="post">
                                 <div title="Nhập tên tài khoản" class="custom-form-group fadeIn second was-validated">
                                     <label class="text-uppercase" for="username">Tên tài khoản</label>
                                     <input type="text" id="username" class="pb-1" name="username" required/><span

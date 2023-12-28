@@ -1,0 +1,76 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+
+    <h1 class="text-center text-info p-1 m-1 mb-2">Quản lý sách</h1>
+
+    <br>
+    <form>
+        <div class="m-1 d-flex justify-content-center flex-wrap">
+            <input style="width: 30%" class="form-control m-1" type="text" name="keyword"
+                   placeholder="Nhập từ khóa..."/>
+            <select style="width: 30%" class="form-control m-1" name="categories" name="categories">
+                <option value="" class="text-muted" selected>Chọn thể loại...</option>
+                {% for c in categories %}
+                    <option value="{{ c.id }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary m-1"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <a href="/admin/add_books" class="btn btn-success text-white m-1">Thêm sách</a>
+        </div>
+    </form>
+    <br>
+    <table class="table" id="addTable">
+        <tr>
+            <th>Mã</th>
+            <th>Sách</th>
+            <th>Thể loại</th>
+            <th>Tác giả</th>
+            <th>Số lượng</th>
+            <th></th>
+        </tr>
+        {% for b in books %}
+            <tr id="book{{ b.id }}" style="">
+                <td>
+                    <p class="text-center">{{ b.id }}</p>
+                </td>
+                <td>
+                    <p>{{ b.name }}</p>
+                </td>
+                <td>
+                    <p>
+                        {% for c in b.categories %}
+                            <span>{{ c.name }}{% if not loop.last %}, {% endif %}</span>
+                        {% endfor %}
+                    </p>
+                </td>
+                <td>
+                    <p>
+                        {% for a in b.authors %}
+                            <span>{{ a.name }}{% if not loop.last %}, {% endif %}</span>
+                        {% endfor %}
+                    </p>
+                </td>
+                <td>
+                    <p>{{ b.quantity }}</p>
+                </td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-link p-0 text-muted" type="button"
+                                data-bs-toggle="dropdown"><i class="fa-solid fa-ellipsis-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/admin/update_books/{{ b.id }}">
+                                <i style="width: 20px" class="fa-solid fa-pencil"></i> Chỉnh sửa</a></li>
+                            <li><a class="dropdown-item" href="" onclick="deleteBook({{ b.id }})">
+                                <i style="width: 20px" class="fa-solid fa-trash"></i> Xóa</a></li>
+                            <li><a class="dropdown-item" href="#">
+                                <i style="width: 20px" class="fa-solid fa-circle-info"></i> Chi tiết</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
