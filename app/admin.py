@@ -67,10 +67,10 @@ class MyInventoryView(ModelView):
 class MyStatsView(BaseView):
     @expose("/")
     def index(self):
-        # stats = dao.stats_revenue(kw=request.args.get('kw'),
-        #                           from_date=request.args.get('from_date'),
-        #                           to_date=request.args.get('to_date'))
-        stats = []
+        stats = dao.stats_revenue(kw=request.args.get('kw'),
+                                  from_date=request.args.get('from_date'),
+                                  to_date=request.args.get('to_date'))
+
         return self.render('admin/stats.html', stats=stats)
 
 

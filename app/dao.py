@@ -3,7 +3,7 @@ import os
 import json
 from app.models import *
 from app import db, app
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from flask_login import current_user
 from datetime import datetime, timedelta
 
@@ -257,21 +257,20 @@ def add_receipt_details(receipt_id, book_id, price=None, quantity=1):
 
 
 def stats_revenue(kw=None, from_date=None, to_date=None):
-    # query = db.session.query(Product.id, Product.name, func.sum(ReceiptDetails.price * ReceiptDetails.quantity)) \
-    #     .join(ReceiptDetails, ReceiptDetails.product_id.__eq__(Product.id)) \
-    #     .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
-    #
-    # if kw:
-    #     query = query.filter(Product.name.contains(kw))
-    #
-    # if from_date:
-    #     query = query.filter(Receipt.created_date.__ge__(from_date))
-    #
-    # if to_date:
-    #     query = query.filter(Receipt.created_date.__le__(to_date))
-    #
-    # return query.group_by(Product.id).order_by(-Product.id).all()
-    pass
+    query = db.session.query(Book.id, Book.name, func.sum(ReceiptDetails.price * ReceiptDetails.quantity)) \
+        .join(ReceiptDetails, ReceiptDetails.book_id.__eq__(Book.id)) \
+        .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
+
+    if kw:
+        query = query.filter(Book.name.contains(kw))
+
+    if from_date:
+        query = query.filter(Receipt.created_date.__ge__(from_date))
+
+    if to_date:
+        query = query.filter(Receipt.created_date.__le__(to_date))
+
+    return query.group_by(Book.id).order_by(-Book.id).all()
 
 
 def delete_book_by_id(book_id):
@@ -279,5 +278,4 @@ def delete_book_by_id(book_id):
     Book_Author.query.filter_by(book_id=book_id).delete()
     Book_Category.query.filter_by(book_id=book_id).delete()
     Book.query.filter_by(id=book_id).delete()
-    print('cc')
     db.session.commit()
