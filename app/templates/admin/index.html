@@ -5,34 +5,95 @@
     {% block body %}
 
         <h1 class="text-center text-success w-100">CHÀO MỪNG BẠN ĐẾN TRANG QUẢN TRỊ!</h1>
-        <div class="container">
-            <div style="justify-content: center; flex-wrap: wrap" class="d-flex w-100">
-                <h2 class="text-center text-info w-100">Chào {{ current_user.name }}!</h2>
-                <img style="height: 10rem" src="{{ url_for('static', filename='img/' + current_user.avatar) }}"
-                     class="rounded-circle" alt="Avatar"/>
-            </div>
-            {#            <div class="row">#}
-            {#                <div class="col-md-5 col-sm-12">#}
-            {#                    <table class="table">#}
-            {#                        <tr>#}
-            {#                            <th>Id</th>#}
-            {#                            <th>Tên danh mục</th>#}
-            {#                            <th>Số sản phẩm</th>#}
-            {#                        </tr>#}
-            {#                        {% for s in stats %}#}
-            {#                            <tr>#}
-            {#                                <td>{{ s[0] }}</td>#}
-            {#                                <td>{{ s[1] }}</td>#}
-            {#                                <td>{{ s[2] }}</td>#}
-            {#                            </tr>#}
-            {#                        {% endfor %}#}
-            {#                    </table>#}
-            {#                </div>#}
-            {#                <div class="col-md-7 col-sm-12">#}
-            {#                    <canvas id="cateChart"></canvas>#}
-            {#                </div>#}
-            {#            </div>#}
+
+        <div style="justify-content: center; flex-wrap: wrap" class="d-flex w-100">
+            <h2 class="text-center text-info w-100">Chào {{ current_user.name }}!</h2>
+            <img style="height: 10rem" src="{{ url_for('static', filename='img/' + current_user.avatar) }}"
+                 class="rounded-circle" alt="Avatar"/>
         </div>
+
+        <div class="border mt-3">
+            <div class="row">
+                <div class="col-md-7 col-sm-12">
+                    <div class="d-block border m-1 mt-2 mb-4" style="border-radius: 10px">
+                        <h6 class="bg-primary text-white p-1 border-primary m-0 d-block"
+                            style="border-radius: 10px 10px 0 0">Các chức năng</h6>
+                        <a href="/admin/manage_books" class=" d-block text-black ps-2 p-1">Quản lý sách</a>
+                        <a href="/admin/edit_rules" class=" d-block text-black ps-2 p-1 border">Thay đổi quy định</a>
+                        <a href="/sales" class=" d-block text-black p-1">Trang bán hàng</a>
+                    </div>
+                    <div class="mb-4">
+                        <canvas id="cateChart"></canvas>
+                        <h5 class="text-center">Số lượng sản phẩm theo thể loại</h5>
+                    </div>
+                </div>
+                <div class="col-md-5 col-sm-12">
+                    <table class="table">
+                        <tr>
+                            <th>Id</th>
+                            <th>Tên thể loại</th>
+                            <th class="text-center">Số sản phẩm</th>
+                        </tr>
+                        {% for s in stats %}
+                            <tr>
+                                <td>{{ s[0].id }}</td>
+                                <td>{{ s[0].name }}</td>
+                                <td class="text-center">{{ s[1] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            .text-black {
+                color: black !important;
+            }
+
+            a.text-black:hover {
+                text-decoration: underline !important;
+                color: blue !important;
+            }
+        </style>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            let labels = [], counter = [], colors = [], borderColors = []
+            {% for s in stats %}
+                labels.push('{{ s[0].name }}')
+                counter.push({{ s[1] }})
+
+                r = parseInt(Math.random() * 255)
+                g = parseInt(Math.random() * 255)
+                b = parseInt(Math.random() * 255)
+                colors.push(`rgba(${r}, ${g}, ${b}, 0.6)`)
+                borderColors.push(`rgba(${r}, {g}, ${b}, 1)`)
+            {% endfor %}
+
+            window.onload = function () {
+                const ctx = document.getElementById('cateChart').getContext('2d')
+                const myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Thống kê số sản phẩm theo thể loại',
+                            data: counter,
+                            backgroundColor: colors,
+                            borderColor: borderColors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+        </script>
 
     {% endblock %}
 

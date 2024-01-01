@@ -173,6 +173,15 @@ def add_receipts():
     dao.add_receipt(customer_id=2, staff_id=3)
     dao.add_receipt_details(quantity=1, price=240000, receipt_id=1, book_id=1)
 
+    dao.add_receipt(customer_id=2, staff_id=3)
+    dao.add_receipt_details(quantity=2, receipt_id=2, book_id=7)
+    dao.add_receipt_details(quantity=1, receipt_id=2, book_id=3)
+
+    dao.add_receipt(customer_id=2, staff_id=3)
+    dao.add_receipt_details(quantity=2, receipt_id=3, book_id=10)
+    dao.add_receipt_details(quantity=1, receipt_id=3, book_id=1)
+    dao.add_receipt_details(quantity=2, receipt_id=3, book_id=4)
+
 
 if __name__ == '__main__':
     with app.app_context():

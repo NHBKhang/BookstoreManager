@@ -1,9 +1,9 @@
 import hashlib
 import os
-import json
+import json, numpy
 from app.models import *
 from app import db, app
-from sqlalchemy import desc, func
+from sqlalchemy import desc, func, extract
 from flask_login import current_user
 from datetime import datetime, timedelta
 
@@ -256,7 +256,7 @@ def add_receipt_details(receipt_id, book_id, price=None, quantity=1):
     db.session.commit()
 
 
-def stats_revenue(kw=None, from_date=None, to_date=None):
+def books_revenue_stats(kw=None, from_date=None, to_date=None):
     query = db.session.query(Book.id, Book.name, func.sum(ReceiptDetails.price * ReceiptDetails.quantity)) \
         .join(ReceiptDetails, ReceiptDetails.book_id.__eq__(Book.id)) \
         .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
@@ -271,6 +271,38 @@ def stats_revenue(kw=None, from_date=None, to_date=None):
         query = query.filter(Receipt.created_date.__le__(to_date))
 
     return query.group_by(Book.id).order_by(-Book.id).all()
+
+
+def categories_stats():
+    return Category.query.join(Book, Book.categories.any(Book_Category.category_id.__eq__(Category.id)), isouter=True) \
+        .add_columns(func.count(Book.id)).group_by(Category.id).all()
+
+
+def categories_revenue_stats(month, year):
+    return (Category.query.filter((extract('month', Receipt.created_date).__eq__(month))
+                                  .__and__(extract('year', Receipt.created_date).__eq__(year)))
+            .add_column(func.sum(ReceiptDetails.price * ReceiptDetails.quantity))
+            .add_column(func.sum(ReceiptDetails.quantity))
+            .join(Book_Category, Book_Category.category_id.__eq__(Category.id))
+            .join(Book, Book_Category.book_id.__eq__(Book.id))
+            .join(ReceiptDetails, ReceiptDetails.book_id.__eq__(Book.id))
+            .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
+            .group_by(Category.id).order_by(Category.id).all())
+
+
+def categories_total_revenue(month, year):
+    return numpy.sum(r.price * r.quantity for r in ReceiptDetails.query
+                     .filter((extract('month', Receipt.created_date) == month)
+                             .__and__(extract('year', Receipt.created_date) == year)).all())
+
+
+def books_frequency_stats(month, year):
+    return (Book.query.filter((extract('month', Receipt.created_date).__eq__(month))
+                              .__and__(extract('year', Receipt.created_date).__eq__(year)))
+            .add_columns(func.sum(ReceiptDetails.quantity))
+            .join(ReceiptDetails, ReceiptDetails.book_id.__eq__(Book.id))
+            .join(Receipt, ReceiptDetails.receipt_id.__eq__(Receipt.id))
+            .group_by(Book.id).order_by(Book.id).all())
 
 
 def delete_book_by_id(book_id):

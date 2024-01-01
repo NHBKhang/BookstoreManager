@@ -1,0 +1,69 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h1 class="text-center text-info p-1 m-1 mb-2">Báo cáo thống kê</h1>
+
+    {% set maxMonth = today.split('-')[0] + '-' + today.split('-')[1] %}
+    <div>
+        <h6 class="text-center text-success p-1 mb-2">Thống kê doanh thu theo từng loại sách</h6>
+        <div class="row" style="border: 1px solid lightgray">
+            <div class="col-md-6 col-sm-12">
+                <table class="table">
+                    <tr>
+                        <th colspan="5" class="text-center">Tháng: {{ month }}</th>
+                    </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Tên sách</th>
+                        <th>Thể loại</th>
+                        <th>Số lượng</th>
+                        <th>Tỷ lệ</th>
+                    </tr>
+                    {% for s in stats %}
+                        <tr>
+                            <td>{{ s[0].id }}</td>
+                            <td>{{ s[0].name }}</td>
+                            <td>
+                                {% for c in s[0].categories %}
+                                    {{ c }}{% if not loop.last %}<span>, </span>{% endif %}
+                                {% endfor %}
+                            </td>
+                            <td>{{ s[1] }}</td>
+                            <td>{{ '%0.2f'| format((s[1] / total * 100) | float) }}%</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <form>
+                    <div class="form-group mt-2">
+                        <label>Theo tháng</label>
+                        <input type="month" class="form-control" name="month" value="{{ maxMonth }}" id="month"
+                               max="{{ maxMonth }}"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
+                    </div>
+                </form>
+                <canvas class="mb-5" id="pieChart"></canvas>
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+    <script>
+        let labels = []
+        let data = []
+        {% for s in stats %}
+            labels.push('{{ s[0] }}')
+            data.push({{ s[1] }})
+        {% endfor %}
+
+        window.onload = function () {
+            drawBarChart(labels, 'Số lượng', data, "barChart")
+            drawPieChart(labels, 'Số lượng', data, "pieChart")
+        }
+    </script>
+{% endblock %}

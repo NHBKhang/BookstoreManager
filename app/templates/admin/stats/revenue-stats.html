@@ -1,0 +1,73 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <h1 class="text-center text-info p-1 m-1 mb-2">Báo cáo thống kê theo tháng</h1>
+
+
+    {% set maxMonth = today.split('-')[0] + '-' + today.split('-')[1] %}
+    <div>
+        <h6 class="text-center text-success p-1 m-0 mb-2">Thống kê doanh thu theo thể loại</h6>
+        <div class="row" style="border: 1px solid lightgray">
+
+            <div class="col-md-5 col-sm-12">
+                <table class="table">
+                    <tr>
+                        <th colspan="5" class="text-center">Tháng: {{ month }}</th>
+                    </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Thể loại</th>
+                        <th>Doanh thu</th>
+                        <th class="text-center">Số lượt mua</th>
+                        <th>Tỷ lệ</th>
+                    </tr>
+                    {% for s in stats %}
+                        <tr>
+                            <td>{{ s[0].id }}</td>
+                            <td>{{ s[0].name }}</td>
+                            <td>{{ "{:,.0f}".format(s[1]) }} VNĐ</td>
+                            <td class="text-center">{{ s[2] }}</td>
+                            <td>{{ '%0.2f'| format((s[1] / total * 100) | float) }}%</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="5" class="ms-2 font-italic font-weight-bold"
+                            style="font-size: 1.05rem">Tổng doanh thu: {{ "{:,.0f}".format(total) }} VNĐ
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-7 col-sm-12">
+                <form>
+                    <div class="form-group mt-2">
+                        <label>Theo tháng</label>
+                        <input type="month" class="form-control" name="month" id="month" value="{{ maxMonth }}"
+                               max="{{ maxMonth }}"/>
+                    </div>
+                    <div>
+                        <input type="submit" value="Lọc dữ liệu" class="btn btn-info"/>
+                    </div>
+                </form>
+                <canvas class="ms-1" id="revenueChart"></canvas>
+                <canvas class="ms-1" id="quantityChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='js/my-chart.js') }}"></script>
+    <script>
+        let labels = []
+        let data = [], q_data = []
+        {% for s in stats %}
+            labels.push('{{ s[0] }}')
+            data.push({{ s[1] }})
+            q_data.push({{ s[2] }})
+        {% endfor %}
+
+        window.onload = function () {
+            drawBarChart(labels, 'Số tiền', data, "revenueChart")
+            drawBarChart(labels, 'Số lượt mua', q_data, "quantityChart")
+        }
+    </script>
+{% endblock %}

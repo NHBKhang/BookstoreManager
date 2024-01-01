@@ -127,3 +127,11 @@ def get_book(book_id):
     })
 
     return book[0]
+
+
+def get_categories_string(book_id):
+    string = ''
+    for c in dao.get_categories_by_book_id(book_id):
+        string += c.name + ', '
+
+    return string
