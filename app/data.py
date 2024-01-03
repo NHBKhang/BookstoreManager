@@ -17,7 +17,10 @@ def add_accounts():
                   email='huyshipping@gmail.com', phone='0123456999', first_name='Huy', last_name='Phan',
                   birthday=datetime.strptime('21/11/2000', '%d/%m/%Y'), address='TTT, Q12, Tp HCM',
                   job_title=models.StaffJobTitle.SHIPPING)
-    db.session.add_all([staff])
+    staff1 = Staff(username='tansaling', name='tan', password=hashlib.md5('11111'.encode('utf-8')).hexdigest(),
+                  email='tansaling@gmail.com', phone='0123456989', first_name='Tấn', last_name='Phạm',
+                  birthday=datetime.strptime('3/5/1999', '%d/%m/%Y'), address='NVL, QBC, Tp HCM')
+    db.session.add_all([staff, staff1])
     db.session.commit()
 
 

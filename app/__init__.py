@@ -13,6 +13,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://root:%s@localhost/books
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 app.config['PAGE_SIZE'] = 9
 app.config['CART_KEY'] = 'cart'
+app.config['SALES_KEY'] = 'sales_cart'
 
 db = SQLAlchemy(app=app)
 login = LoginManager(app=app)

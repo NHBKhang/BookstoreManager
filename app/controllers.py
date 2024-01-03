@@ -70,7 +70,38 @@ def my_order_details(order_id):
 
 
 def sales():
-    return render_template('sales/index.html')
+    books = dao.get_books()
+
+    return render_template('sales/index.html', books=books)
+
+
+def staff_login():
+    books = dao.get_books()
+    customers = dao.get_customers()
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        user = dao.auth_account(username, password, 'staff')
+        try:
+            from app.models import Staff
+            staff = Staff.query.get(user.id)
+        except Exception as e:
+            print(e)
+        if user:
+            login_user(user)
+            return render_template('/sales/index.html', books=books, customers=customers,
+                                   user=dao.get_user_by_id(user.id))
+        else:
+            return render_template('/sales/index.html', books=books, err_msg=True)
+
+    return render_template('/sales/index.html', books=books, customers=customers,
+                           user=dao.get_user_by_id(current_user.id))
+
+
+def staff_logout():
+    logout_user()
+    return redirect('/sales')
 
 
 def admin_login():
@@ -196,6 +227,45 @@ def delete_cart(book_id):
     return jsonify(utils.count_cart(cart))
 
 
+def add_to_sales_cart():
+    key = app.config['SALES_KEY']
+    cart = session.get(key)
+    if cart is None:
+        cart = {}
+
+    data = request.json
+    id = str(data.get("id"))
+    if id in cart:
+        cart[id]['quantity'] += 1
+    else:
+        cart[id] = {
+            "id": id,
+            "name": data.get("name"),
+            "price": data.get("price"),
+            "quantity": 1,
+            "max_quantity": dao.get_book_inventory(id).quantity
+        }
+    session[key] = cart
+
+    return jsonify(utils.count_sales_cart(cart))
+
+
+def update_sales_cart(book_id):
+    key = app.config['SALES_KEY']
+    cart = session.get(key)
+
+    if request.method == "PUT":
+        if cart and book_id in cart:
+            cart[book_id]['quantity'] = int(request.json['quantity'])
+    else:
+        if cart and book_id in cart:
+            del cart[book_id]
+
+    session[key] = cart
+
+    return jsonify(utils.count_sales_cart(cart))
+
+
 @login_required
 def payment():
     return render_template('payment.html')
@@ -220,6 +290,41 @@ def pay():
             del session[key]
 
     return redirect('/my_orders')
+
+
+@login_required
+def pay_invoice():
+    key = app.config['SALES_KEY']
+    cart = session.get(key)
+    customer_id = request.form.get('customer')
+
+    try:
+        receipt = dao.save_receipt(cart, customer_id=customer_id, staff_id=current_user.id)
+    except Exception as e:
+        print(e)
+        return jsonify({"status": 500})
+
+    return render_template('sales/invoice.html', receipt=receipt,
+                           customer=dao.get_user_by_id(customer_id))
+
+
+@login_required
+def print_invoice(receipt_id):
+    key = app.config['SALES_KEY']
+    cart = session.get(key)
+
+    if int(receipt_id) == 0:
+        try:
+            if request.method == 'POST':
+                dao.save_receipt(cart, customer_id=int(request.json['customer']),
+                                 staff_id=current_user.id)
+        except Exception as e:
+            print(e)
+            return jsonify({"status": 500})
+
+    del session[key]
+
+    return redirect('/sales/login')
 
 
 def comments(book_id):

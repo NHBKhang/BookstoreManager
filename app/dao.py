@@ -57,6 +57,10 @@ def count_books():  # Count number of product in database
     return Book.query.count()
 
 
+def get_customers():
+    return User.query.filter(User.id.__eq__(Customer.id))
+
+
 def get_book_by_id(book_id):
     return Book.query.get(book_id)
 
@@ -113,17 +117,17 @@ def edit_rule(min_quantity=None, max_quantity=None, expired_hours=None):
         r.write(json.dumps(rule, indent=2))
 
 
-def auth_account(username, password, type='user'):
+def auth_account(username, password, type='admin'):
     import hashlib
 
     password = str(hashlib.md5(password.strip().encode('utf-8')).hexdigest())
 
-    if type == 'user':
-        return User.query.filter(User.username.__eq__(username.strip()),
-                                 User.password.__eq__(password)).first()
-    else:
+    if type == 'admin':
         return Admin.query.filter(Admin.username.__eq__(username.strip()),
                                   Admin.password.__eq__(password)).first()
+    else:
+        return User.query.filter(User.username.__eq__(username.strip()),
+                                 User.password.__eq__(password)).first()
 
 
 def update_order_status(order_id, status=None):
@@ -147,9 +151,9 @@ def update_book(book_id, name, price, description, image, published_date):
     db.session.commit()
 
 
-def save_receipt(cart):
+def save_receipt(cart, customer_id, staff_id):
     if cart:
-        r = Receipt(customer_id=current_user.id)
+        r = Receipt(customer_id=customer_id, staff_id=staff_id)
         db.session.add(r)
         db.session.commit()
 
@@ -157,6 +161,8 @@ def save_receipt(cart):
             d = ReceiptDetails(quantity=c['quantity'], price=c['price'], receipt_id=r.id, book_id=c['id'])
             db.session.add(d)
             db.session.commit()
+
+        return r
 
 
 def save_order(cart, is_paid=False):

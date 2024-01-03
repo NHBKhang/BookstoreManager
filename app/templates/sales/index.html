@@ -2,29 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Trang chủ</title>
-    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+    <title>Trang bán hàng</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+            integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+            integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/sales.js') }}"></script>
 </head>
 <body>
-    <h1>WEBSITE BÁN HÀNG TRỰC TUYẾN</h1>
-    <h3>
-        {% if session.user  %}
-        <h4>{{ session.user.username }}</h4> <a href="{{ url_for('logout') }}">Logout</a>
+<h1 class="text-center text-success m-1">WEBSITE BÁN HÀNG TRỰC TUYẾN</h1>
+
+<div class="row mt-4">
+    <div class="col-sm-7">
+        <div class="border" style="border-radius: 10px">
+            <label class="m-2 p-1 pe-2 border font-weight-bold text-primary"
+                   style="font-size: 1.5rem; border-radius: 15px; background: greenyellow">
+                <img src="{{ url_for('static', filename='img/logo_book.png') }}" class="m-1"
+                     width="35"/>Book Store</label>
+            <div class="d-flex justify-content-center flex-wrap row">
+                {% for b in books %}
+                    <div class="card m-1 col-lg-2 col-md-3 col-sm-5">
+                        <div>
+                            <img title="{{ b.name }}" class="card-img-top" src="{{ b.image }}"
+                                 alt="Card image"/>
+                        </div>
+                        <div class="card-body p-0 pt-2">
+                            <h4 title="{{ b.name }}" class="card-title w-100"
+                                style="font-size: 1.25rem">{{ b.name }}</h4>
+                            <p title="{{ "{:,.0f}".format(b.price) }} VNĐ" style="font-size: .9rem"
+                               class="card-text">{{ "{:,.0f}".format(b.price) }} VNĐ</p>
+                        </div>
+                        <div class="card-footer w-100 d-flex justify-content-center">
+                            <a class="btn btn-info text-white" href=""
+                               onclick="addToOrderList('{{ b.id }}', '{{ b.name }}', {{ b.price }})">Thêm</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        {% if current_user.is_authenticated %}
+
+            <div class="border" style="border-radius: 10px">
+                <div class="d-flex flex-wrap">
+                    <label class="d-block w-100 p-2 bg-blue text-white"
+                           style="font-size: 1.25rem; border-radius: 10px 10px 0 0">Thông tin</label>
+                    <h6 class="m-2 mb-1 w-100">Họ tên: <span>{{ user.first_name + ' ' + user.last_name }}</span></h6>
+                    <h6 class="m-2 w-100">Ca làm: <span>1</span></h6>
+                    <a class="btn btn-primary" style="margin: .5rem auto" href="/sales/logout">Đăng xuất</a>
+                </div>
+            </div>
+            <div class="border mt-1" style="border-radius: 10px">
+                <label class="d-block w-100 p-2 bg-blue text-white"
+                       style="font-size: 1.25rem; border-radius: 10px 10px 0 0">Đơn mua</label>
+                <form method="post" action="/invoice">
+                    <table class="table" style="width: 100%">
+                        {% if 'sales_cart' in session and session['sales_cart'] %}
+                            <tr>
+                                <td><h6 class="p-1">Tên khách hàng</h6></td>
+                                <td colspan="2">
+                                    <select class="form-control" name="customer" id="customer">
+                                        {% for c in customers %}
+                                            <option value="{{ c.id }}"
+                                                    {% if loop.first %}selected{% endif %}>{{ c.first_name + ' ' + c.last_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                            {% for c in session['sales_cart'].values() %}
+                                <tr id="cart{{ c.id }}" style="">
+                                    <td>{{ c.name }}</td>
+                                    <td>
+                                        <input type="number" value="{{ c.quantity }}"
+                                               onblur="updateOrderList('{{ c.id }}', this)"
+                                               class="form-control" min="0" max="{{ c.max_quantity }}"/>
+                                    </td>
+                                    <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+                        <tr>
+                            <td>
+                                <h6>Số lượng</h6>
+                                <h6>Thành tiền</h6>
+                            </td>
+                            <td colspan="2" class="text-end">
+                                <h6 class="cart-counter">{{ sales_cart.total_quantity }} sản phẩm</h6>
+                                <h6 class="cart-amount">{{ "{:,.0f}".format(sales_cart.total_amount) }} VNĐ</h6>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" class="text-center m-1 w-100">
+                                <a class="btn btn-danger" href="/invoice/print/{{ 0 }}"
+                                   onclick="sendCustomerId({{ 0 }})">In hóa đơn</a>
+                                <button class="btn btn-primary" type="submit">Tạo hóa đơn</button>
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
         {% else %}
-        <a href="{{ url_for('login') }}">Login</a>
-        <a href="{{ url_for('register') }}">Register</a>
+            <div class="border" style="border-radius: 10px">
+                <form class="was-validated d-flex justify-content-center flex-wrap" method="post"
+                      action="/sales/login">
+                    <label class="d-block w-100 p-2 bg-blue text-white"
+                           style="font-size: 1.25rem; border-radius: 10px 10px 0 0">Đăng nhập</label>
+                    <input type="text" class="form-control m-2 mt-3" placeholder="Tên tài khoản..."
+                           name="username"
+                           required/>
+                    <input type="password" class="form-control m-2" placeholder="Mật khẩu..."
+                           name="password" required/>
+                    {% if err_msg %}
+                        <span class="text-danger" style="font-size: .75rem">
+                            Sai tên tài khoản hoặc mật khẩu. Vui lòng nhập lại.
+                        </span>
+                    {% endif %}
+                    <button class="btn btn-primary m-2" type="submit">Đăng nhập</button>
+                </form>
+            </div>
         {% endif %}
-    </h3>
-{#    <ul>#}
-{#        <li>#}
-{#            <a href="{{ url_for('product_list') }}">Tất cả</a>#}
-{#        </li>#}
-{#        <li>#}
-{#            <a href="{{ url_for('product_list_by_cate', category_id=1) }}">Điện thoại di động</a>#}
-{#        </li>#}
-{#        <li>#}
-{#            <a href="{{ url_for('product_list_by_cate', category_id=2) }}">Máy tính bảng</a>#}
-{#        </li>#}
-{#    </ul>#}
+    </div>
+</div>
 </body>
 </html>

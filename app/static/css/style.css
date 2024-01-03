@@ -88,6 +88,14 @@ a.normal {
     padding: 0;
 }
 
+.text-black {
+    color: black;
+}
+
+.bg-blue {
+    background: #033C73;
+}
+
 /*body*/
 .btn.all {
     padding: 25px 0 0;
