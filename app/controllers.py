@@ -1,8 +1,8 @@
 import math
-from flask import render_template, request, redirect, url_for, session, jsonify
+from flask import render_template, request, redirect, url_for, session, jsonify, flash
 from flask_login import logout_user, current_user, login_user, login_required
 from flask_admin import expose
-from app import dao, utils, app
+from app import dao, utils, app, otp
 from datetime import datetime
 
 
@@ -65,8 +65,10 @@ def my_orders():
 def my_order_details(order_id):
     order = utils.get_order_by_id(order_id)
     user = dao.get_user_by_id(current_user.id)
+    payment = dao.get_vnpay_history_by_order_id(int(order['id']))
+    print(int(order['id']))
 
-    return render_template('my-orders-details.html', order=order, user=user)
+    return render_template('my-orders-details.html', order=order, user=user, payment=payment)
 
 
 def sales():
@@ -95,8 +97,9 @@ def staff_login():
         else:
             return render_template('/sales/index.html', books=books, err_msg=True)
 
+    user = dao.get_user_by_id(current_user.id)
     return render_template('/sales/index.html', books=books, customers=customers,
-                           user=dao.get_user_by_id(current_user.id))
+                           user=user if user else dao.get_admin_by_id(current_user.id))
 
 
 def staff_logout():
@@ -276,20 +279,31 @@ def pay():
     key = app.config['CART_KEY']
     cart = session.get(key)
     method = request.form.get('payment')
+    order = None
+    otp_valid = otp.verify_otp(current_user.email, request.form.get('otp'))
+    print(otp_valid, request.form.get('otp'), otp.otp_storage.get(current_user.email))
 
     if cart:
         try:
             if int(method) == 3:
-                dao.save_order(cart=cart, is_paid=True)
+                order = dao.save_order(cart=cart, is_paid=True)
+                del session[key]
+
+                return redirect(utils.pay_with_vnpay(request, dao.get_order_by_id(order.id)))
             elif int(method) == 4:
-                dao.save_order(cart=cart)
+                if otp_valid:
+                    order = (dao.save_order(cart=cart))
+                    utils.send_payment_message(order.id)
         except Exception as ex:
             print(str(ex))
             return jsonify({"status": 500})
         else:
             del session[key]
 
-    return redirect('/my_orders')
+    if otp_valid is False:
+        return render_template('payment.html', otp_error='Mã OTP không trùng khớp.')
+    return redirect('/my_orders/' + str(order.id))
+
 
 
 @login_required
@@ -375,3 +389,37 @@ def edit_rules():
 
     dao.edit_rule(int(min_quantity), int(max_quantity), int(expired_hours))
     return redirect('/admin/edit_rules/')
+
+
+def vnpay_return():
+    vnp_TransactionNo = request.args.get('vnp_TransactionNo')
+    vnp_TxnRef = request.args.get('vnp_TxnRef')
+    vnp_Amount = request.args.get('vnp_Amount')
+    vnp_ResponseCode = request.args.get('vnp_ResponseCode')
+    vnp_BankCode = request.args.get('vnp_BankCode')
+    order_id = int(vnp_TxnRef[:1])
+
+    utils.send_payment_message(dao.get_order_by_id(order_id), True)
+    dao.save_vnpay_history(vnp_TransactionNo, vnp_BankCode, request.args.get('vnp_OrderInfo'), order_id)
+
+    if vnp_ResponseCode == '00':
+        try:
+            flash('Cập nhật trạng thái thanh toán thành công.')
+        except Exception as e:
+            print(f"Error updating database: {str(e)}")
+            flash('Lỗi cập nhật trạng thái thanh toán.')
+
+    else:
+        flash('Lỗi thanh toán. Vui lòng thử lại hoặc liên hệ với hỗ trợ.')
+
+    return render_template('vnpay-return.html', transaction_no=vnp_TransactionNo, txn_ref=vnp_TxnRef,
+                           amount=int(vnp_Amount), response_code=vnp_ResponseCode, bank_code=vnp_BankCode,
+                           order_id=order_id)
+
+
+@login_required
+def send_otp():
+    if request.method == 'SEND':
+        otp.send_otp(current_user.email)
+
+    return jsonify({'status': 'sent'})

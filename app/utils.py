@@ -1,6 +1,9 @@
 import numpy
-from app import dao
+from app import dao, app, controllers
 from flask_login import current_user
+from flask import flash, redirect, url_for, request
+from app.vnpay import VNPAY
+from datetime import datetime
 
 
 def count_cart(cart):
@@ -149,3 +152,55 @@ def get_categories_string(book_id):
         string += c.name + ', '
 
     return string
+
+
+def send_payment_message(order, is_paid=False):
+    recipient_email = current_user.email
+
+    try:
+        from flask_mail import Message
+        from app import mail
+
+        if is_paid:
+            info = 'Đơn hàng của bạn đã được thanh toán. Chúng tôi sẽ vận chuyển tới địa chỉ của bạn sớm nhất có thể.'
+        else:
+            info = 'Vui lòng nhận sách và thanh toán tại quầy của nhà sách Book Store trong vòng 48 tiếng. Nếu sau khoảng thời gian 48 tiếng mà không thanh toán thì đơn hàng sẽ bị hủy.'
+
+        message = Message('Your orders', sender='bookstore123@example.com', recipients=[recipient_email])
+        message.body = f'Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là #MN{order.id}. Theo dõi đơn hàng trên trang để biết tình trạng hiện tại. ' + info
+        mail.send(message)
+
+        flash('OTP sent successfully!', 'success')
+    except Exception as e:
+        flash(f'Error sending OTP: {str(e)}', 'error')
+
+
+def pay_with_vnpay(request, order):
+    if request.method == "POST":
+        order_desc = request.form.get('order_desc')
+        bank_code = request.form.get('bank_code')
+        language = request.form.get('language')
+
+        dt = dao.get_order_details(order.id)
+        amount = numpy.sum([d.quantity * d.price for d in dt])
+
+        vnp = VNPAY()
+        if bank_code and bank_code != "":
+            vnp.request_data['vnp_BankCode'] = bank_code
+        vnp.request_data['vnp_Amount'] = amount * 100
+        vnp.request_data['vnp_TxnRef'] = str(order.id) + datetime.now().strftime('%Y%m%d%H%M%S')
+        vnp.request_data['vnp_OrderInfo'] = order_desc
+        vnp.request_data['vnp_OrderType'] = 'bill_payment'
+        vnp.request_data['vnp_CurrCode'] = app.config['VNP_CURRENCY_CODE']
+        vnp.request_data['vnp_Version'] = app.config['VNP_VERSION']
+        vnp.request_data['vnp_Command'] = app.config['VNP_COMMAND']
+        vnp.request_data['vnp_TmnCode'] = app.config['VNP_TMN_CODE']
+        vnp.request_data['vnp_Locale'] = language if language and language != '' else 'vn'
+        vnp.request_data['vnp_CreateDate'] = datetime.now().strftime('%Y%m%d%H%M%S')
+        vnp.request_data['vnp_IpAddr'] = app.config['VNP_IP_ADDRESS']
+        vnp.request_data['vnp_ReturnUrl'] = url_for('vnpay-return', _external=True)
+
+        return vnp.get_payment_url(vnpay_payment_url=app.config['VNP_URL'], secret_key=app.config['VNP_HASH_SECRET'])
+
+    flash('Invalid request', 'error')
+    return '/my_orders'

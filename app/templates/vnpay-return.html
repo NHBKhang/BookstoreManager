@@ -1,0 +1,17 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+    <h1 class="mt-5 text-center text-uppercase text-success">Thanh toán thành công</h1>
+    <div class="card m-5 container">
+        <div class="card-body">
+            <p class="card-text">Mã thanh toán: {{ transaction_no }}</p>
+            <p class="card-text">Mã ngân hàng: {{ bank_code }}</p>
+            <p class="card-text">Số hóa đơn: {{ txn_ref }}</p>
+            <p class="card-text">Số đơn hàng: #MN{{ "{:03d}".format(order_id) }}</p>
+            <p class="card-text">Số tiền: {{ "{:,.0f}".format(amount / 100) }} VNĐ</p>
+        </div>
+        <a class="btn btn-primary m-1" href="/my_orders/{{ order_id }}">Xem chi tiết đơn hàng</a>
+    </div>
+
+{% endblock %}

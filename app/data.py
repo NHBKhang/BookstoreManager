@@ -10,7 +10,7 @@ def add_accounts():
                   email='admin@gmail.com')
     db.session.add_all([admin])
     customer = Customer(username='khang', name='khang', password=hashlib.md5('khang2003'.encode('utf-8')).hexdigest(),
-                        email='2151053027khang@ou.edu.vn', phone='0123456789', first_name='Khang', last_name='Nguyễn',
+                        email='nhbkhang12@gmail.com', phone='0964562759', first_name='Khang', last_name='Nguyễn',
                         birthday=datetime.strptime('29/01/2003', '%d/%m/%Y'), address='11 HCS, Bến Lức, Long An')
     db.session.add_all([customer])
     staff = Staff(username='huyshipping', name='huy', password=hashlib.md5('11001100'.encode('utf-8')).hexdigest(),

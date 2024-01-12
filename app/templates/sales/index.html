@@ -53,7 +53,12 @@
                 <div class="d-flex flex-wrap">
                     <label class="d-block w-100 p-2 bg-blue text-white"
                            style="font-size: 1.25rem; border-radius: 10px 10px 0 0">Thông tin</label>
-                    <h6 class="m-2 mb-1 w-100">Họ tên: <span>{{ user.first_name + ' ' + user.last_name }}</span></h6>
+                    <h6 class="m-2 mb-1 w-100">Họ tên: <span>
+                        {% if user.first_name %}
+                            {{ user.first_name + ' ' + user.last_name }}
+                        {% else %}
+                            {{ user.name }}
+                        {% endif %}</span></h6>
                     <h6 class="m-2 w-100">Ca làm: <span>1</span></h6>
                     <a class="btn btn-primary" style="margin: .5rem auto" href="/sales/logout">Đăng xuất</a>
                 </div>

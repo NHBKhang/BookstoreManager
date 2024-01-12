@@ -261,6 +261,17 @@ class Comment(db.Model):
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
 
 
+class VNPAY_History(db.Model):
+    __tablename__ = 'vnpay_history'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    transaction_id = Column(Integer, nullable=False)
+    bank_code = Column(String(20), nullable=False)
+    description = Column(String(512), nullable=False)
+    order_id = Column(Integer, ForeignKey(Order.id), nullable=False)
+
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

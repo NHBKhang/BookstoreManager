@@ -15,6 +15,8 @@ function addToCart(id, name, price) {
         let items = document.getElementsByClassName('cart-counter');
         for (let item of items)
             item.innerText = data.total_quantity;
+
+        location.reload()
     })
 }
 
@@ -35,6 +37,8 @@ function updateCart(bookId, obj) {
         let d2 = document.getElementsByClassName('cart-amount')
         for (let i = 0; i < d2.length; i++)
             d2[i].innerText = data.total_amount.toLocaleString("en-US") + ' VNĐ'
+
+        location.reload()
     }).catch(err => console.info(err)) // promise
 }
 

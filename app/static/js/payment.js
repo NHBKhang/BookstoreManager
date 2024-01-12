@@ -8,3 +8,9 @@ function pay() {
         })
     }
 }
+
+function sendOtp() {
+    fetch("/sendotp", {
+        method: "send"
+    }).then(() => alert("Mã OTP đã được gửi vào mail của bạn"))
+}

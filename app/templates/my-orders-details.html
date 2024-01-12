@@ -20,14 +20,21 @@
                                 <div>
                                     <span class="me-3">{{ order.created_date }}</span>
                                     <span class="me-3">#MN{{ "{:03d}".format(order.id) }}</span>
-                                    {% if order.is_paid %}<span class="me-3">Momo -{{ user.phone }}</span>{% endif %}
+                                    {% if order.is_paid %}
+                                        {% if payment %}
+                                            <span class="me-3">{{ payment.bank_code }} -{{ payment.transaction_id }}</span>
+                                        {% else %}
+                                            <span class="me-3">Momo -{{ user.phone }}</span>
+                                        {% endif %}
+                                    {% endif %}
                                     <span class="badge rounded-pill {{ order.status.value[1] }}">
                                         {{ order.status.name }}</span>
                                 </div>
                                 <div class="d-flex">
                                     {% if order.is_paid %}
-                                    <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text">
-                                        <i class="fa-solid fa-download"></i> <span class="text">Hóa đơn</span></button>
+                                        <button class="btn btn-link p-0 me-3 d-none d-lg-block btn-icon-text">
+                                            <i class="fa-solid fa-download"></i> <span class="text">Hóa đơn</span>
+                                        </button>
                                     {% endif %}
                                     <div class="dropdown">
                                         <button class="btn btn-link p-0 text-muted" type="button"
@@ -62,7 +69,8 @@
                                                 </div>
                                                 <div class="flex-lg-grow-1 ms-3">
                                                     <h6 class="small mb-0">
-                                                        <a href="/books/{{ d.book.id }}" class="text-reset">{{ d.book.name }}</a>
+                                                        <a href="/books/{{ d.book.id }}"
+                                                           class="text-reset">{{ d.book.name }}</a>
                                                     </h6>
                                                     <span class="small">Bản phổ thông</span>
                                                 </div>
@@ -108,9 +116,14 @@
                                     <h3 class="h6">Phương thức thanh toán</h3>
                                     <p>
                                         {% if order.is_paid %}
-                                            <span class="me-3">Momo -{{ user.phone }}</span>
+                                            {% if payment %}
+                                                <span class="me-3">{{ payment.bank_code }} -{{ payment.transaction_id }}</span>
+                                            {% else %}
+                                                <span class="me-3">Momo -{{ user.phone }}</span>
+                                            {% endif %}
+                                            <br><span class="me-3">Thanh toán trực tuyến</span>
                                         {% else %}
-                                            <span class="me-3">Thanh toán tại quầy</span>
+                                            <br><span class="me-3">Thanh toán tại quầy</span>
                                         {% endif %}
                                         <br>Tổng: {{ "{:,.0f}".format(order.total_price) }} VNĐ
                                         {% if order.is_paid %}
@@ -119,7 +132,6 @@
                                             <span class="badge bg-danger rounded-pill">CHƯA THANH TOÁN</span>
                                         {% endif %}
                                     </p>
-
                                 </div>
                                 <div class="col-lg-6">
                                     <h3 class="h6">Địa chỉ thanh toán</h3>
@@ -139,7 +151,11 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h3 class="h6">Ghi chú khách hàng</h3>
-                                <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
+                                {% if payment %}
+                                    <p>{{ payment.description }}</p>
+                                {% else %}
+                                    <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
+                                {% endif %}
                             </div>
                         </div>
                         <div class="card mb-4">

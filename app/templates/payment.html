@@ -22,7 +22,7 @@
                                     </label>
                                 </div>
                                 <span>
-                                <svg width="34" height="25" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="35" height="25" xmlns="http://www.w3.org/2000/svg">
                                 <g fill-rule="nonzero" fill="#333840">
                                 <path d="M29.418 2.083c1.16 0 2.101.933 2.101 2.084v16.666c0 1.15-.94 2.084-2.1 2.084H4.202A2.092 2.092 0 0 1 2.1 20.833V4.167c0-1.15.941-2.084 2.102-2.084h25.215ZM4.203 0C1.882 0 0 1.865 0 4.167v16.666C0 23.135 1.882 25 4.203 25h25.215c2.321 0 4.203-1.865 4.203-4.167V4.167C33.62 1.865 31.739 0 29.418 0H4.203Z"></path>
                                 <path d="M4.203 7.292c0-.576.47-1.042 1.05-1.042h4.203c.58 0 1.05.466 1.05 1.042v2.083c0 .575-.47 1.042-1.05 1.042H5.253c-.58 0-1.05-.467-1.05-1.042V7.292Zm0 6.25c0-.576.47-1.042 1.05-1.042H15.76c.58 0 1.05.466 1.05 1.042 0 .575-.47 1.041-1.05 1.041H5.253c-.58 0-1.05-.466-1.05-1.041Zm0 4.166c0-.575.47-1.041 1.05-1.041h2.102c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042H5.253c-.58 0-1.05-.466-1.05-1.042Zm6.303 0c0-.575.47-1.041 1.051-1.041h2.101c.58 0 1.051.466 1.051 1.041 0 .576-.47 1.042-1.05 1.042h-2.102c-.58 0-1.05-.466-1.05-1.042Zm6.304 0c0-.575.47-1.041 1.051-1.041h2.101c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042h-2.101c-.58 0-1.05-.466-1.05-1.042Zm6.304 0c0-.575.47-1.041 1.05-1.041h2.102c.58 0 1.05.466 1.05 1.041 0 .576-.47 1.042-1.05 1.042h-2.101c-.58 0-1.05-.466-1.05-1.042Z"></path>
@@ -98,30 +98,64 @@
                                     </div>
                                 </div>
                             </div>
-                        </div><!-- MOMO -->
+                        </div><!-- VNPAY -->
                         <div class="accordion-item mb-3 border">
                             <h2 class="h5 px-4 py-3 accordion-header d-flex justify-content-between align-items-center">
                                 <div class="form-check w-100 collapsed" data-bs-toggle="collapse"
-                                     data-bs-target="#collapseMM"
+                                     data-bs-target="#collapseVV"
                                      aria-expanded="false">
                                     <input class="form-check-input" type="radio" name="payment" id="payment3" value="3"
                                            checked>
-                                    <label class="form-check-label pt-1" for="payment3">
-                                        MOMO
-                                    </label>
+                                    <label class="form-check-label pt-1" for="payment3">VNPAY</label>
                                 </div>
                                 <span class="m-0 p-0">
-                                <img src="https://play-lh.googleusercontent.com/dQbjuW6Jrwzavx7UCwvGzA_sleZe3-Km1KISpMLGVf1Be5N6hN6-tdKxE5RDQvOiGRg"
-                                     alt="momo-img" width="35" class="m-0 p-0"/>
+                                <img src="https://play-lh.googleusercontent.com/o-_z132f10zwrco4NXk4sFqmGylqXBjfcwR8-wK0lO1Wk4gzRXi4IZJdhwVlEAtpyQ=w600-h300-pc0xffffff-pd"
+                                     alt="vnpay-img" width="75" class="m-0 p-0"/>
                             </span>
                             </h2>
-                            <div id="collapseMM" class="accordion-collapse collapse show"
+                            <div id="collapseVV" class="accordion-collapse collapse show"
                                  data-bs-parent="#accordionPayment"
                                  style="">
-                                <div class="accordion-body">
-                                    <div class="px-2 col-lg-6 mb-3">
-                                        <label class="form-label">Số điện thoại</label>
-                                        <input type="tel" pattern="(?:7|0\d|\+94\d)\d{8}" class="form-control">
+                                <div class="accordion-body row">
+                                    <div class="form-group px-2 col-lg-6 mb-3">
+                                        <label for="bank_code" class="form-label">Ngân hàng</label>
+                                        <select name="bank_code" id="bank_code" class="form-control">
+                                            <option value="" selected>Không chọn</option>
+                                            <option value="NCB"> Ngan hang NCB</option>
+                                            <option value="AGRIBANK"> Ngan hang Agribank</option>
+                                            <option value="SCB"> Ngan hang SCB</option>
+                                            <option value="SACOMBANK">Ngan hang SacomBank</option>
+                                            <option value="EXIMBANK"> Ngan hang EximBank</option>
+                                            <option value="MSBANK"> Ngan hang MSBANK</option>
+                                            <option value="NAMABANK"> Ngan hang NamABank</option>
+                                            <option value="VNMART"> Vi dien tu VnMart</option>
+                                            <option value="VIETINBANK">Ngan hang Vietinbank</option>
+                                            <option value="VIETCOMBANK"> Ngan hang VCB</option>
+                                            <option value="HDBANK">Ngan hang HDBank</option>
+                                            <option value="DONGABANK"> Ngan hang Dong A</option>
+                                            <option value="TPBANK"> Ngân hàng TPBank</option>
+                                            <option value="OJB"> Ngân hàng OceanBank</option>
+                                            <option value="BIDV"> Ngân hàng BIDV</option>
+                                            <option value="TECHCOMBANK"> Ngân hàng Techcombank</option>
+                                            <option value="VPBANK"> Ngan hang VPBank</option>
+                                            <option value="MBBANK"> Ngan hang MBBank</option>
+                                            <option value="ACB"> Ngan hang ACB</option>
+                                            <option value="OCB"> Ngan hang OCB</option>
+                                            <option value="IVB"> Ngan hang IVB</option>
+                                            <option value="VISA"> Thanh toan qua VISA/MASTER</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group px-2 ms-lg-4 col-lg-5 mb-3">
+                                        <label for="language" class="form-label">Ngôn ngữ</label>
+                                        <select name="language" id="language" class="form-control">
+                                            <option value="vn">Tiếng Việt</option>
+                                            <option value="en">English</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group pe-lg-5">
+                                        <label for="order_desc" class="form-label">Nội dung thanh toán</label>
+                                        <textarea class="form-control" cols="20" id="order_desc" name="order_desc"
+                                                  rows="2">Thanh toán đơn hàng vào thời gian: {{ date }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +182,18 @@
                                         gian {{ rule.expired_hours }}
                                         tiếng mà không thanh toán thì đơn hàng sẽ bị hủy.
                                     </div>
+                                    <div class="px-2">
+                                        <label for="language" class="form-label">Mã OTP</label>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <input class="form-control" type="text" name="otp" id="otp">
+                                            </div>
+                                            <button type="button" class="btn btn-danger col-sm-3" onclick="sendOtp()">
+                                                Gửi mã OTP
+                                            </button>
+                                            <small style="font-size: .75rem" class="text-danger mt-1">{{ otp_error }}</small>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +205,7 @@
                         <div class="p-3 bg-light bg-opacity-10">
                             <h6 class="card-title mb-3">Tóm tắt đơn hàng</h6>
                             <div class="d-flex justify-content-between mb-1 small">
-                                <span>Tổng phụ</span> <span>{{ "{:,.0f}".format(cart.total_amount) }} VNĐ</span>
+                                <span>Tạm tính</span> <span>{{ "{:,.0f}".format(cart.total_amount) }} VNĐ</span>
                             </div>
                             <div class="d-flex justify-content-between mb-1 small">
                                 <span>Phí vận chuyển</span> <span>0 VNĐ</span>
