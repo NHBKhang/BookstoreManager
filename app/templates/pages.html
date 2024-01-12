@@ -37,7 +37,7 @@
         </div>
         <ul style="justify-content: center" class="pagination mt-1 d-flex">
             {% for i in range(pages) %}
-                <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}">{{ i + 1 }}</a></li>
+                <li class="page-item"><a class="page-link" href="/?page={{ i + 1 }}&cate_id={{ cate_id }}&kw={{ kw }}">{{ i + 1 }}</a></li>
             {% endfor %}
         </ul>
     {% else %}

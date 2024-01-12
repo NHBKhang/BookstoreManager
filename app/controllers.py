@@ -17,11 +17,11 @@ def index():
 
     num = dao.count_books()
 
-    if kw or cate_id:
-        num = len(books)
-        return render_template('index.html', books=books, pages=math.ceil(num / page_size))
-    if page:
-        return render_template('index.html', books=books, pages=math.ceil(num / page_size))
+    if kw or cate_id or page:
+        if kw or cate_id:
+            num = len(books)
+        return render_template('index.html', books=books, pages=math.ceil(num / page_size),
+                               page=page if page else "", cate_id=cate_id if cate_id else "", kw=kw if kw else "")
 
     return render_template('index.html', books=books, amount=8, carousel_items=carousel_items,
                            index=True)
@@ -281,29 +281,29 @@ def pay():
     method = request.form.get('payment')
     order = None
     otp_valid = otp.verify_otp(current_user.email, request.form.get('otp'))
-    print(otp_valid, request.form.get('otp'), otp.otp_storage.get(current_user.email))
 
     if cart:
         try:
-            if int(method) == 3:
+            method = int(method)
+            if imethod == 3:
                 order = dao.save_order(cart=cart, is_paid=True)
-                del session[key]
-
-                return redirect(utils.pay_with_vnpay(request, dao.get_order_by_id(order.id)))
-            elif int(method) == 4:
+            elif method == 4:
                 if otp_valid:
                     order = (dao.save_order(cart=cart))
-                    utils.send_payment_message(order.id)
+            utils.send_payment_message(order.id)
         except Exception as ex:
             print(str(ex))
             return jsonify({"status": 500})
         else:
             del session[key]
 
-    if otp_valid is False:
-        return render_template('payment.html', otp_error='Mã OTP không trùng khớp.')
-    return redirect('/my_orders/' + str(order.id))
-
+    if method == 3:
+        return redirect(utils.pay_with_vnpay(request, dao.get_order_by_id(order.id)))
+    else:
+        if otp_valid is False:
+            return render_template('payment.html', otp_error='Mã OTP không trùng khớp.')
+        else:
+            return redirect('/my_orders/' + str(order.id))
 
 
 @login_required
