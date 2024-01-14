@@ -20,7 +20,7 @@
         <td></td>
         <td class="container" width="600">
             <div class="content d-flex justify-content-center flex-wrap">
-                <table class="main" width="100%" cellpadding="0" cellspacing="0">
+                <table class="main" width="100%" cellpadding="0" cellspacing="0" id="receipt">
                     <tbody>
                     <tr>
                         <td class="content-wrap aligncenter">
@@ -38,11 +38,11 @@
                                         <table class="invoice">
                                             <tbody>
                                             <tr>
-                                                <td>Họ tên khách
-                                                    hàng: {{ customer.first_name + ' ' + customer.last_name }}
+                                                <td>Họ tên khách hàng:
+                                                    {{ customer.first_name + ' ' + customer.last_name }}
                                                     <br>Hóa đơn #{{ receipt.id }}
-                                                    <br>Ngày lập hóa
-                                                    đơn: {{ (receipt.created_date).strftime('%H:%M:%S %d/%m/%Y') }}</td>
+                                                    <br>Ngày lập hóa đơn:
+                                                    {{ (receipt.created_date).strftime('%H:%M:%S %d/%m/%Y') }}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -74,6 +74,10 @@
                                                                 {{ "{:,.0f}".format(sales_cart.total_amount) }} VNĐ
                                                             </td>
                                                         </tr>
+                                                        <tr>
+                                                            <td colspan="4">Họ tên nhân viên:
+                                                                {{ staff.first_name + ' ' + staff.last_name }}
+                                                        </tr>
                                                         </tbody>
                                                     </table>
                                                 </td>
@@ -94,12 +98,18 @@
                     </tr>
                     </tbody>
                 </table>
-                <a class="btn btn-success m-2" href="/invoice/print/{{ receipt.id }}">In hoá đơn và quay trở lại</a>
+                <a class="btn btn-success m-2" href="/invoice/return">Trở lại</a>
+                <button class="btn btn-danger m-2" onclick="exportToPDF()">In hoá đơn</button>
             </div>
         </td>
         <td></td>
     </tr>
     </tbody>
 </table>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+<script src="{{ url_for('static', filename='js/invoice.js') }}"></script>
+
 </body>
 </html>

@@ -199,6 +199,16 @@ class Staff(User):
     receipts = relationship('Receipt', backref='staff', lazy=True)
 
 
+class VNPAY_History(db.Model):
+    __tablename__ = 'vnpay_history'
+    __table_args__ = {'extend_existing': True}
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    transaction_id = Column(Integer, nullable=False)
+    bank_code = Column(String(20), nullable=False)
+    description = Column(String(512), nullable=False)
+
+
 class Order(db.Model):
     __tablename__ = 'order'
     __table_args__ = {'extend_existing': True}
@@ -209,6 +219,7 @@ class Order(db.Model):
     is_paid = Column(Boolean, nullable=False, default=False)
     status = Column(Enum(OrderStatus), nullable=False, default=OrderStatus.PENDING)
     customer_id = Column(Integer, ForeignKey(Customer.id), nullable=False)
+    transaction_id = Column(Integer, ForeignKey(VNPAY_History.id))
 
 
 class OrderDetails(db.Model):
@@ -259,17 +270,6 @@ class Comment(db.Model):
     created_date = Column(DateTime, default=datetime.now())
     user_id = Column(Integer, ForeignKey(User.id), nullable=False)
     book_id = Column(Integer, ForeignKey(Book.id), nullable=False)
-
-
-class VNPAY_History(db.Model):
-    __tablename__ = 'vnpay_history'
-    __table_args__ = {'extend_existing': True}
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    transaction_id = Column(Integer, nullable=False)
-    bank_code = Column(String(20), nullable=False)
-    description = Column(String(512), nullable=False)
-    order_id = Column(Integer, ForeignKey(Order.id), nullable=False)
 
 
 if __name__ == '__main__':

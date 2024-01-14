@@ -5,8 +5,31 @@
     {% if index %}
         <br>
         <section class="container">
-            <!-- Carousel -->
-            <div id="demo" class="carousel slide container-fluid" data-bs-ride="carousel">
+            <br>
+            <div class="d-flex justify-content-between" style="background: whitesmoke">
+                <h1 class="tw-text-3xl">Mới tải lên</h1>
+                <a class="btn all" href="/?page=1&cate_id={{ cate_id }}&kw={{ kw }}">Xem tất cả
+                    <i style="font-size: .75em" class="fa-solid fa-play fa-fw ms-1"></i></a>
+            </div>
+            <div class="d-flex row justify-content-center align-items-center flex-wrap p-0"
+                 style="background: whitesmoke">
+                {% for i in range(0, amount) %}
+                    <div class="card mb-2 col-sm-6 col-md-3">
+                        <a class="normal" href="/books/{{ books[i].id }}">
+                            <div>
+                                <img title="{{ books[i].name }}" class="card-img-top h-100" src="{{ books[i].image }}"
+                                     alt="Card image">
+                            </div>
+                            <div class="card-body">
+                                <h4 title="{{ books[i].name }}" class="card-title w-100">{{ books[i].name }}</h4>
+                                <p title="{{ "{:,.0f}".format(books[i].price) }} VNĐ"
+                                   class="card-text">{{ "{:,.0f}".format(books[i].price) }} VNĐ</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        <div id="demo" class="carousel slide container-fluid" data-bs-ride="carousel">
 
                 <!-- Indicators/dots -->
                 <div class="carousel-indicators">
@@ -40,30 +63,6 @@
                 <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
                     <span class="carousel-control-next-icon"></span>
                 </button>
-            </div>
-            <br>
-            <div class="d-flex justify-content-between" style="background: whitesmoke">
-                <h1 class="tw-text-3xl">Mới tải lên</h1>
-                <a class="btn all" href="/?page=1&cate_id={{ cate_id }}&kw={{ kw }}">Xem tất cả
-                    <i style="font-size: .75em" class="fa-solid fa-play fa-fw ms-1"></i></a>
-            </div>
-            <div class="d-flex row justify-content-center align-items-center flex-wrap p-0"
-                 style="background: whitesmoke">
-                {% for i in range(0, amount) %}
-                    <div class="card mb-2 col-sm-6 col-md-3">
-                        <a class="normal" href="/books/{{ books[i].id }}">
-                            <div>
-                                <img title="{{ books[i].name }}" class="card-img-top h-100" src="{{ books[i].image }}"
-                                     alt="Card image">
-                            </div>
-                            <div class="card-body">
-                                <h4 title="{{ books[i].name }}" class="card-title w-100">{{ books[i].name }}</h4>
-                                <p title="{{ "{:,.0f}".format(books[i].price) }} VNĐ"
-                                   class="card-text">{{ "{:,.0f}".format(books[i].price) }} VNĐ</p>
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
             </div>
         </section>
 

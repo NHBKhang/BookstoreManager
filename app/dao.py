@@ -95,8 +95,8 @@ def get_order_by_id(order_id):
     return Order.query.get(order_id)
 
 
-def get_vnpay_history_by_order_id(order_id):
-    return VNPAY_History.query.filter_by(order_id=order_id).first()
+def get_vnpay_history_by_id(history_id):
+    return VNPAY_History.query.get(history_id)
 
 
 def get_carousel_items():
@@ -159,6 +159,15 @@ def update_book(book_id, name, price, description, image, published_date):
     db.session.commit()
 
 
+def update_order(order_id, transaction_id, status=OrderStatus.APPROVED, is_paid=True):
+    o = get_order_by_id(order_id)
+    o.transaction_id = transaction_id
+    o.status = status
+    o.is_paid = is_paid
+    db.session.add(o)
+    db.session.commit()
+
+
 def save_receipt(cart, customer_id, staff_id):
     if cart:
         r = Receipt(customer_id=customer_id, staff_id=staff_id)
@@ -194,10 +203,11 @@ def save_comment(content, book_id):
     return c
 
 
-def save_vnpay_history(transaction_id, bank_code, description, order_id):
-    h = VNPAY_History(transaction_id=transaction_id, bank_code=bank_code, description=description, order_id=order_id)
+def save_vnpay_history(transaction_id, bank_code, description):
+    h = VNPAY_History(transaction_id=transaction_id, bank_code=bank_code, description=description)
     db.session.add(h)
     db.session.commit()
+    return h
 
 
 def add_admin(username, password, name, email, status=AccountStatus.ACTIVE, avatar='avatar_male.png'):

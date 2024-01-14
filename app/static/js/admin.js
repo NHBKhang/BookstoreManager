@@ -5,7 +5,6 @@ function deleteBook(bookId) {
         }).then(res => res.json()).then(data => {
             let c = document.getElementById(`book${bookId}`)
             c.style.display = "none"
-            alert(c.style.display)
         }).catch(err => console.info(err)) // promise
     }
 }

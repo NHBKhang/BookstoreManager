@@ -21,8 +21,8 @@
                                     <span class="me-3">{{ order.created_date }}</span>
                                     <span class="me-3">#MN{{ "{:03d}".format(order.id) }}</span>
                                     {% if order.is_paid %}
-                                        {% if payment %}
-                                            <span class="me-3">{{ payment.bank_code }} -{{ payment.transaction_id }}</span>
+                                        {% if order.payment %}
+                                            <span class="me-3">{{ order.payment.bank_code }} -{{ order.payment.transaction_id }}</span>
                                         {% else %}
                                             <span class="me-3">Momo -{{ user.phone }}</span>
                                         {% endif %}
@@ -116,8 +116,8 @@
                                     <h3 class="h6">Phương thức thanh toán</h3>
                                     <p>
                                         {% if order.is_paid %}
-                                            {% if payment %}
-                                                <span class="me-3">{{ payment.bank_code }} -{{ payment.transaction_id }}</span>
+                                            {% if order.payment %}
+                                                <span class="me-3">{{ order.payment.bank_code }} -{{ order.payment.transaction_id }}</span>
                                             {% else %}
                                                 <span class="me-3">Momo -{{ user.phone }}</span>
                                             {% endif %}
@@ -151,8 +151,8 @@
                         <div class="card mb-4">
                             <div class="card-body">
                                 <h3 class="h6">Ghi chú khách hàng</h3>
-                                {% if payment %}
-                                    <p>{{ payment.description }}</p>
+                                {% if order.payment %}
+                                    <p>{{ order.payment.description }}</p>
                                 {% else %}
                                     <p>Giao sách cẩn thận, tránh bị trầy xước.</p>
                                 {% endif %}

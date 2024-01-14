@@ -65,20 +65,12 @@ def my_orders():
 def my_order_details(order_id):
     order = utils.get_order_by_id(order_id)
     user = dao.get_user_by_id(current_user.id)
-    payment = dao.get_vnpay_history_by_order_id(int(order['id']))
-    print(int(order['id']))
 
-    return render_template('my-orders-details.html', order=order, user=user, payment=payment)
-
-
-def sales():
-    books = dao.get_books()
-
-    return render_template('sales/index.html', books=books)
+    return render_template('my-orders-details.html', order=order, user=user)
 
 
 def staff_login():
-    books = dao.get_books()
+    books = dao.get_books(kw=request.args.get('kw'))
     customers = dao.get_customers()
     if request.method == 'POST':
         username = request.form.get('username')
@@ -100,6 +92,14 @@ def staff_login():
     user = dao.get_user_by_id(current_user.id)
     return render_template('/sales/index.html', books=books, customers=customers,
                            user=user if user else dao.get_admin_by_id(current_user.id))
+
+
+def sales():
+    books = dao.get_books(kw=request.args.get('kw'))
+    if current_user:
+        redirect('/sales/login')
+
+    return render_template('sales/index.html', books=books)
 
 
 def staff_logout():
@@ -170,7 +170,7 @@ def user_register():
                 avatar = 'avatar_male.png'
 
             try:
-                dao.add_customer(username=username, password=password, first_name=first_name, last_name=last_name,
+                dao.add_customer(username=username, password=password, name=username, first_name=first_name, last_name=last_name,
                                  gender=gender, birthday=birthday, address=address, phone=phone, email=email,
                                  avatar=avatar)
 
@@ -285,12 +285,12 @@ def pay():
     if cart:
         try:
             method = int(method)
-            if imethod == 3:
+            if method == 3:
                 order = dao.save_order(cart=cart, is_paid=True)
             elif method == 4:
-                if otp_valid:
-                    order = (dao.save_order(cart=cart))
-            utils.send_payment_message(order.id)
+                if otp_valid is True:
+                    order = dao.save_order(cart=cart)
+                    utils.send_payment_message(order, order.is_paid)
         except Exception as ex:
             print(str(ex))
             return jsonify({"status": 500})
@@ -298,12 +298,12 @@ def pay():
             del session[key]
 
     if method == 3:
-        return redirect(utils.pay_with_vnpay(request, dao.get_order_by_id(order.id)))
+        return redirect(utils.pay_with_vnpay(request, order))
     else:
-        if otp_valid is False:
-            return render_template('payment.html', otp_error='Mã OTP không trùng khớp.')
-        else:
+        if otp_valid is True:
             return redirect('/my_orders/' + str(order.id))
+        else:
+            return redirect('/payment')
 
 
 @login_required
@@ -319,22 +319,26 @@ def pay_invoice():
         return jsonify({"status": 500})
 
     return render_template('sales/invoice.html', receipt=receipt,
-                           customer=dao.get_user_by_id(customer_id))
+                           customer=dao.get_user_by_id(customer_id), staff=dao.get_user_by_id(current_user.id))
+
+
+def export_invoice():
+    key = app.config['SALES_KEY']
+    cart = session.get(key)
+    customer_id = request.args.get('customer')
+    try:
+        receipt = dao.save_receipt(cart, customer_id=customer_id, staff_id=current_user.id)
+    except Exception as e:
+        print(e)
+        return jsonify({"status": 500})
+
+    return render_template('/sales/export-invoice.html', customer=dao.get_user_by_id(customer_id),
+                           staff=dao.get_user_by_id(current_user.id), receipt=receipt)
 
 
 @login_required
-def print_invoice(receipt_id):
+def invoice_return():
     key = app.config['SALES_KEY']
-    cart = session.get(key)
-
-    if int(receipt_id) == 0:
-        try:
-            if request.method == 'POST':
-                dao.save_receipt(cart, customer_id=int(request.json['customer']),
-                                 staff_id=current_user.id)
-        except Exception as e:
-            print(e)
-            return jsonify({"status": 500})
 
     del session[key]
 
@@ -364,7 +368,8 @@ def add_comment(book_id):
 
     try:
         c = dao.save_comment(book_id=book_id, content=content)
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({'status': 500})
 
     return jsonify({
@@ -397,10 +402,11 @@ def vnpay_return():
     vnp_Amount = request.args.get('vnp_Amount')
     vnp_ResponseCode = request.args.get('vnp_ResponseCode')
     vnp_BankCode = request.args.get('vnp_BankCode')
-    order_id = int(vnp_TxnRef[:1])
+    order_id = int(vnp_TxnRef.split('-')[0])
 
     utils.send_payment_message(dao.get_order_by_id(order_id), True)
-    dao.save_vnpay_history(vnp_TransactionNo, vnp_BankCode, request.args.get('vnp_OrderInfo'), order_id)
+    v = dao.save_vnpay_history(vnp_TransactionNo, vnp_BankCode, request.args.get('vnp_OrderInfo'))
+    dao.update_order(order_id, v.id)
 
     if vnp_ResponseCode == '00':
         try:

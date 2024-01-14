@@ -59,6 +59,7 @@ def get_order_by_id(order_id):
     orders = []
     o = dao.get_order_by_id(order_id)
     dt = dao.get_order_details(order_id)
+    h = dao.get_vnpay_history_by_id(o.transaction_id)
     orders.append({
         'id': order_id,
         'created_date': o.created_date.strftime('%H:%M:%S %d/%m/%Y'),
@@ -71,7 +72,12 @@ def get_order_by_id(order_id):
             'quantity': d.quantity,
             'price': d.price,
             'book': dao.get_book_by_id(d.book_id)
-        } for d in dt]
+        } for d in dt],
+        'payment': {
+            'transaction_id': h.transaction_id,
+            'bank_code': h.bank_code,
+            'description': h.description
+        } if h else None
     })
     orders[0]['sub_total'] = numpy.sum([d['quantity'] * d['book'].price for d in orders[0]['details']])
 
@@ -164,10 +170,11 @@ def send_payment_message(order, is_paid=False):
         if is_paid:
             info = 'Đơn hàng của bạn đã được thanh toán. Chúng tôi sẽ vận chuyển tới địa chỉ của bạn sớm nhất có thể.'
         else:
-            info = 'Vui lòng nhận sách và thanh toán tại quầy của nhà sách Book Store trong vòng 48 tiếng. Nếu sau khoảng thời gian 48 tiếng mà không thanh toán thì đơn hàng sẽ bị hủy.'
+            info = (f'Vui lòng nhận sách và thanh toán tại quầy của nhà sách Book Store trong vòng 48 tiếng. Nếu sau khoảng thời gian '
+                    f'{ dao.get_rule()["expired_hours"] } tiếng mà không thanh toán thì đơn hàng sẽ bị hủy.')
 
         message = Message('Your orders', sender='bookstore123@example.com', recipients=[recipient_email])
-        message.body = f'Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là #MN{order.id}. Theo dõi đơn hàng trên trang để biết tình trạng hiện tại. ' + info
+        message.body = f'Cảm ơn bạn đã đặt hàng. Mã đơn hàng của bạn là #MN{"{:0>3d}".format(order.id)}. Theo dõi đơn hàng trên trang để biết tình trạng hiện tại. ' + info
         mail.send(message)
 
         flash('OTP sent successfully!', 'success')
@@ -188,7 +195,7 @@ def pay_with_vnpay(request, order):
         if bank_code and bank_code != "":
             vnp.request_data['vnp_BankCode'] = bank_code
         vnp.request_data['vnp_Amount'] = amount * 100
-        vnp.request_data['vnp_TxnRef'] = str(order.id) + datetime.now().strftime('%Y%m%d%H%M%S')
+        vnp.request_data['vnp_TxnRef'] = str(order.id) + '-' + datetime.now().strftime('%Y%m%d%H%M%S')
         vnp.request_data['vnp_OrderInfo'] = order_desc
         vnp.request_data['vnp_OrderType'] = 'bill_payment'
         vnp.request_data['vnp_CurrCode'] = app.config['VNP_CURRENCY_CODE']

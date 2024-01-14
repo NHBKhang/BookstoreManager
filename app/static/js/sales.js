@@ -61,14 +61,13 @@ function updateOrderList(bookId, obj) {
     }
 }
 
-function sendCustomerId(receiptId) {
-    fetch(`/invoice/print/${receiptId}`, {
-        method: "post",
-        body: JSON.stringify({
-            "customer": document.getElementById('customer').value
-        }),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+function exportReceipt() {
+    // Get form data
+    var customer = document.getElementById('customer').value;
+
+    // Encode the data into a query string
+    var queryString = "?customer=" + encodeURIComponent(customer);
+
+    // Redirect to the other page with the query string
+    window.location.href = "/invoice/export" + queryString;
 }

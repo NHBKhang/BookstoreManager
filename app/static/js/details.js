@@ -57,5 +57,5 @@ function addComment(bookId) {
             alert("Bình luận rỗng")
         } else
             alert("Hệ thống bị lỗi!")
-    }) // js promise
+    }).catch(err => console.info(err)) // js promise
 }
