@@ -1,5 +1,6 @@
-# BookStoreManager
+# BookStore Manager
 
+Đồ án cho môn Công nghệ phần mềm được viết bởi NHBKhang. Đồ án phát triển hệ thống web quản lý nhà sách dựa trên framework của python
 
 B1: Tạo schema bookstoredb trong database
 
@@ -38,3 +39,6 @@ B4: Chạy module index.py để chạy phần mềm
     + Tên chủ thẻ: NGUYEN VAN A
     + Ngày phát hành: 07/15
     + Mật khẩu OTP: 123456
+* Ngôn ngữ: Html, Css, Javascript, Python
+* Framwork: Flask
+* Tools: MySQL Workbench
