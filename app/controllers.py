@@ -429,3 +429,16 @@ def send_otp():
         otp.send_otp(current_user.email)
 
     return jsonify({'status': 'sent'})
+
+
+def sales_scan():
+    from app import qrcode
+
+    qr_code_data = qrcode.scan_qr_code_camera()
+
+    if qr_code_data:
+        print(f"Mã QR đã quét: {qr_code_data}")
+
+    if current_user:
+        return redirect('/sales/login')
+    return redirect('/sales')

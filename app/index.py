@@ -1,4 +1,6 @@
 from flask import session
+
+import app.qrcode
 from app import dao, login, utils, app
 from datetime import datetime
 
@@ -24,3 +26,4 @@ if __name__ == '__main__':
     from app import urls, admin
 
     app.run(debug=True)
+

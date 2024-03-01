@@ -12,6 +12,7 @@ app.add_url_rule('/vnpay_return', 'vnpay-return', controllers.vnpay_return)
 app.add_url_rule('/sales', 'sales', controllers.sales, methods=['POST', 'GET'])
 app.add_url_rule('/sales/login', 'staff-login', controllers.staff_login, methods=['POST', 'GET'])
 app.add_url_rule('/sales/logout', 'staff-logout', controllers.staff_logout)
+app.add_url_rule('/sales/scan', 'sales-scan', controllers.sales_scan, methods=['GET'])
 app.add_url_rule('/api/sales', 'api-sales-cart', controllers.add_to_sales_cart, methods=['POST'])
 app.add_url_rule('/api/sales/<string:book_id>', 'update-sales-cart', controllers.update_sales_cart,
                  methods=['PUT', 'DELETE'])
