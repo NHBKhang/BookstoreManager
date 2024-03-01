@@ -31,6 +31,7 @@ B4: Chạy module index.py để chạy phần mềm
   - VNPAY Test case:  https://sandbox.vnpayment.vn/vnpaygw-sit-testing/user/login
   - Ethereal Web: https://ethereal.email/
   - Pythonanywhere: https://nhbkhang12.pythonanywhere.com/
+  - GG Drive: https://drive.google.com/drive/folders/18hXGtlhngJdz96WN7vlH--qN-l5Tayih?usp=sharing
 * Khác:
   - Tài khoản NCB:
     + Số thẻ: 9704198526191432198
