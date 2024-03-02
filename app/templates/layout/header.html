@@ -20,7 +20,7 @@
                     <a class="nav-link dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">Thể loại</a>
                     <ul style="column-count: 3" class="dropdown-menu bg-dark">
                         {% for c in categories %}
-                            <li><a class="dropdown-item text-white" href="/?page=1&cate_id={{ c.id }}&kw=">{{ c.name }}</a>
+                            <li><a class="dropdown-item text-white" href="/?page=1&cate_id={{ c.id }}&kw=">{{ c.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </li>
