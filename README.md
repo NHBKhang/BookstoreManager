@@ -41,4 +41,4 @@ B4: Chạy module index.py để chạy phần mềm
     + Mật khẩu OTP: 123456
 * Ngôn ngữ: Html, Css, Javascript, Python
 * Framwork: Flask
-* Tools: MySQL Workbench
+* Tools: MySQL Workbench, PyCharm
